@@ -24,12 +24,12 @@ then
 fi
 
 echo Installing brew packages from Brewfile...
-brew bundle;
+#brew bundle;
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  brew bundle --file=Brewfile-Mac;
-  echo Copying iterm2 theme switcher...
-  cp -r ./iterm2-scripts/theme/ ~/Library/Application Support/iTerm2/Scripts/AutoLaunch/
+  brew bundle --file=Brewfile;
+  #echo Copying iterm2 theme switcher...
+  #cp -r ./iterm2-scripts/theme/ ~/Library/Application Support/iTerm2/Scripts/AutoLaunch/
 fi
 
 
@@ -55,10 +55,10 @@ sudo curl https://cht.sh/:cht.sh > /usr/local/bin
 sudo chmod +x /usr/local/bin/cht.sh
 curl https://cheat.sh/:zsh > ~/.zsh/_cht;
 
-echo Moving .tmux.conf to .tmux_conf.pre_bootstrap...
-mv ~/.tmux.conf ~/.tmux_conf.pre_bootstrap;
-echo Linking .tmux.conf...
-ln .tmux.conf ~/.tmux.conf;
+#echo Moving .tmux.conf to .tmux_conf.pre_bootstrap...
+#mv ~/.tmux.conf ~/.tmux_conf.pre_bootstrap;
+#echo Linking .tmux.conf...
+#ln .tmux.conf ~/.tmux.conf;
 
 echo Moving .zshrc to .zsrhc.pre_bootstrap...
 mv ~/.zshrc ~/.zshrc.pre_bootstrap;
@@ -70,13 +70,13 @@ mv ~/.p10k.zsh ~/.p10k_zsh.pre_bootstrap;
 echo Linking .p10k.zsh...
 ln .p10k.zsh ~/.p10k.zsh
 
-echo Moving .init.vim to .init_vim.pre_bootstrap...
-mv ~/.config/nvim/init.vim ~/.init_vim.pre_bootstrap;
-echo Linking init.vim for neovim...
-mkdir -p ~/.config/nvim;
-ln init.vim ~/.config/nvim/init.vim;
+#echo Moving .init.vim to .init_vim.pre_bootstrap...
+#mv ~/.config/nvim/init.vim ~/.init_vim.pre_bootstrap;
+#echo Linking init.vim for neovim...
+#mkdir -p ~/.config/nvim;
+#ln init.vim ~/.config/nvim/init.vim;
 
-echo Linking tmux-sessionizer...
-ln tmux-sessionizer.sh ~/.tmux-sessionizer;
+#echo Linking tmux-sessionizer...
+#ln tmux-sessionizer.sh ~/.tmux-sessionizer;
 
 echo Done. Run "source ~/.zshrc" or open a new terminal.
