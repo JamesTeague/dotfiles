@@ -166,7 +166,7 @@ brew 'bash-completion'
 brew 'zsh'
 brew 'zsh-completions'
 brew 'zsh-autosuggestions'
-brew 'zsh-syntax-highlighting'
+brew 'zsh-fast-syntax-highlighting'
 brew 'romkatv/powerlevel10k/powerlevel10k'
 
 # Mobile Shell (MOSH) is like SSH plus roaming and smart echo.
