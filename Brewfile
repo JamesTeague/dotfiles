@@ -461,6 +461,8 @@ brew 'libtiff'
 # VLC media player
 cask 'vlc'
 
+# YT Music player
+cask 'ytmdesktop-youtube-music'
 
 ## Sound controls
 
@@ -470,6 +472,11 @@ cask 'vlc'
 # eqMac2: System-wide Audio Equalizer for the Mac; free open source
 #cask 'eqmac'
 
+# Audio-Hijack: Records audio from any application
+cask 'audio-hijack'
+
+# VB-CABLE Virtual Audio Device: Virtual audio cable for routing audio from one application to another
+cask 'vb-cable'
 
 ## Multimedia editors
 
@@ -517,6 +524,18 @@ brew 'ffmpegthumbnailer'
 
 # TODO
 #brew 'imagemagick'
+
+
+## Streaming Software
+
+# OBS: Open-source software for live streaming and screen recording
+cask 'obs'
+
+# OBS-Websocket: Remote-control OBS Studio through WebSockets
+cask 'obs-websocket'
+
+# Touch Portal: Macro remote control
+cask 'touch-portal'
 
 ##
 # Server-Related
