@@ -5,6 +5,12 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# brew-wrap wraps the original brew command for an automatic update of Brewfile 
+# when you execute such a brew install or brew uninstall.
+if [ -f $(brew --prefix)/etc/brew-wrap ];then
+  source $(brew --prefix)/etc/brew-wrap
+fi
+
 # If you come from bash you might have to change your $PATH.
 export GOPATH="$HOME/go"
 export PATH="$PATH:$GOPATH/bin"
@@ -118,10 +124,15 @@ source $ZSH/oh-my-zsh.sh
 alias gitlog="git log --graph --decorate --oneline"
 alias prune-branches="git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -d"
 
+for d in "/share/zsh-completions" "/share/zsh/zsh-site-functions";do
+  brew_completion=$(brew --prefix 2>/dev/null)$d
+  if [ $? -eq 0 ] && [ -d "$brew_completion" ];then
+    fpath=($brew_completion $fpath)
+  fi
+done
 
-autoload -U add-zsh-hook
-
-add-zsh-hook chpwd load-nvmrc
+autoload -U compinit add-zsh-hook
+compinit add-zsh-hook chpwd
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
