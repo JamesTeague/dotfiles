@@ -89,9 +89,6 @@ plugins=(
   npm
   sudo
   wd
-  zsh-completions
-  zsh-autosuggestions
-  fast-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -121,7 +118,6 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias gitlog="git log --graph --decorate --oneline"
 alias prune-branches="git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -d"
 
 for d in "/share/zsh-completions" "/share/zsh/zsh-site-functions";do
