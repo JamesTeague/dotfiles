@@ -164,6 +164,9 @@ brew 'bash-completion'
 
 # Zsh is a shell designed for interactive use.
 brew 'zsh'
+brew 'zsh-fast-syntax-highlighting'
+brew 'zsh-completions'
+brew 'zsh-autosuggestions'
 brew 'romkatv/powerlevel10k/powerlevel10k'
 
 # Mobile Shell (MOSH) is like SSH plus roaming and smart echo.
