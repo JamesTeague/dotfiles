@@ -163,6 +163,10 @@ brew 'bash-completion'
 
 # Zsh is a shell designed for interactive use.
 brew 'zsh'
+brew 'zsh-completions'
+brew 'zsh-autosuggestions'
+brew 'zsh-syntax-highlighting'
+brew 'romkatv/powerlevel10k/powerlevel10k'
 
 # Mobile Shell (MOSH) is like SSH plus roaming and smart echo.
 brew 'mobile-shell'
@@ -949,6 +953,11 @@ brew 'v8'
 
 # JSON output using the shell
 brew 'jo'
+
+# Package Managers
+brew 'volta'
+brew 'npm'
+brew 'yarn'
 
 # JID JSON explorer
 tap 'simeji/jid'
