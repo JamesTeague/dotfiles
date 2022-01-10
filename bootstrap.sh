@@ -16,6 +16,8 @@ if ! command -v brew &> /dev/null
 then
   echo Installing brew...
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)";
+  echo Installing brew-file...
+  brew install rcmdnk/file/brew-file
   if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.zprofile; 
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)";
