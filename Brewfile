@@ -498,6 +498,9 @@ cask 'shotcut'
 # yEd is desktop application to generate high-quality diagrams
 #cask 'yed'
 
+# Multimedia Management
+cask lunasea
+
 # Visualization Toolkit for manipulating and displaying scientific data
 #brew 'vtk'
 
