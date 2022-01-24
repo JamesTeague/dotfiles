@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 ##
 # Brewfile by James Teague II
 #
@@ -73,19 +71,17 @@
 #   * https://www.topbug.net/blog/2013/04/14/install-and-use-gnu-command-line-tools-in-mac-os-x/
 #
 #
->>>>>>> 48bce8029ddc17f9171d25d6f8918a707b9d5a91
 
-# tap repositories and their packages
+##
+# Preflight
+##
 
+# Tap homebrew
+tap 'homebrew/cask'
+tap 'homebrew/cask-drivers'
+tap 'homebrew/cask-fonts'
+tap 'homebrew/cask-versions'
 tap 'homebrew/core'
-<<<<<<< HEAD
-brew 'ca-certificates'
-brew 'gdbm'
-brew 'mas'
-brew 'mpdecimal'
-brew 'openssl@1.1'
-brew 'python@3.9'
-=======
 tap 'homebrew/bundle'
 tap 'homebrew/services'
 tap 'romkatv/powerlevel10k'
@@ -289,15 +285,8 @@ brew 'openssl'
 #brew 'pkg-config', link: true
 
 # Functions for use by applications that allow users to edit command lines while typing.
->>>>>>> c2fb172a1b0344dac1d88b8b3db9f193a01c2930
 brew 'readline'
-brew 'sqlite'
-brew 'xz'
 
-<<<<<<< HEAD
-tap 'rcmdnk/file'
-brew 'brew-file'
-=======
 # Parallel SSH
 #brew 'pssh'
 
@@ -1368,28 +1357,4 @@ cask 'font-ubuntu'
 cask 'font-ultra'
 cask 'font-verdana'
 cask 'font-voltaire'
-<<<<<<< HEAD
-cask 'font-vt323'
-cask 'font-waiting-for-the-sunrise'
-cask 'font-wakor'
-cask 'font-wallpoet'
-cask 'font-walter-turncoat'
-cask 'font-waltograph'
-cask 'font-warnes'
-cask 'font-webdings'
-cask 'font-wellfleet'
-cask 'font-wendy-one'
-cask 'font-wenquanyi-micro-hei-lite'
-cask 'font-wenquanyi-micro-hei'
-cask 'font-wenquanyi-zen-hei'
-cask 'font-wire-one'
-cask 'font-work-sans'
-cask 'font-xits'
-cask 'font-yanone-kaffeesatz'
-cask 'font-yellowtail'
-cask 'font-yeseva-one'
-cask 'font-yesteryear'
-cask 'font-zeyada'
->>>>>>> c2fb172a1b0344dac1d88b8b3db9f193a01c2930
-=======
->>>>>>> 7b9d35f48ce22a588732a553fcdbcf37b51189fe
+
