@@ -442,6 +442,12 @@ brew 'xsv'
 cask 'tad'
 
 ##
+# Chess
+##
+
+cask 'scidvsmac'
+
+##
 # Cross-platform tooling
 #
 # These installations tend to be large.
@@ -499,7 +505,7 @@ cask 'shotcut'
 #cask 'yed'
 
 # Multimedia Management
-cask lunasea
+cask 'lunasea'
 
 # Visualization Toolkit for manipulating and displaying scientific data
 #brew 'vtk'

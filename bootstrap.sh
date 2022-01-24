@@ -25,14 +25,17 @@ then
   fi
 fi
 
-echo Installing brew packages from Brewfile...
+brew set_repo;
+brew file init;
+
+#echo Installing brew packages from Brewfile...
 #brew bundle;
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  brew bundle --file=Brewfile;
+#if [[ "$OSTYPE" == "darwin"* ]]; then
+#  brew bundle --file=Brewfile;
   #echo Copying iterm2 theme switcher...
   #cp -r ./iterm2-scripts/theme/ ~/Library/Application Support/iTerm2/Scripts/AutoLaunch/
-fi
+#fi
 
 
 echo Configuring git...
