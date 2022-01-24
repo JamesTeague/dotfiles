@@ -340,21 +340,8 @@ brew 'zstd'
 # unzip is the classic command.
 brew 'unzip'
 
-# bzip
-brew 'bzip2', link: true
-
-# ZIP file compression
-brew 'libzip'
-
-# pp7zip
-brew 'p7zip'
-
 # GNU zip
 brew 'gzip'
-
-# RPM to CPIO converts a Red Hat RPM package file to a cpio archive
-brew 'rpm2cpio'
-
 
 ## Encryption & decryption
 
