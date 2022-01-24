@@ -337,9 +337,6 @@ brew 'howdoi'
 # Zstandard is the best modern compression
 brew 'zstd'
 
-# WinRAR provides compression/decompression for RAR and ZIP files.
-brew 'unrar'
-
 # unzip is the classic command.
 brew 'unzip'
 
