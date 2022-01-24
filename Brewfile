@@ -197,7 +197,7 @@ cask "microsoft-office"
 #brew 'carthage'
 
 # curl is a command line tool for transferring data with URL syntax.
-brew 'curl', link: true
+brew 'curl'
 
 # HTTrack is a free and easy-to-use offline browser utility.
 #brew 'httrack'
@@ -257,7 +257,7 @@ brew 'svn'
 # We choose to replace these with newer versions.
 ##
 
-brew 'gdb'  # gdb requires further actions to make it work. See `brew info gdb`.
+#brew 'gdb'  # gdb requires further actions to make it work. See `brew info gdb`.
 brew 'gpatch'
 brew 'm4'
 brew 'make'
