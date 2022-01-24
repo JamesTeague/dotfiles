@@ -21,7 +21,6 @@ then
   if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.zprofile; 
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)";
-  elif [[ "$OSTYPE" == "darwin"* ]]; then
   fi
 fi
 
