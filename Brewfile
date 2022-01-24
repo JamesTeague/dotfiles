@@ -1,3 +1,79 @@
+<<<<<<< HEAD
+=======
+##
+# Brewfile by James Teague II
+#
+# This is a work in progress. Use at your own discretion.
+#
+#
+# ## Introduction
+#
+# This file installs many apps, including office suites, multimedia suites,
+# programming langauges, unix utilities, sysadmin tools, and fonts.
+#
+# This file is organized in meaningful sections because we want to
+# make it easy for you to pick and choose sections that you want.
+#
+# There are many TODO items in this file. If you want, help us
+# describe these and organize them into the relevant sections.
+#
+# The file is generally organized in these sections:
+#
+#   * Software that's fine for everyone,
+#     e.g., browsers, players, editors.
+#
+#   * Software that's especially suitable for programmers,
+#     e.g., compilers, databases, languages, servers, etc.
+#
+#   * Paid software that requires a license or purchase,
+#     e.g. JetBrains, OmniGroup, Paw, etc.
+#
+#   * Libraries: operating system libraries e.g. lib*.
+#
+#   * TODO: a section of uncategorized software.
+#
+#   * Fonts
+#
+#
+# ### About Brewfile capabilities
+#
+# To learn about Brewfile capabilties, please see:
+#
+#   * http://brew.sh/
+#   * http://homebrew-file.readthedocs.io/
+#   * https://github.com/Homebrew/homebrew-bundle
+#
+#
+# ### Usage
+#
+# To use this Brewfile via `brew bundle`:
+#
+#     $ brew bundle
+#
+# To use this Brewfile via `brew-file`, which has more capabilties than bundle:
+#
+#     $ brew install rcmdnk/file/brew-file
+#     $ brew file init
+#     Do you want to set a repository (y)? ((n) for local Brewfile). [y/n]: y
+#     Set repository, "non" for local Brewfile,
+#     <user>/<repo> for github repository,
+#     or full path for the repository: joelparkerhenderson/brewfile
+#
+#
+# ### Mac tools vs. GNU tools
+#
+# We generaly prefer GNU tools over preinstalled Mac software tools.
+# For example, we prefer the GNU `sed` command vs. macOS `sed` command.
+#
+# However, we have seen this cause conflicts with macOS software that
+# isn't aware of GNU; therefore we install the dupes in parallel.
+#
+# See:
+#
+#   * https://www.topbug.net/blog/2013/04/14/install-and-use-gnu-command-line-tools-in-mac-os-x/
+#
+#
+>>>>>>> 48bce8029ddc17f9171d25d6f8918a707b9d5a91
 
 # tap repositories and their packages
 
@@ -1278,10 +1354,6 @@ cask 'font-mate-sc'
 cask 'font-mate'
 cask 'font-material-icons'
 cask 'font-mononoki'
-cask 'font-roboto-condensed'
-cask 'font-roboto-mono-for-powerline'
-cask 'font-roboto-mono'
-cask 'font-roboto-slab'
 cask 'font-roboto'
 cask 'font-source-code-pro-for-powerline'
 cask 'font-source-code-pro'
