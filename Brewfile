@@ -108,8 +108,6 @@ tap 'homebrew/cask-drivers'
 tap 'homebrew/cask-fonts'
 tap 'homebrew/cask-versions'
 tap 'homebrew/core'
-tap 'homebrew/boneyard'
-tap 'homebrew/dev-tools'
 tap 'homebrew/bundle'
 tap 'homebrew/services'
 tap 'romkatv/powerlevel10k'
@@ -239,6 +237,7 @@ brew 'wget'
 
 # Git is a free and open source distributed version control system.
 brew 'git'
+brew 'svn'
 
 ##
 # GNU command line tools
@@ -735,32 +734,32 @@ cask 'tunnelblick'
 ##
 
 # Netcat is a networking utility for the TCP/IP protocol.
-brew 'netcat'
+# brew 'netcat'
 
 # prettyping: ping with colorful output and progress bars
-brew 'prettyping'
+# brew 'prettyping'
 
 # mtr: a better tool for ping and traceroute
-brew 'mtr'
+# brew 'mtr'
 
 # Wireshark network monitoring, with the QT GUI.
-brew 'cmake', link: true
+# brew 'cmake', link: true
 
 # Wireshark-chmodbft enables regular users to capture network packets.
 # Use this for typical macOS behaviors; use this insted of 'wireshark'.
-cask 'wireshark-chmodbpf'
+# cask 'wireshark-chmodbpf'
 
 # Charles web debugging proxy
-cask 'charles'
+# cask 'charles'
 
 # Siege is an http load testing and benchmarking utility.
-brew 'siege'
+# brew 'siege'
 
 # nmap network mapper is a security scanner
-brew 'nmap'
+# brew 'nmap'
 
 # Certbot: automatically enable HTTPS on your website via Let's Encrypt
-brew 'certbot'
+# brew 'certbot'
 
 ##
 # Markup languages
@@ -778,7 +777,7 @@ cask 'TeXShop'
 ## Markdown
 
 # MacDown simple markdown editor
-cask 'macdown'
+# cask 'macdown'
 
 # MarkText free open source markdown editor
 cask 'mark-text'
@@ -1101,10 +1100,6 @@ brew 'llvm', args: ['with-toolchain']
 
 # Amazon Web Services (AWS) Command Line Interface (CLI)
 brew 'awscli'
-
-# AWS command line tools
-tap 'wallix/awless'
-brew 'awless'
 
 # Google Cloud Platform (GCP)
 #brew 'gcloud'
