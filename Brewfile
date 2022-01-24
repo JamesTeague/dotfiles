@@ -509,26 +509,11 @@ cask 'touch-portal'
 
 # Docker software containers to help distribute applications.
 brew 'docker'
-#brew 'boot2docker'
-
-# Compose is a tool for defining and running multi-container Docker applications.
-brew 'docker-compose'
-
-# Docker Machine installs Docker Engine on virtual hosts, and manages the hosts.
-#brew 'docker-machine'
 
 ##
 # Font-Related
 ##
 
-# Fontconfig is a library for configuring and customizing font access.
-brew 'fontconfig'
-
-# FreeType is a freely available software library to render fonts.
-brew 'freetype'
-
-# Command-line programs for manipulating fonts
-brew 'lcdf-typetools'
 
 ##
 # Dupes
