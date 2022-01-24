@@ -1020,7 +1020,7 @@ brew 'python3'
 brew 'gcc'
 
 # LLVM compiler
-brew 'llvm', args: ['with-toolchain']
+#brew 'llvm', args: ['with-toolchain']
 
 ## Continuous automation
 
