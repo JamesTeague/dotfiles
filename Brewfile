@@ -1,7 +1,6 @@
 ##
 # Brewfile by James Teague II
 #
-# I use this Brewfile developer laptops.
 # This is a work in progress. Use at your own discretion.
 #
 #
@@ -72,31 +71,6 @@
 #   * https://www.topbug.net/blog/2013/04/14/install-and-use-gnu-command-line-tools-in-mac-os-x/
 #
 #
-# ## Epilog
-#
-#
-# ### Contributing
-#
-# Feedback welcome. Pull requests welcome.
-#
-# For more information, see the file `CONTRIBUTING.md` in the repository.
-#
-#
-# ### Thanks
-#
-# Thanks to the Homebrew team, and all the brew file package teams.
-# Your work makes macOS much better for so many people!
-#
-#
-# ### Tracking
-#
-# * Package: https://github.com/joelparkerhenderson/brewfile
-# * Version: 3.1.0
-# * Created: 2017-01-01
-# * Updated: 2020-05-29
-# * License: GPL
-# * Contact: Joel Parker Henderson (http://joelparkerhenderson.com)
-##
 
 ##
 # Preflight
