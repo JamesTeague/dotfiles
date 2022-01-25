@@ -352,7 +352,7 @@ cask 'alfred'
 cask 'appcleaner'
 cask 'atom'
 cask 'audio-hijack'
-cask 'bitwarden'
+# cask 'bitwarden'
 cask 'discord'
 cask 'docker'
 cask 'firefox'
@@ -393,3 +393,6 @@ tap 'romkatv/powerlevel10k'
 brew 'powerlevel10k'
 
 tap 'simeji/jid'
+
+# Mac App Store
+mas 'Bitwarden', id: 1352778147
