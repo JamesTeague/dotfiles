@@ -190,6 +190,7 @@ brew 'speex'
 brew 'sqlite'
 brew 'srt'
 brew 'subversion'
+brew 'syncthing'
 brew 'tcl-tk'
 brew 'tcpdump'
 brew 'tesseract'
@@ -341,6 +342,8 @@ cask 'font-ubuntu-mono-derivative-powerline'
 cask 'font-ultra'
 cask 'font-verdana'
 cask 'font-voltaire'
+cask 'font-vt323'
+cask 'font-waiting-for-the-sunrise'
 
 tap 'homebrew/cask-versions'
 cask 'firefox-developer-edition'
@@ -393,3 +396,11 @@ tap 'romkatv/powerlevel10k'
 brew 'powerlevel10k'
 
 tap 'simeji/jid'
+
+# App Store applications
+mas 'Bitwarden (1.30.0)', id: 1352778147
+mas 'GarageBand (10.4.4)', id: 682658836
+mas 'iMovie (10.3)', id: 408981434
+mas 'Keynote (11.2)', id: 409183694
+mas 'Numbers (11.2)', id: 409203825
+mas 'Pages (11.2)', id: 409201541
