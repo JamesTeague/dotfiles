@@ -26,6 +26,7 @@ then
 fi
 
 echo Installing brew packages from Brewfile...
+brew install rcmdnk/file/brew-file;
 brew file set_repo -r $brewfile_repo;
 brew file install;
 
