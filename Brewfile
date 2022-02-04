@@ -34,6 +34,7 @@ brew 'fdk-aac'
 brew 'fetchmail'
 brew 'ffmpeg'
 brew 'ffmpeg2theora'
+brew 'ffmpeg@4'
 brew 'ffmpegthumbnailer'
 brew 'file-formula'
 brew 'flac'
@@ -400,8 +401,8 @@ tap 'simeji/jid'
 
 # App Store applications
 mas 'Bitwarden (1.30.0)', id: 1352778147
-mas 'GarageBand (10.4.4)', id: 682658836
-mas 'iMovie (10.3)', id: 408981434
+mas 'GarageBand (10.4.5)', id: 682658836
+mas 'iMovie (10.3.1)', id: 408981434
 mas 'Keynote (11.2)', id: 409183694
 mas 'Numbers (11.2)', id: 409203825
 mas 'Pages (11.2)', id: 409201541
