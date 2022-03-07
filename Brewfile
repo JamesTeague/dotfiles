@@ -169,6 +169,7 @@ brew 'pcre2'
 brew 'perl'
 brew 'pixman'
 brew 'pkg-config'
+brew 'pnpm'
 brew 'protobuf'
 brew 'psutils'
 brew 'python@3.10'
@@ -401,6 +402,7 @@ tap 'simeji/jid'
 
 # App Store applications
 mas 'Bitwarden (1.30.0)', id: 1352778147
+mas 'Final Cut Pro (10.6.1)', id: 424389933
 mas 'GarageBand (10.4.5)', id: 682658836
 mas 'iMovie (10.3.1)', id: 408981434
 mas 'Keynote (11.2)', id: 409183694
