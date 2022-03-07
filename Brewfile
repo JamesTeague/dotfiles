@@ -84,6 +84,7 @@ brew 'less'
 brew 'libarchive'
 brew 'libass'
 brew 'libav'
+brew 'libavif'
 brew 'libb2'
 brew 'libbluray'
 brew 'libcbor'
@@ -401,7 +402,7 @@ brew 'powerlevel10k'
 tap 'simeji/jid'
 
 # App Store applications
-mas 'Bitwarden (1.30.0)', id: 1352778147
+mas 'Bitwarden (1.31.3)', id: 1352778147
 mas 'Final Cut Pro (10.6.1)', id: 424389933
 mas 'GarageBand (10.4.5)', id: 682658836
 mas 'iMovie (10.3.1)', id: 408981434
