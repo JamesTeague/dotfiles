@@ -417,7 +417,7 @@ tap 'simeji/jid'
 # App Store applications
 mas 'Bitwarden (2022.10.1)', id: 1352778147
 mas 'Final Cut Pro (10.6.5)', id: 424389933
-mas 'GarageBand (10.4.6)', id: 682658836
+mas 'GarageBand (10.4.7)', id: 682658836
 mas 'iMovie (10.3.5)', id: 408981434
 mas 'Keynote (12.2)', id: 409183694
 mas 'Numbers (12.2)', id: 409203825
