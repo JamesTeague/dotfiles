@@ -119,6 +119,8 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias prune-branches="git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -d"
+alias vim="nvim"
+
 
 for d in "/share/zsh-completions" "/share/zsh/zsh-site-functions";do
   brew_completion=$(brew --prefix 2>/dev/null)$d
