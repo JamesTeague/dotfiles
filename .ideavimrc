@@ -1,0 +1,27 @@
+" basics
+set number
+set relativenumber
+set scrolloff=8
+set tabstop=2 softtabstop=2
+set shiftwidth=2
+set expandtab
+set smartindent
+
+"Do incremental searching.
+set incsearch
+
+" Don't use Ex mode, use Q for formatting.
+map Q gq
+
+set showmode
+
+" Have clipboard available in yank
+set clipboard+=unnamed
+
+" Set leader to space
+let mapleader = " "
+
+" ideavim plugins
+Plug 'tpope/vim-commentary'
+
+
