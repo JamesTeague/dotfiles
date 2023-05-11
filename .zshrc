@@ -121,7 +121,6 @@ source $ZSH/oh-my-zsh.sh
 alias prune-branches="git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -d"
 alias vim="nvim"
 
-
 for d in "/share/zsh-completions" "/share/zsh/zsh-site-functions";do
   brew_completion=$(brew --prefix 2>/dev/null)$d
   if [ $? -eq 0 ] && [ -d "$brew_completion" ];then
@@ -140,3 +139,10 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 source $(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme
 source $(brew --prefix)/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
+
+# pnpm
+export PNPM_HOME="/Users/jteague/Library/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+# pnpm end
