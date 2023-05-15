@@ -5,10 +5,21 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+for d in "/share/zsh-completions" "/share/zsh/zsh-site-functions";do
+  brew_completion=$(brew --prefix 2>/dev/null)$d
+  if [ $? -eq 0 ] && [ -d "$brew_completion" ];then
+    fpath=($brew_completion $fpath)
+  fi
+done
+
 # brew-wrap wraps the original brew command for an automatic update of Brewfile 
 # when you execute such a brew install or brew uninstall.
 if [ -f $(brew --prefix)/etc/brew-wrap ];then
   source $(brew --prefix)/etc/brew-wrap
+
+  _post_brewfile_update () {
+     echo "Brewfile was updated!"
+  }
 fi
 
 # If you come from bash you might have to change your $PATH.
@@ -17,6 +28,9 @@ export PATH="$PATH:$GOPATH/bin"
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/jteague/.oh-my-zsh"
+
+# Path to Homebrew
+export HOMEBREW_BREWFILE="~/dev/dotfiles"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -120,13 +134,6 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias prune-branches="git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -d"
 alias vim="nvim"
-
-for d in "/share/zsh-completions" "/share/zsh/zsh-site-functions";do
-  brew_completion=$(brew --prefix 2>/dev/null)$d
-  if [ $? -eq 0 ] && [ -d "$brew_completion" ];then
-    fpath=($brew_completion $fpath)
-  fi
-done
 
 autoload -U compinit add-zsh-hook
 compinit -u add-zsh-hook chpwd
