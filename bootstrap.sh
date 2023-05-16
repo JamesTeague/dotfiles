@@ -96,7 +96,7 @@ git config --global core.autocrlf input
 git config --global pull.rebase false
 git config --global user.name $git_username
 git config --global user.email $git_email
-git congif --global core.excludesfile ~/.gitignore
+git config --global core.excludesfile ~/.gitignore
 
 echo Downloading cht.sh with completions...
 sudo touch /usr/local/bin/cht.sh

@@ -20,4 +20,4 @@ cask "iterm2"
 cask "obsidian"
 
 # App Store applications
-mas 'Bitwarden (2023.2.0)', id: 1352778147
+mas "Bitwarden (2023.2.0)", id: 1352778147
