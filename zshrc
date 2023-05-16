@@ -12,25 +12,12 @@ for d in "/share/zsh-completions" "/share/zsh/zsh-site-functions";do
   fi
 done
 
-# brew-wrap wraps the original brew command for an automatic update of Brewfile 
-# when you execute such a brew install or brew uninstall.
-if [ -f $(brew --prefix)/etc/brew-wrap ];then
-  source $(brew --prefix)/etc/brew-wrap
-
-  _post_brewfile_update () {
-     echo "Brewfile was updated!"
-  }
-fi
-
 # If you come from bash you might have to change your $PATH.
 export GOPATH="$HOME/go"
 export PATH="$PATH:$GOPATH/bin"
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/jteague/.oh-my-zsh"
-
-# Path to Homebrew
-export HOMEBREW_BREWFILE="~/dev/dotfiles"
+export ZSH="$(echo $HOME).oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,

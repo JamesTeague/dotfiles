@@ -43,9 +43,6 @@ cask "discord"
 cask "docker"
 cask "google-chrome"
 
-tap "rcmdnk/file"
-brew "brew-file"
-
 tap "romkatv/powerlevel10k"
 brew "powerlevel10k"
 
