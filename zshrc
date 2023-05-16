@@ -15,6 +15,7 @@ done
 # If you come from bash you might have to change your $PATH.
 export GOPATH="$HOME/go"
 export PATH="$PATH:$GOPATH/bin"
+export GOPRIVATE="scm.bluebeam.com/nw/proto"
 
 # Path to your oh-my-zsh installation.
 export ZSH="$(echo $HOME)/.oh-my-zsh"
@@ -127,6 +128,9 @@ compinit -u add-zsh-hook chpwd
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Export Secret Keys
+[[ ! -f ~/.secret-keys.zsh ]] || source ~/.secret-keys.zsh
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 

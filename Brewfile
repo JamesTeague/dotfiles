@@ -14,6 +14,7 @@ brew "zsh-completions"
 brew "zsh-fast-syntax-highlighting"
 brew "zsh-vi-mode"
 
+brew "npm" # required by lsp tsserver
 brew "make" # required by powerlevel10k on linux
 brew "gcc" # required by powerlevel10k, zsh on linux
 
@@ -46,3 +47,29 @@ cask "google-chrome"
 tap "romkatv/powerlevel10k"
 brew "powerlevel10k"
 
+if OS.mac?
+  # Taps
+  tap "homebrew/bundle"
+  
+
+  # set arguments for all 'brew install --cask' commands
+  cask_args appdir: "/Applications", require_sha: false
+
+  # Mac Utilities
+  cask "alfred"
+  cask "bartender"
+  cask "rectangle"
+
+  # Dependencies
+  brew "blueutil" # for alfred airpod plugin
+
+  # Dev Applications
+  cask "iterm2"
+
+  cask "obsidian"
+
+  # App Store applications
+  mas "Bitwarden (2023.2.0)", id: 1352778147
+elsif OS.linux?
+  brew "xclip"
+end

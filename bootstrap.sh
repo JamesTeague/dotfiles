@@ -29,9 +29,6 @@ echo Installing brew packages from Brewfile...
 brew bundle;
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  echo Instaling Mac applications...
-  brew bundle --file=Brewfile.Mac
-
   echo Changing macOS defaults...
 
   # defaults write com.apple.Accessibility ReduceMotionEnabled -bool true
