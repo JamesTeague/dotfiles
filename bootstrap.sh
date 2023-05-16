@@ -4,55 +4,127 @@ echo git username:
 read git_username;
 
 echo git email:
-read git_email;
+read git_email
 
 echo Brewfile repo:
-read brewfile_repo;
+read brewfile_repo
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-  sudo apt-get install zsh;
-  chsh -s /bin/zsh;
+  sudo apt-get update
+  sudo apt-get install zsh
+  chsh -s /bin/zsh
 fi
 
 echo Checking for brew...
-if ! command -v brew &> /dev/null
-then
+if ! [ command -v brew &> /dev/null ]; then
   echo Installing brew...
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)";
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.zprofile; 
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)";
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.zprofile 
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  elif [[ "$OSTYPE" == "darwin"* ]]; then
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
   fi
 fi
 
+echo Installing homebrew-file... 
+curl -o install.sh -fsSL https://raw.github.com/rcmdnk/homebrew-file/install/install.sh
+chmod 755 ./install.sh
+bash ./install.sh
+rm -f install.sh
+
 echo Installing brew packages from Brewfile...
-brew install rcmdnk/file/brew-file;
 brew file set_repo -r $brewfile_repo;
 brew file install;
 
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  echo Instaling Mac applications...
+  brew bundle --file=Mac.Brewfile
+
+  echo Changing macOS defaults...
+
+  # defaults write com.apple.Accessibility ReduceMotionEnabled -bool true
+
+  echo Configuring finder and hiding unwanted desktop items.
+  defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool false
+  defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
+  defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
+  defaults write com.apple.finder ShowMountedServersOnDesktop -bool false
+  killall Finder
+
+  echo Configuring Dock and Mission Control.
+  defaults write com.apple.dock no-bouncing -bool true
+  defaults write com.apple.dock orientation right 
+  defaults write com.apple.dock autohide -bool true
+  defaults write com.apple.dock show-recents -bool false
+  # Turns off misson control rearrange spaces
+  defaults write com.apple.dock mru-spaces -bool false
+  # disable hot corners
+  defaults write com.apple.dock wvous-tl-corner -int 0
+  defaults write com.apple.dock wvous-tr-corner -int 0
+  defaults write com.apple.dock wvous-bl-corner -int 0
+  defaults write com.apple.dock wvous-br-corner -int 0
+  killall Dock
+
+  echo Fixing mouse scroll direction.
+  defaults write -g com.apple.swipescrolldirection -bool false
+
+  echo Setting screenshots to jpg and disabling shadows.
+  defaults write com.apple.screencapture disable-shadow -bool true
+  defaults write com.apple.screencapture type jpg
+  mkdir ~/Screenshots
+  defaults write com.apple.screencapture "location" -string "~/Screenshots"
+  killall SystemUIServer
+
+  echo Configuring Desktop Services.
+  defaults write com.apple.desktopservices DSDontWriteNetworkStores true
+
+  # echo Copying Karabiner configuration...
+  # cp -r ./karabiner ~/.config
+fi
+
+echo Moving .gitignore to .gitignore.pre_bootstrap...
+mv ~/.gitignore ~/.gitignore.pre_bootstrap
+echo Linking .gitignore...
+ln -sf $(pwd)gitignore $(echo $HOME)/.gitignore
+
 echo Configuring git...
-git config --global core.editor nvim;
-git config --global push.default simple;
-git config --global core.autocrlf input;
-git config --global user.name $git_username;
-git config --global user.email $git_email;
+git config --global core.editor nvim
+git config --global push.default simple
+git config --global core.autocrlf input
+git config --global pull.rebase false
+git config --global user.name $git_username
+git config --global user.email $git_email
+git congif --global core.excludesfile ~/.gitignore
 
 echo Downloading cht.sh with completions...
-sudo curl https://cht.sh/:cht.sh > /usr/local/bin
+sudo touch /usr/local/bin/cht.sh
+sudo curl -s https://cht.sh/:cht.sh | sudo tee /usr/local/bin/cht.sh
 sudo chmod +x /usr/local/bin/cht.sh
-curl https://cheat.sh/:zsh > ~/.zsh/_cht;
+curl https://cheat.sh/:zsh > ~/.zsh/_cht --create-dirs
 
 echo Configuring oh-my-zsh...
 sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 echo Moving .zshrc to .zsrhc.pre_bootstrap...
-mv ~/.zshrc ~/.zshrc.pre_bootstrap;
+mv ~/.zshrc ~/.zshrc.pre_bootstrap
 echo Linking .zshrc...
-ln .zshrc ~/.zshrc;
+ln -sf $(pwd)/zshrc $(echo $HOME).zshrc
 
 echo Moving .p10k.zsh to .p10k_zsh.pre_bootstrap...
 mv ~/.p10k.zsh ~/.p10k_zsh.pre_bootstrap;
 echo Linking .p10k.zsh...
-ln .p10k.zsh ~/.p10k.zsh
+ln -sf $(pwd)/p10k.zsh $(echo $HOME)/.p10k.zsh
+
+echo Moving .config/nvim to .config/nvim.pre_boostrap...
+mv -r ~/.config/nvim ~/.config/nvim.pre_boostrap
+echo Linking .config/nvim directory to nvim
+ln -sf $(pwd)/nvim $(echo $HOME)/.config/nvim
+
+echo Moving .ideavimrc to .ideavimrc.pre_boostrap...
+mv ~/.ideavimrc ~/.ideavimrc.pre_bootstrap
+echo Linking .ideavimrc for IntelliJ...
+ln -sf $(pwd)/ideavimrc $(echo $HOME)/.ideavimrc
 
 echo Done. Run "source ~/.zshrc" or open a new terminal.

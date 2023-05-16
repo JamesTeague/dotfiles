@@ -1,0 +1,23 @@
+# Homebrew Taps
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/core"
+
+# set arguments for all 'brew install --cask' commands
+cask_args appdir: "/Applications", require_sha: false
+
+# Mac Utilities
+cask "alfred"
+cask "bartender"
+cask "rectangle"
+
+# Dependencies
+brew "blueutil" # for alfred airpod plugin
+
+# Dev Applications
+cask "iterm2"
+
+cask "obsidian"
+
+# App Store applications
+mas 'Bitwarden (2023.2.0)', id: 1352778147
