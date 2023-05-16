@@ -110,7 +110,7 @@ ln -sf $(pwd)/p10k.zsh $(echo $HOME)/.p10k.zsh
 echo Moving .config/nvim to .config/nvim.pre_boostrap...
 mv -r ~/.config/nvim ~/.config/nvim.pre_boostrap
 echo Linking .config/nvim directory to nvim
-ln -sf $(pwd)/nvim $(echo $HOME)/.config/nvim
+ln -sf $(pwd)/nvim $(echo $HOME)/.config
 
 echo Moving .ideavimrc to .ideavimrc.pre_boostrap...
 mv ~/.ideavimrc ~/.ideavimrc.pre_bootstrap
