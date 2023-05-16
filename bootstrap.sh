@@ -40,7 +40,7 @@ brew file install;
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   echo Instaling Mac applications...
-  brew bundle --file=Mac.Brewfile
+  brew bundle --file=Brewfile.Mac
 
   echo Changing macOS defaults...
 
