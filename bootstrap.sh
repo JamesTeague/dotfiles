@@ -6,9 +6,6 @@ read git_username;
 echo git email:
 read git_email
 
-echo Brewfile repo:
-read brewfile_repo
-
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   sudo apt-get update
   sudo apt-get install zsh
@@ -28,15 +25,8 @@ if ! [ command -v brew &> /dev/null ]; then
   fi
 fi
 
-echo Installing homebrew-file... 
-curl -o install.sh -fsSL https://raw.github.com/rcmdnk/homebrew-file/install/install.sh
-chmod 755 ./install.sh
-bash ./install.sh
-rm -f install.sh
-
 echo Installing brew packages from Brewfile...
-brew file set_repo -r $brewfile_repo;
-brew file install;
+brew bundle;
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   echo Instaling Mac applications...
