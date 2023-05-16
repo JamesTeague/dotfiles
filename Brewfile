@@ -49,4 +49,3 @@ brew "brew-file"
 tap "romkatv/powerlevel10k"
 brew "powerlevel10k"
 
-main ./Brewfile.$OSTYPE.$PLATFORM.$HOSTNAME
