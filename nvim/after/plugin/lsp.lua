@@ -7,16 +7,15 @@ lsp.ensure_installed({
 	'rust_analyzer',
 	'jedi_language_server',
 	'vuels',
-  'gopls',
 })
 
 local cmp = require('cmp')
 local cmp_select = {behavior = cmp.SelectBehavior.Select}
-
 local cmp_mappings = lsp.defaults.cmp_mappings({
 	['<C-m>'] = cmp.mapping.select_prev_item(cmp_select),
 	['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
 	['<CR>'] = cmp.mapping.confirm({ select = true }),
+	['<C-Space>'] = cmp.mapping.complete(),
 })
 
 lsp.setup_nvim_cmp({
@@ -39,6 +38,5 @@ end)
 
 -- (Optional) Configure lua language server for neovim
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
-require('lspconfig').gopls.setup({})
 
 lsp.setup()
