@@ -30,6 +30,7 @@ return require('packer').startup(function(use)
   use('tpope/vim-fugitive')
 
   -- Debugging
+  use('jay-babu/mason-nvim-dap.nvim')
   use('mfussenegger/nvim-dap')
   use('leoluz/nvim-dap-go')
   use('rcarriga/nvim-dap-ui')
