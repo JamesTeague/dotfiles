@@ -29,6 +29,11 @@ return require('packer').startup(function(use)
   use('mbbill/undotree')
   use('tpope/vim-fugitive')
 
+  -- Debugging
+  use('mfussenegger/nvim-dap')
+  use('leoluz/nvim-dap-go')
+  use('rcarriga/nvim-dap-ui')
+
   use {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'v2.x',
