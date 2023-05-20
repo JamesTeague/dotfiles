@@ -55,7 +55,6 @@ if OS.mac?
 
   # Mac Utilities
   cask "alfred"
-  cask "bartender"
   cask "rectangle"
 
   # Dependencies
