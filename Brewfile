@@ -39,6 +39,7 @@ cask "bitwarden"
 cask "discord"
 cask "docker"
 cask "google-chrome"
+cask 'ytmdesktop-youtube-music'
 
 tap "romkatv/powerlevel10k"
 brew "powerlevel10k"
@@ -47,6 +48,7 @@ if OS.mac?
   # Taps
   tap "homebrew/bundle"
   
+  brew "mas"
 
   # set arguments for all 'brew install --cask' commands
   cask_args appdir: "/Applications", require_sha: false
@@ -64,8 +66,6 @@ if OS.mac?
 
   cask "obsidian"
 
-  # App Store applications
-  mas "Bitwarden (2023.2.0)", id: 1352778147
 elsif OS.linux?
   brew "xclip"
 end

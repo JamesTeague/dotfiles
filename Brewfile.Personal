@@ -1,0 +1,19 @@
+# Homebrew Taps
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/core"
+
+if OS.mac?
+
+  # set arguments for all 'brew install --cask' commands
+  cask_args appdir: "/Applications", require_sha: false
+
+  # Mac Utilities
+  cask "gpg-suite"
+
+  cask 'microsoft-office'
+  cask 'obs'
+
+  # App Store applications
+  mas 'Final Cut Pro (10.6.5)', id: 424389933
+end

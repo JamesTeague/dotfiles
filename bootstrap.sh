@@ -6,6 +6,9 @@ read git_username;
 echo git email:
 read git_email
 
+echo Personal Setup? [y/n]
+read personal_setup
+
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   sudo apt-get update
   sudo apt-get install zsh
@@ -13,7 +16,8 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 fi
 
 echo Checking for brew...
-if ! [ command -v brew &> /dev/null ]; then
+which -s brew
+if [[ $(command -v brew) == "" ]]; then
   echo Installing brew...
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   if [[ "$OSTYPE" == "linux-gnu"* ]]; then
@@ -99,13 +103,25 @@ mv ~/.zshrc ~/.zshrc.pre_bootstrap
 echo Linking .zshrc...
 ln -sf $(pwd)/zshrc $(echo $HOME)/.zshrc
 
+if [[ $personal_setup = "n" ]] 
+then
+  echo Tailoring the work experience...
+
+  echo 'export GOPRIVATE="scm.bluebeam.com/nw/proto"' >> $(echo $HOME)/.zshrc
+  brew bundle --file=$(pwd)/Brewfile.Work
+else
+  echo Adding personal touches...
+
+  brew bundle --file=$(pwd)/Brewfile.Personal
+fi
+
 echo Moving .p10k.zsh to .p10k_zsh.pre_bootstrap...
 mv ~/.p10k.zsh ~/.p10k_zsh.pre_bootstrap;
 echo Linking .p10k.zsh...
 ln -sf $(pwd)/p10k.zsh $(echo $HOME)/.p10k.zsh
 
 echo Moving .config/nvim to .config/nvim.pre_boostrap...
-mv -r ~/.config/nvim ~/.config/nvim.pre_boostrap
+mv ~/.config/nvim ~/.config/nvim.pre_boostrap
 echo Linking .config/nvim directory to nvim
 ln -sf $(pwd)/nvim $(echo $HOME)/.config
 

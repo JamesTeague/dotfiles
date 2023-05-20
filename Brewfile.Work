@@ -1,0 +1,6 @@
+tap "homebrew/cask"
+if OS.mac?
+  cask "slack"
+end
+
+cask "postman"
