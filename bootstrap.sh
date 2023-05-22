@@ -21,10 +21,10 @@ if [[ $(command -v brew) == "" ]]; then
   echo Installing brew...
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.zprofile 
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $(echo $HOME)/.zprofile 
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   elif [[ "$OSTYPE" == "darwin"* ]]; then
-    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $(echo $HOME)/.zprofile
     eval "$(/opt/homebrew/bin/brew shellenv)"
   fi
 fi
@@ -42,6 +42,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
   defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
   defaults write com.apple.finder ShowMountedServersOnDesktop -bool false
+  defaults write com.apple.Finder AppleShowAllFiles true
   killall Finder
 
   echo Configuring Dock and Mission Control.
@@ -76,7 +77,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 fi
 
 echo Moving .gitignore to .gitignore.pre_bootstrap...
-mv ~/.gitignore ~/.gitignore.pre_bootstrap
+mv $(echo $HOME)/.gitignore $(echo $HOME)/.gitignore.pre_bootstrap
 echo Linking .gitignore...
 ln -sf $(pwd)gitignore $(echo $HOME)/.gitignore
 
@@ -93,13 +94,13 @@ echo Downloading cht.sh with completions...
 sudo touch /usr/local/bin/cht.sh
 sudo curl -s https://cht.sh/:cht.sh | sudo tee /usr/local/bin/cht.sh
 sudo chmod +x /usr/local/bin/cht.sh
-curl https://cheat.sh/:zsh > ~/.zsh/_cht --create-dirs
+curl https://cheat.sh/:zsh > $(echo $HOME)/.zsh/_cht --create-dirs
 
 echo Configuring oh-my-zsh...
 sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 echo Moving .zshrc to .zsrhc.pre_bootstrap...
-mv ~/.zshrc ~/.zshrc.pre_bootstrap
+mv $(echo $HOME)/.zshrc $(echo $HOME)/.zshrc.pre_bootstrap
 echo Linking .zshrc...
 ln -sf $(pwd)/zshrc $(echo $HOME)/.zshrc
 
@@ -116,22 +117,23 @@ else
 fi
 
 echo Moving .p10k.zsh to .p10k_zsh.pre_bootstrap...
-mv ~/.p10k.zsh ~/.p10k_zsh.pre_bootstrap;
+mv $(echo $HOME)/.p10k.zsh $(echo $HOME)/.p10k_zsh.pre_bootstrap;
 echo Linking .p10k.zsh...
 ln -sf $(pwd)/p10k.zsh $(echo $HOME)/.p10k.zsh
 
 echo Moving .config/nvim to .config/nvim.pre_boostrap...
-mv ~/.config/nvim ~/.config/nvim.pre_boostrap
+mv $(echo $HOME)/.config/nvim $(echo $HOME)/.config/nvim.pre_boostrap
+mkdir -p $(echo $HOME)/.config/nvim
 echo Linking .config/nvim directory to nvim
 ln -sf $(pwd)/nvim $(echo $HOME)/.config/nvim 
 
 echo Moving .ideavimrc to .ideavimrc.pre_boostrap...
-mv ~/.ideavimrc ~/.ideavimrc.pre_bootstrap
+mv $(echo $HOME)/.ideavimrc $(echo $HOME)/.ideavimrc.pre_bootstrap
 echo Linking .ideavimrc for IntelliJ...
 ln -sf $(pwd)/ideavimrc $(echo $HOME)/.ideavimrc
 
-echo Installing packer for neovim
+echo Installing packer for neovim...
 git clone --depth 1 https://github.com/wbthomason/packer.nvim\
- ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+ $(echo $HOME)/.local/share/nvim/site/pack/packer/start/packer.nvim
 
 echo Done. Run "source ~/.zshrc" or open a new terminal.
