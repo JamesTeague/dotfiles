@@ -8,6 +8,7 @@ brew "git"
 brew "grep"
 brew "lua"
 brew "neovim"
+brew "ripgrep"
 brew "zsh" # macOS ships with an old version
 brew "zsh-autosuggestions"
 brew "zsh-completions"
