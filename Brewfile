@@ -57,6 +57,7 @@ if OS.mac?
   # Mac Utilities
   cask "alfred"
   cask "rectangle"
+  cash "via"
 
   # Dependencies
   brew "blueutil" # for alfred airpod plugin
