@@ -16,7 +16,8 @@ return require('packer').startup(function(use)
   use({ 'rose-pine/neovim', as = 'rose-pine' })
   use({'navarasu/onedark.nvim', as = 'onedark'})
 
-  -- vim.cmd('colorscheme rose-pine')
+  use('theprimeagen/vim-be-good')
+
   require('onedark').setup {
     style = 'warmer',
     transparent = true
