@@ -8,6 +8,7 @@ brew "git"
 brew "grep"
 brew "lua"
 brew "neovim"
+brew "ripgrep"
 brew "zsh" # macOS ships with an old version
 brew "zsh-autosuggestions"
 brew "zsh-completions"
@@ -56,6 +57,7 @@ if OS.mac?
   # Mac Utilities
   cask "alfred"
   cask "rectangle"
+  cash "via"
 
   # Dependencies
   brew "blueutil" # for alfred airpod plugin
