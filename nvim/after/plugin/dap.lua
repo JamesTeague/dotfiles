@@ -24,7 +24,7 @@ vim.keymap.set("n", "<leader>dc", function()
   --  require("notify")("Breakpoints cleared", "warn")
 end)
 vim.keymap.set("n", "<leader>st", function()
-  dap.clear_breakpoints()
+  -- dap.clear_breakpoints()
   ui.toggle({})
   dap.terminate()
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-w>=", false, true, true), "n", false)
@@ -53,7 +53,7 @@ dap.adapters.go = {
 dap.adapters.node2 = {
   type = 'executable',
   command = 'node',
-  args = {os.getenv('HOME') .. '/dev/microsoft/vscode-node-debug2/out/src/nodeDebug.js'},
+  args = { os.getenv('HOME') .. '/dev/microsoft/vscode-node-debug2/out/src/nodeDebug.js' },
 }
 
 dap.adapters.codelldb = {
@@ -61,7 +61,7 @@ dap.adapters.codelldb = {
   port = "${port}",
   executable = {
     command = '/Users/jteague/.local/share/nvim/mason/bin/codelldb',
-    args = {"--port", "${port}"},
+    args = { "--port", "${port}" },
   }
 }
 
@@ -94,7 +94,7 @@ dap.configurations.javascript = {
     name = 'Attach to process',
     type = 'node2',
     request = 'attach',
-    processId = require'dap.utils'.pick_process,
+    processId = require 'dap.utils'.pick_process,
   },
 }
 
@@ -111,15 +111,25 @@ ui.setup({
   layouts = {
     {
       elements = {
-        "scopes",
+        "repl",
       },
       size = 0.3,
       position = "right"
     },
     {
       elements = {
-        "repl",
-        "breakpoints"
+        {
+          id = "watches",
+          size = 0.4,
+        },
+        {
+          id = "scopes",
+          size = 0.4,
+        },
+        {
+          id = "breakpoints",
+          size = 0.2,
+        },
       },
       size = 0.3,
       position = "bottom",

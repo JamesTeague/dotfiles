@@ -8,13 +8,13 @@ return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
 
   use {
-	  'nvim-telescope/telescope.nvim', tag = '0.1.1',
-	  -- or                            , branch = '0.1.x',
-	  requires = { {'nvim-lua/plenary.nvim'} }
+    'nvim-telescope/telescope.nvim', tag = '0.1.1',
+    -- or                            , branch = '0.1.x',
+    requires = { { 'nvim-lua/plenary.nvim' } }
   }
 
   use({ 'rose-pine/neovim', as = 'rose-pine' })
-  use({'navarasu/onedark.nvim', as = 'onedark'})
+  use({ 'navarasu/onedark.nvim', as = 'onedark' })
 
   use('theprimeagen/vim-be-good')
 
@@ -24,7 +24,7 @@ return require('packer').startup(function(use)
   }
   require('onedark').load()
 
-  use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
+  use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
   use('nvim-treesitter/nvim-treesitter-context')
   use('nvim-treesitter/playground')
   use('theprimeagen/harpoon')
@@ -35,26 +35,27 @@ return require('packer').startup(function(use)
   use('jay-babu/mason-nvim-dap.nvim')
   use('mfussenegger/nvim-dap')
   use('leoluz/nvim-dap-go')
-  use {'rcarriga/nvim-dap-ui', requires = { {'mfussenegger/nvim-dap'} } }
+  use { 'rcarriga/nvim-dap-ui', requires = { { 'mfussenegger/nvim-dap' } } }
 
   use {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'v2.x',
     requires = {
       -- LSP Support
-      {'neovim/nvim-lspconfig'},             -- Required
-      {                                      -- Optional
+      { 'neovim/nvim-lspconfig' }, -- Required
+      {
+        -- Optional
         'williamboman/mason.nvim',
         run = function()
           pcall(vim.cmd, 'MasonUpdate')
         end,
       },
-      {'williamboman/mason-lspconfig.nvim'}, -- Optional
+      { 'williamboman/mason-lspconfig.nvim' }, -- Optional
 
       -- Autocompletion
-      {'hrsh7th/nvim-cmp'},     -- Required
-      {'hrsh7th/cmp-nvim-lsp'}, -- Required
-      {'L3MON4D3/LuaSnip'},     -- Required
+      { 'hrsh7th/nvim-cmp' },     -- Required
+      { 'hrsh7th/cmp-nvim-lsp' }, -- Required
+      { 'L3MON4D3/LuaSnip' },     -- Required
     }
   }
 end)
