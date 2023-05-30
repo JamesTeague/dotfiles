@@ -32,11 +32,18 @@ lsp.on_attach(function(_, bufnr)
   vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
   vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
   vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
-  vim.keymap.set("i", "<C-h>", function() vim.lis.buf.signature_help() end, opts)
+  vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
   vim.keymap.set("n", "<leader>re", function () vim.lsp.buf.rename() end, opts)
   vim.keymap.set("n", "<leader>ca", function () vim.lsp.buf.code_action() end, opts)
   vim.keymap.set("n", "<leader>rr", function () vim.lsp.buf.references() end, opts)
 end)
+
+lsp.set_sign_icons({
+  error = '✘',
+  warn = '▲',
+  hint = '⚑',
+  info = '»'
+})
 
 -- (Optional) Configure lua language server for neovim
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())

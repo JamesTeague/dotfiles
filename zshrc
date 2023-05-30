@@ -23,6 +23,11 @@ export PATH="$PATH:$GOPATH/bin"
 # Path to your oh-my-zsh installation.
 export ZSH="$(echo $HOME)/.oh-my-zsh"
 
+# ZSH History
+export HISTFILE=~/.zsh_history
+export HISTSIZE=1000
+export HISTFILESIZE=10000
+
 # Which plugins would you like to load?
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
