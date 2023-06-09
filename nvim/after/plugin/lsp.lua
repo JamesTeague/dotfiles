@@ -59,3 +59,7 @@ lsp.set_sign_icons({
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
 lsp.setup()
+
+vim.diagnostic.config({
+  virtual_text = true
+})

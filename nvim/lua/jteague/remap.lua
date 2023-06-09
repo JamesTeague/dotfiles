@@ -10,16 +10,20 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Scroll up half page" })
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
-vim.keymap.set("x", "<leader>p", "\"_dP")
+vim.keymap.set("x", "<leader>p", [["_dP]])
 
-vim.keymap.set("n", "<leader>y", "\"+y", { desc = "Yank to clipboard" })
-vim.keymap.set("v", "<leader>y", "\"+y", { desc = "Yank to clipboard" })
-vim.keymap.set("n", "<leader>Y", "\"+Y", { desc = "Yank to end of line to clipboard" })
+vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "Yank to clipboard" })
+vim.keymap.set("n", "<leader>Y", [["+Y]], { desc = "Yank to end of line to clipboard" })
 
-vim.keymap.set("n", "<leader>d", "\"_d", { desc = "delete without yank???" })
-vim.keymap.set("v", "<leader>d", "\"_d", { desc = "delete without yank???" })
+vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]], { desc = "delete without yank???" })
 
 vim.keymap.set("n", "Q", "<nop>")
+-- Disable Arrow Keys to break habit
+vim.keymap.set({ "n", "i", "v" }, "<Up>", "<nop>")
+vim.keymap.set({ "n", "i", "v" }, "<Down>", "<nop>")
+vim.keymap.set({ "n", "i", "v" }, "<Right>", "<nop>")
+vim.keymap.set({ "n", "i", "v" }, "<Left>", "<nop>")
+
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 
 vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
