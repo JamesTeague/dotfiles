@@ -1,35 +1,34 @@
 local dap = require('dap')
 local ui = require('dapui')
 
-vim.keymap.set("n", "<F9>", dap.continue)
-vim.keymap.set("n", "<F8>", dap.step_over)
-vim.keymap.set("n", "<F7>", dap.step_into)
-vim.keymap.set("n", "<F6>", dap.step_out)
-vim.keymap.set("n", "<F6>", dap.step_out)
-vim.keymap.set("n", "<leader>b", dap.toggle_breakpoint)
+vim.keymap.set("n", "<F9>", dap.continue, { desc = "Continue" })
+vim.keymap.set("n", "<F8>", dap.step_over, { desc = "Step Over" })
+vim.keymap.set("n", "<F7>", dap.step_into, { desc = "Step Into" })
+vim.keymap.set("n", "<F6>", dap.step_out, { desc = "Step Out" })
+vim.keymap.set("n", "<leader>b", dap.toggle_breakpoint, { desc = "Toggle Breakpoint" })
 vim.keymap.set("n", "<leader>B", function()
   dap.set_breakpoint(vim.fn.input('Breakpoint condition: '))
-end)
+end, { desc = "Breakpoint with condition" })
 vim.keymap.set("n", "<leader>lp", function()
   dap.set_breakpoint(vim.fn.input(nil, nil, vim.fn.input('Log point message: ')))
-end)
-vim.keymap.set("n", "<leader>dr", dap.repl.open)
+end, { desc = "Log point with message" })
+vim.keymap.set("n", "<leader>dr", dap.repl.open, { desc = "Open REPL" })
 vim.keymap.set("n", "<leader>dd", function()
   dap.continue()
   ui.toggle({})
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-w>=", false, true, true), "n", false) -- Spaces buffers evenly
-end)
+end, { desc = "Start Debugger" })
 vim.keymap.set("n", "<leader>dc", function()
   dap.clear_breakpoints()
   --  require("notify")("Breakpoints cleared", "warn")
-end)
+end, { desc = "Clear breakpoints" })
 vim.keymap.set("n", "<leader>st", function()
   -- dap.clear_breakpoints()
   ui.toggle({})
   dap.terminate()
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-w>=", false, true, true), "n", false)
   --  require("notify")("Debugger session ended", "warn")
-end)
+end, { desc = "Stop Debugger" })
 
 require("mason-nvim-dap").setup({
   ensure_installed = {
@@ -59,7 +58,7 @@ require("dap-vscode-js").setup({
   -- log_console_level = vim.log.levels.ERROR -- Logging level for output to console. Set to false to disable console output.
 })
 
-for _, language in ipairs({ "typescript", "javascript" }) do
+for _, language in ipairs({ "typescript", "javascript", "typescriptreact" }) do
   dap.configurations[language] = {
     {
       type = "pwa-node",
