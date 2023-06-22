@@ -30,6 +30,7 @@ return require('packer').startup(function(use)
   use('theprimeagen/harpoon')
   use('mbbill/undotree')
   use('tpope/vim-fugitive')
+  use('voldikss/vim-floaterm')
 
   -- Debugging
   use('jay-babu/mason-nvim-dap.nvim')
@@ -52,9 +53,7 @@ return require('packer').startup(function(use)
       {
         -- Optional
         'williamboman/mason.nvim',
-        run = function()
-          pcall(vim.cmd, 'MasonUpdate')
-        end,
+        run = ":MasonUpdate"
       },
       { 'williamboman/mason-lspconfig.nvim' }, -- Optional
 

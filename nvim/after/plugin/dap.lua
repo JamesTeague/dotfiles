@@ -48,6 +48,15 @@ dap.adapters.go = {
   },
 }
 
+dap.adapters.codelldb = {
+  type = "server",
+  port = "${port}",
+  executable = {
+    command = vim.fn.stdpath("data") .. '/mason/bin/codelldb',
+    args = { "--port", "${port}" }
+  }
+}
+
 require("dap-vscode-js").setup({
   -- node_path = "node", -- Path of node executable. Defaults to $NODE_PATH, and then "node"
   -- debugger_path = "(runtimedir)/site/pack/packer/opt/vscode-js-debug", -- Path to vscode-js-debug installation.
@@ -84,6 +93,21 @@ for _, language in ipairs({ "typescript", "javascript", "typescriptreact" }) do
       sourceMaps = true,
       trace = true,
     }
+  }
+end
+
+for _, language in ipairs({ "cpp", "c", "rust" }) do
+  dap.configurations[language] = {
+    {
+      name = "Launch file",
+      type = "codelldb",
+      request = "launch",
+      program = function()
+        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+      end,
+      cwd = "${workspaceFolder}",
+      stopOnEntry = false,
+    },
   }
 end
 
