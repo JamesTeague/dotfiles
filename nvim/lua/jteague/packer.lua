@@ -30,6 +30,7 @@ return require('packer').startup(function(use)
   use('theprimeagen/harpoon')
   use('mbbill/undotree')
   use('tpope/vim-fugitive')
+  use('lewis6991/gitsigns.nvim')
   use('voldikss/vim-floaterm')
 
   -- Debugging
