@@ -16,7 +16,7 @@ autocmd("BufWinEnter", {
     --    local opts = { buffer = bufnr, remap = false }
     vim.keymap.set("n", "<leader>c", function()
       vim.cmd.Git('commit')
-    end, { buffer = bufnr, remap = false, desc = "Push changes" })
+    end, { buffer = bufnr, remap = false, desc = "Commit changes" })
 
     vim.keymap.set("n", "<leader>p", function()
       vim.cmd.Git('push')
