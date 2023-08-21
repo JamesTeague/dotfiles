@@ -15,4 +15,5 @@ if OS.mac?
 
   # App Store applications
   mas 'Final Cut Pro (10.6.5)', id: 424389933
+  mas 'Brother iPrint&Scan', id: 1193539993
 end
