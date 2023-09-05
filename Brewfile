@@ -4,6 +4,8 @@ tap "homebrew/core"
 brew "bash"
 brew "bash-completion"
 brew "curl"
+brew "wget"
+brew "jq"
 brew "git"
 brew "grep"
 brew "lua"
@@ -64,6 +66,7 @@ if OS.mac?
 
   # Dev Applications
   cask "iterm2"
+  brew "slides"
 
   cask "obsidian"
 

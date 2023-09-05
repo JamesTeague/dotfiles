@@ -1,6 +1,9 @@
 tap "homebrew/cask"
+tap "snyk/tap"
+
 if OS.mac?
   cask "slack"
 end
 
 cask "postman"
+brew "snyk"

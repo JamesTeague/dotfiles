@@ -30,6 +30,7 @@ vim.keymap.set("n", "<leader>st", function()
   --  require("notify")("Debugger session ended", "warn")
 end, { desc = "Stop Debugger" })
 
+require("mason").setup()
 require("mason-nvim-dap").setup({
   ensure_installed = {
     "delve",
