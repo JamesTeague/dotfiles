@@ -7,3 +7,4 @@ end
 
 cask "postman"
 brew "snyk"
+brew "awscli"

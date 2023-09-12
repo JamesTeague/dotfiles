@@ -22,9 +22,24 @@ brew "make" # required by powerlevel10k on linux
 brew "gcc" # required by powerlevel10k, zsh on linux
 
 # CLI tools
-brew "bat" # colorize man pages
+brew "bat" # reading files (better cat)
 brew "gpg" # for signing git commits
 brew "tmux"
+brew "thefuck" # auto-correct mistyped commands
+brew "zoxide" # easy navigation (better cd)
+brew "tldr" # community-maintained docs (better man)
+brew "scc" # count lines of code
+brew "eza" # listing files (better ls)
+brew "diff-so-fancy" # file comparisons (better diff)
+brew "fdupes" # duplicate file finder
+brew "fzf" # fuzzy file finder (better find)
+brew "hyperfine" # command benchmarking
+brew "rip" # deletion tool (better rm)
+brew "buku" # bookmark manager
+brew "ddgr" # search web from terminal
+brew "khal" # calendar client
+brew "mutt" # email client
+brew "newsboat" # RSS/Atom news reader
 
 tap "homebrew/cask-fonts"
 cask "font-alfa-slab-one"
