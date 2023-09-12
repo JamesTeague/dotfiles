@@ -34,7 +34,7 @@ brew "diff-so-fancy" # file comparisons (better diff)
 brew "fdupes" # duplicate file finder
 brew "fzf" # fuzzy file finder (better find)
 brew "hyperfine" # command benchmarking
-brew "rip" # deletion tool (better rm)
+brew "rm-improved" # deletion tool (better rm)
 brew "buku" # bookmark manager
 brew "ddgr" # search web from terminal
 brew "khal" # calendar client
