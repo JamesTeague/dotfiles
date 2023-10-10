@@ -1,5 +1,6 @@
 tap "homebrew/cask"
 tap "snyk/tap"
+tap "localstack/tap"
 
 if OS.mac?
   cask "slack"
@@ -8,3 +9,4 @@ end
 cask "postman"
 brew "snyk"
 brew "awscli"
+brew "localstack-cli"

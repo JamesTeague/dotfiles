@@ -47,6 +47,7 @@ source $ZSH/oh-my-zsh.sh
 
 alias prune-branches="git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -d"
 alias vim="nvim"
+alias b="buku --suggest"
 
 export VISUAL=nvim
 export EDITOR="$VISUAL"
@@ -70,3 +71,4 @@ export PNPM_HOME="/Users/jteague/Library/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 # pnpm end
 
+eval "$(zoxide init zsh)"

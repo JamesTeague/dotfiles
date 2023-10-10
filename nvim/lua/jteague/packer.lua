@@ -24,7 +24,13 @@ return require('packer').startup(function(use)
   }
   require('onedark').load()
 
-  use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
+  use {
+    'nvim-treesitter/nvim-treesitter',
+
+    run = ':TSUpdate',
+    requires = { { 'nvim-treesitter/nvim-treesitter-textobjects' } },
+    event = { "BufReadPre", "BufNewFile" },
+  }
   use('nvim-treesitter/nvim-treesitter-context')
   use('nvim-treesitter/playground')
   use('theprimeagen/harpoon')
