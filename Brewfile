@@ -1,6 +1,5 @@
 # tap repositories and their packages
 
-tap "homebrew/core"
 brew "bash"
 brew "bash-completion"
 brew "curl"
@@ -52,12 +51,12 @@ cask "font-roboto"
 tap "homebrew/cask-versions"
 cask "firefox-developer-edition"
 
-tap "homebrew/cask"
 cask "bitwarden"
 cask "discord"
 cask "docker"
 cask "google-chrome"
 cask 'ytmdesktop-youtube-music'
+cask 'logseq'
 
 tap "romkatv/powerlevel10k"
 brew "powerlevel10k"
