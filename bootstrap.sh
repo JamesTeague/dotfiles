@@ -108,6 +108,11 @@ ln -sf $(pwd)/tmux.conf $(echo $HOME)/.config/tmux/tmux.conf
 echo installing tmux plugin manager
 git clone https://github.com/tmux-plugins/tpm $(echo $HOME)/.tmux/plugins/tpm
 
+echo Moving .zshenv to .zshenv.pre_bootstrap...
+mv $(echo $HOME)/.zshenv $(echo $HOME)/.zshenv.pre_bootstrap
+echo Linking .zshenv...
+ln -sf $(pwd)/zshenv $(echo $HOME)/.zshenv
+
 echo Moving .zshrc to .zsrhc.pre_bootstrap...
 mv $(echo $HOME)/.zshrc $(echo $HOME)/.zshrc.pre_bootstrap
 echo Linking .zshrc...
@@ -117,7 +122,7 @@ if [[ $personal_setup = "n" ]]
 then
   echo Tailoring the work experience...
 
-  echo 'export GOPRIVATE="scm.bluebeam.com,github.com"' >> $(echo $HOME)/.zprofile
+  echo 'export GOPRIVATE="scm.bluebeam.com,github.com"' >> $(echo $HOME)/.zshenv
   brew bundle --file=$(pwd)/Brewfile.Work
 else
   echo Adding personal touches...

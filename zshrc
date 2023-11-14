@@ -16,10 +16,6 @@ for d in "/share/zsh-completions" "/share/zsh/zsh-site-functions";do
   fi
 done
 
-# If you come from bash you might have to change your $PATH.
-export GOPATH="$HOME/go"
-export PATH="$PATH:$GOPATH/bin"
-
 # Path to your oh-my-zsh installation.
 export ZSH="$(echo $HOME)/.oh-my-zsh"
 
@@ -48,9 +44,6 @@ source $ZSH/oh-my-zsh.sh
 alias prune-branches="git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -d"
 alias vim="nvim"
 alias b="buku --suggest"
-
-export VISUAL=nvim
-export EDITOR="$VISUAL"
 
 autoload -U compinit add-zsh-hook
 compinit -u add-zsh-hook chpwd
