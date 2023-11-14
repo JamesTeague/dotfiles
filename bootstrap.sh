@@ -117,7 +117,7 @@ if [[ $personal_setup = "n" ]]
 then
   echo Tailoring the work experience...
 
-  echo 'export GOPRIVATE="scm.bluebeam.com/nw/proto"' >> $(echo $HOME)/.zsh_profile
+  echo 'export GOPRIVATE="scm.bluebeam.com,github.com"' >> $(echo $HOME)/.zprofile
   brew bundle --file=$(pwd)/Brewfile.Work
 else
   echo Adding personal touches...
