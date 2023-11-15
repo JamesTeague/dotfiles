@@ -6,3 +6,8 @@ Brewfile-Mac.lock.json
 .credentials
 .idea/*
 nvim/plugin/packer_compiled.lua
+
+# Work
+*.work.lua
+Brewfile.Work.lock.json
+getSnykLSP.sh
