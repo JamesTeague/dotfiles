@@ -18,6 +18,9 @@ fi
 echo Checking for brew...
 which -s brew
 if [[ $(command -v brew) == "" ]]; then
+  echo Moving .zprofile to .zprofile.pre_bootstrap...
+  mv $(echo $HOME)/.zprofile $(echo $HOME)/.zprofile.pre_bootstrap
+
   echo Installing brew...
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   if [[ "$OSTYPE" == "linux-gnu"* ]]; then
@@ -145,8 +148,12 @@ mv $(echo $HOME)/.ideavimrc $(echo $HOME)/.ideavimrc.pre_bootstrap
 echo Linking .ideavimrc for IntelliJ...
 ln -sf $(pwd)/ideavimrc $(echo $HOME)/.ideavimrc
 
-echo Installing packer for neovim...
-git clone --depth 1 https://github.com/wbthomason/packer.nvim\
- $(echo $HOME)/.local/share/nvim/site/pack/packer/start/packer.nvim
+if ! [[ "$(ls -A $(echo $HOME)/.local/share/nvim/site/pack/packer/start/packer.nvim)" ]]; then
+  echo Installing packer for neovim...
+  git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+   $(echo $HOME)/.local/share/nvim/site/pack/packer/start/packer.nvim
+else
+  echo Packer already installed.
+fi
 
 echo Done. Run "source ~/.zshrc" or open a new terminal.

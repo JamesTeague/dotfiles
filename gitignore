@@ -5,3 +5,8 @@
 .idea
 .run
 **.iml
+
+# Work
+*.work.lua
+Brewfile.Work.lock.json
+getSnykLSP.sh

@@ -13,3 +13,4 @@ export EDITOR="$VISUAL"
 # Export Secret Keys
 [[ -f ~/.secret-keys.zsh ]] && source ~/.secret-keys.zsh
 export GOPRIVATE="scm.bluebeam.com,github.com"
+export GOPRIVATE="scm.bluebeam.com,github.com"
