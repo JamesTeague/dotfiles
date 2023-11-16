@@ -1,4 +1,4 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Enable Powerlevel11k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
@@ -9,20 +9,39 @@ fi
 source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-for d in "/share/zsh-completions" "/share/zsh/zsh-site-functions";do
-  brew_completion=$(brew --prefix 2>/dev/null)$d
-  if [ $? -eq 0 ] && [ -d "$brew_completion" ];then
-    fpath=($brew_completion $fpath)
-  fi
+# Stash your environment variables in ~/.localrc. This means they'll stay out
+# of your main dotfiles repository (which may be public, like this one), but
+# you'll have access to them in your scripts.
+if [[ -a ~/.localrc ]]
+then
+  source ~/.localrc
+fi
+
+# all of our zsh files
+typeset -U config_files
+config_files=($HOME/dev/dotfiles/*/*.zsh)
+
+# load the path files
+for file in ${(M)config_files:#*/path.zsh}
+do
+  source $file
 done
+
+# load everything but the path and completion files
+for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
+do
+  source $file
+done
+
+# for d in "/share/zsh-completions" "/share/zsh/zsh-site-functions";do
+#   brew_completion=$(brew --prefix 2>/dev/null)$d
+#   if [ $? -eq 0 ] && [ -d "$brew_completion" ];then
+#     fpath=($brew_completion $fpath)
+#   fi
+# done
 
 # Path to your oh-my-zsh installation.
 export ZSH="$(echo $HOME)/.oh-my-zsh"
-
-# ZSH History
-export HISTFILE=~/.zsh_history
-export HISTSIZE=1000
-export HISTFILESIZE=10000
 
 # Which plugins would you like to load?
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
@@ -32,36 +51,27 @@ export HISTFILESIZE=10000
 plugins=(
   deno
   docker
+  docker-compose
   git
-  kubectl
-  npm
   sudo
-  wd
+  web-search
 )
 
 source $ZSH/oh-my-zsh.sh
-
-alias prune-branches="git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -d"
-alias vim="nvim"
-alias b="buku --suggest"
 
 autoload -U compinit add-zsh-hook
 compinit -u add-zsh-hook chpwd
 compaudit | xargs chmod g-w,o-w
 
+# load every completion after autocomplete loads
+for file in ${(M)config_files:#*/completion.zsh}
+do
+  source $file
+done
+
+unset config_files
+
 # Export Secret Keys
 [[ ! -f ~/.secret-keys.zsh ]] || source ~/.secret-keys.zsh
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
-source $(brew --prefix)/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"
-
-# pnpm
-export PNPM_HOME="/Users/jteague/Library/pnpm"
-export PATH="$PNPM_HOME:$PATH"
-# pnpm end
-
-eval "$(zoxide init zsh)"

@@ -1,0 +1,4 @@
+# ZSH History
+HISTFILE=~/.zsh_history
+HISTSIZE=1000
+HISTFILESIZE=10000
