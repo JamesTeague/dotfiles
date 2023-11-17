@@ -33,12 +33,6 @@ do
   source $file
 done
 
-# for d in "/share/zsh-completions" "/share/zsh/zsh-site-functions";do
-#   brew_completion=$(brew --prefix 2>/dev/null)$d
-#   if [ $? -eq 0 ] && [ -d "$brew_completion" ];then
-#     fpath=($brew_completion $fpath)
-#   fi
-# done
 
 # Path to your oh-my-zsh installation.
 export ZSH="$(echo $HOME)/.oh-my-zsh"
@@ -70,6 +64,9 @@ do
 done
 
 unset config_files
+
+typeset -A ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[path]='fg=magenta,underline'
 
 # Export Secret Keys
 [[ ! -f ~/.secret-keys.zsh ]] || source ~/.secret-keys.zsh
