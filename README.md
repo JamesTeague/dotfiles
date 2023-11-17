@@ -50,7 +50,11 @@ this script in `bin/`.
 
 ## Credits and Inspirations
 [saweber/dotfiles](https://github.com/saweber/dotfiles)
+
 [ThePrimeagen/.dotfiles](https://github.com/ThePrimeagen/.dotfiles)
+
 [holman/dotfiles](https://github.com/holman/dotfiles)
+
 https://www.josean.com/posts/tmux-setup
+
 https://vonheikemen.github.io/devlog/tools/using-netrw-vim-builtin-file-explorer/
