@@ -7,7 +7,6 @@ fi
 
 # powerlevel10k theme
 source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Stash your environment variables in ~/.localrc. This means they'll stay out
 # of your main dotfiles repository (which may be public, like this one), but
@@ -19,7 +18,7 @@ fi
 
 # all of our zsh files
 typeset -U config_files
-config_files=($HOME/dev/dotfiles/*/*.zsh)
+config_files=($DOTFILES/*/*.zsh)
 
 # load the path files
 for file in ${(M)config_files:#*/path.zsh}
@@ -66,9 +65,8 @@ done
 unset config_files
 
 typeset -A ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_STYLES[path]='fg=magenta,underline'
-
-# Export Secret Keys
-[[ ! -f ~/.secret-keys.zsh ]] || source ~/.secret-keys.zsh
+ZSH_HIGHLIGHT_STYLES[path]='fg=magenta'
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=cyan'
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=cyan'
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
