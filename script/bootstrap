@@ -45,6 +45,49 @@ setup_gitconfig () {
 
     sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" git/gitconfig.local.symlink.example > git/gitconfig.local.symlink
 
+    user " - Do you want to sign your commits? [y/N]"
+    read -e verified
+
+    if [ "$verified" == "y" ]
+    then
+      # Check if a GPG key already exists
+      existing_keys=$(gpg --list-secret-keys --keyid-format LONG)
+    
+      if [[ -n "$existing_keys" ]]; then
+        # Extract the GPG key ID from the existing keys
+        gpg_key_id=$(echo "$existing_keys" | grep -E "^sec" | awk '{print $2}' | cut -d '/' -f 2)
+        # info "You already have an existing GPG key. Your GPG key ID is: $gpg_key_id"
+      else
+        # info "Creating GPG Key for commit signing"
+        # Prompt for user information
+        user " - Enter your full name: " 
+        read -e full_name
+        user " - Enter your email address: " 
+        read -e email_address
+    
+        # Generate a new GPG key
+        gpg --batch --generate-key <<EOF
+          %no-protection
+          Key-Type: default
+          Subkey-Type: default
+          Name-Real: $full_name
+          Name-Email: $email_address
+          Expire-Date: 0
+          %commit
+EOF
+    
+        # Extract the GPG key ID from the newly generated key
+        gpg_key_id=$(gpg --list-secret-keys --keyid-format LONG | grep -E "^sec" | awk '{print $2}' | cut -d '/' -f 2)
+        # info "GPG key generated successfully. Your GPG key ID is: $gpg_key_id"
+        
+        # Save the GPG public key to a variable
+        gpg_public_key=$(gpg --armor --export $gpg_key_id)
+      fi
+      sed -e "s/GPGSIGNINGKEY/$gpg_key_id/g" -e "s/VERIFY/true/g" git/gitconfig.local.symlink > git/gitconfig.local.symlink.tmp && mv git/gitconfig.local.symlink.tmp git/gitconfig.local.symlink
+    else
+      sed -e "s/VERIFY/false/g" git/gitconfig.local.symlink > git/gitconfig.local.symlink.tmp && mv git/gitconfig.local.symlink.tmp git/gitconfig.local.symlink
+    fi
+
     success 'gitconfig'
   fi
 }
@@ -137,7 +180,7 @@ install_dotfiles () {
   done
 }
 
-user ' - Personal Setup? [y/n]'
+user ' - Personal Setup? [Y/n]'
 read personal_setup
 
 setup_gitconfig
@@ -167,3 +210,4 @@ fi
 
 echo ''
 echo '  All installed!'
+
