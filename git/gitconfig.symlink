@@ -1,0 +1,9 @@
+# Local/private config goes in the include
+[include]
+  path = ~/.gitconfig.local
+[core]
+	editor = nvim
+	autocrlf = input
+[push]
+	default = simple
+	autoSetupRemote = true
