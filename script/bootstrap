@@ -83,9 +83,11 @@ EOF
         # Save the GPG public key to a variable
         gpg_public_key=$(gpg --armor --export $gpg_key_id)
       fi
-      sed -e "s/GPGSIGNINGKEY/$gpg_key_id/g" -e "s/VERIFY/true/g" git/gitconfig.local.symlink > git/gitconfig.local.symlink.tmp && mv git/gitconfig.local.symlink.tmp git/gitconfig.local.symlink
+      sed -e "s/GPGSIGNINGKEY/$gpg_key_id/g" -e "s/VERIFY/true/g" git/gitconfig.local.symlink > git/gitconfig.local.symlink.tmp \
+        && mv git/gitconfig.local.symlink.tmp git/gitconfig.local.symlink
     else
-      sed -e "s/VERIFY/false/g" git/gitconfig.local.symlink > git/gitconfig.local.symlink.tmp && mv git/gitconfig.local.symlink.tmp git/gitconfig.local.symlink
+      sed -e "s/VERIFY/false/g" git/gitconfig.local.symlink > git/gitconfig.local.symlink.tmp \
+        && mv git/gitconfig.local.symlink.tmp git/gitconfig.local.symlink
     fi
 
     success 'gitconfig'
@@ -169,7 +171,7 @@ link_file () {
 }
 
 install_dotfiles () {
-  info 'installing dotfiles'
+  info 'Installing dotfiles'
 
   local overwrite_all=false backup_all=false skip_all=false
 
@@ -194,18 +196,19 @@ else
   dot_file_cmd="source bin/dot --work"
 fi
 
-info "installing dependencies"
+info "Installing dependencies"
 if eval "$dot_file_cmd" | while read -r data; do info "$data"; done
 then
   
   if [[ $personal_setup = "n" ]] 
   then
-    echo 'export GOPRIVATE="scm.bluebeam.com,github.com"' >> $(echo $HOME)/.zshenv
+    grep -qxF 'export GOPRIVATE="scm.bluebeam.com,github.com"' $(echo $HOME)/.zprofile || \
+      echo 'export GOPRIVATE="scm.bluebeam.com,github.com"' >> $(echo $HOME)/.zprofile
   fi
 
-  success "dependencies installed"
+  success "Dependencies installed"
 else
-  fail "error installing dependencies"
+  fail "Error installing dependencies"
 fi
 
 echo ''

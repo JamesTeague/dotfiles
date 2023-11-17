@@ -6,8 +6,8 @@
 
 tmuxHome=$(echo $HOME)/.tmux/plugins/tpm
 if [ ! -d $tmuxHome ]; then
-  echo installing tmux plugin manager
+  echo "› Installing tmux plugin manager"
   git clone https://github.com/tmux-plugins/tpm $tmuxHome
 else
-  echo tmux plugin manager already installed
+  echo "Tmux plugin manager already installed"
 fi

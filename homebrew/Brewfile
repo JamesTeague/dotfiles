@@ -16,6 +16,12 @@ brew "zsh-completions"
 brew "zsh-syntax-highlighting"
 brew "zsh-vi-mode"
 
+brew "go"
+brew "python3"
+brew "jupyterlab"
+brew "deno"
+brew "node"
+
 brew "npm" # required by lsp tsserver
 brew "make" # required by powerlevel10k on linux
 brew "gcc" # required by powerlevel10k, zsh on linux
