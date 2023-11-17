@@ -39,5 +39,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
   echo Configuring Desktop Services.
   defaults write com.apple.desktopservices DSDontWriteNetworkStores true
+  defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 fi
 
