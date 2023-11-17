@@ -2,20 +2,7 @@
 # It should contain commands to set the command search path, plus other important environment variables.
 # .zshenv' should not contain commands that produce output or assume the shell is attached to a tty.
 
-. "$HOME/.cargo/env"
-
-export GOPATH="$HOME/go"
-export PATH="$PATH:$GOPATH/bin"
-
 export VISUAL=nvim
 export EDITOR="$VISUAL"
 
 export GPG_TTY=$(tty)
-
-# pnpm
-export PNPM_HOME="/Users/jteague/Library/pnpm"
-export PATH="$PNPM_HOME:$PATH"
-# pnpm end
-
-# Export Secret Keys
-[[ -f ~/.secret-keys.zsh ]] && source ~/.secret-keys.zsh
