@@ -52,7 +52,7 @@ grep -qxF "export DOTFILES=${DOTFILES}" $DOTFILES/zsh/zshenv.symlink || echo "ex
 $DOTFILES/macos/set-defaults.sh
 
   # Install homebrew
-if [ $personalInstall ]; then
+if $personalInstall ; then
   $DOTFILES/homebrew/setup.sh -p 2>&1
 else
   $DOTFILES/homebrew/setup.sh -w 2>&1

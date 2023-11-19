@@ -58,33 +58,19 @@ setup_gitconfig () {
         gpg_key_id=$(echo "$existing_keys" | grep -E "^sec" | awk '{print $2}' | cut -d '/' -f 2)
         # info "You already have an existing GPG key. Your GPG key ID is: $gpg_key_id"
       else
-        # info "Creating GPG Key for commit signing"
-        # Prompt for user information
-        user " - Enter your full name: " 
-        read -e full_name
-        user " - Enter your email address: " 
-        read -e email_address
-    
         # Generate a new GPG key
-        gpg --batch --generate-key <<EOF
-          %no-protection
-          Key-Type: default
-          Subkey-Type: default
-          Name-Real: $full_name
-          Name-Email: $email_address
-          Expire-Date: 0
-          %commit
-EOF
-    
+        gpg --full-generate-key
+
         # Extract the GPG key ID from the newly generated key
         gpg_key_id=$(gpg --list-secret-keys --keyid-format LONG | grep -E "^sec" | awk '{print $2}' | cut -d '/' -f 2)
-        # info "GPG key generated successfully. Your GPG key ID is: $gpg_key_id"
+        info "GPG key generated successfully. Your GPG key ID is: $gpg_key_id"
         
-        # Save the GPG public key to a variable
-        gpg_public_key=$(gpg --armor --export $gpg_key_id)
       fi
-      sed -e "s/GPGSIGNINGKEY/$gpg_key_id/g" -e "s/VERIFY/true/g" git/gitconfig.local.symlink > git/gitconfig.local.symlink.tmp \
+        sed -e "s/GPGSIGNINGKEY/$gpg_key_id/g" -e "s/VERIFY/true/g" git/gitconfig.local.symlink > git/gitconfig.local.symlink.tmp \
         && mv git/gitconfig.local.symlink.tmp git/gitconfig.local.symlink
+
+        # Print the GPG public key
+        gpg --armor --export $gpg_key_id
     else
       sed -e "s/VERIFY/false/g" git/gitconfig.local.symlink > git/gitconfig.local.symlink.tmp \
         && mv git/gitconfig.local.symlink.tmp git/gitconfig.local.symlink
@@ -190,7 +176,7 @@ install_dotfiles
 
 dot_file_cmd="source bin/dot --personal"
 
-if [ $personal_setup ]; then
+if [[ $personal_setup != "n" ]]; then
   dot_file_cmd="source bin/dot --personal"
 else
   dot_file_cmd="source bin/dot --work"
@@ -199,18 +185,11 @@ fi
 info "Installing dependencies"
 if eval "$dot_file_cmd" | while read -r data; do info "$data"; done
 then
-  
-  if [[ $personal_setup = "n" ]] 
-  then
-    grep -qxF 'export GOPRIVATE="scm.bluebeam.com,github.com"' $(echo $HOME)/.zprofile || \
-      echo 'export GOPRIVATE="scm.bluebeam.com,github.com"' >> $(echo $HOME)/.zprofile
-  fi
-
   success "Dependencies installed"
 else
   fail "Error installing dependencies"
 fi
 
 echo ''
-echo '  All installed!'
+echo '  All installed! Please open a new Terminal window.'
 

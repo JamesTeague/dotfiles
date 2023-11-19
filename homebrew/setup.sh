@@ -7,10 +7,10 @@
 
 personal=
 
-while getopts 'pn' flag; do
+while getopts 'pw' flag; do
   case "${flag}" in
     p) personal=true ;;
-    n) personal=false ;;
+    w) personal=false ;;
     *) exit 1 ;;
   esac
 done
@@ -39,7 +39,7 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo "   Installing brew packages from Brewfile."
 brew bundle --file=${script_dir}/Brewfile;
 
-if [[ ! personal ]] 
+if ! $personal 
 then
   echo Tailoring the work experience...
 
