@@ -81,6 +81,7 @@ if OS.mac?
   cask "alfred"
   cask "rectangle"
   cask "via"
+  cask "macgpt"
 
   # Dependencies
   brew "blueutil" # for alfred airpod plugin
