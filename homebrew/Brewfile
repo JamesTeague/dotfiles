@@ -1,5 +1,3 @@
-# tap repositories and their packages
-
 brew "bash"
 brew "bash-completion"
 brew "curl"
@@ -17,6 +15,7 @@ brew "zsh-syntax-highlighting"
 brew "zsh-vi-mode"
 
 brew "go"
+brew "delve"
 brew "python3"
 brew "jupyterlab"
 brew "deno"
@@ -90,7 +89,7 @@ if OS.mac?
   cask "iterm2"
   brew "slides"
 
-  cask "obsidian"
+  cask "macgpt"
 
 elsif OS.linux?
   brew "xclip"

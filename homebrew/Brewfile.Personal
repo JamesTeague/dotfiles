@@ -2,6 +2,7 @@
 tap "homebrew/bundle"
 
 cask 'mullvadvpn'
+cask "kindle"
 
 if OS.mac?
 
@@ -9,7 +10,6 @@ if OS.mac?
   cask_args appdir: "/Applications", require_sha: false
 
   cask 'microsoft-office'
-  cask 'obs'
 
   # App Store applications
   mas 'Final Cut Pro (10.6.5)', id: 424389933

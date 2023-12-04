@@ -10,7 +10,8 @@ lsp.ensure_installed({
   'lua_ls',
   'rust_analyzer',
   'jedi_language_server',
-  'vuels',
+  'gopls',
+  'volar',
 })
 
 local cmp = require('cmp')
