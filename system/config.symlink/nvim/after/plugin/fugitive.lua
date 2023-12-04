@@ -1,4 +1,7 @@
 vim.keymap.set("n", "<leader>gs", vim.cmd.Git, { desc = "git status" })
+vim.keymap.set("n", "<leader>gf", function()
+  vim.cmd.Git("diff")
+end, { desc = "git diff" })
 -- vim.keymap.set("n", "gf", "<cmd>diffget //2<CR>")
 -- vim.keymap.set("n", "gj", "<cmd>diffget //3<CR>")
 local Jteague_Fugitive = vim.api.nvim_create_augroup("Jteague_Fugitive", {})

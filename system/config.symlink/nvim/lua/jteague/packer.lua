@@ -49,6 +49,9 @@ return require('packer').startup(function(use)
       require('Comment').setup()
     end
   }
+  use('ray-x/go.nvim')
+  use('ray-x/guihua.lua') -- recommended if need floating window support
+
   -- Debugging
   use('jay-babu/mason-nvim-dap.nvim')
   use('mfussenegger/nvim-dap')
