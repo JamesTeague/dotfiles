@@ -15,7 +15,12 @@ return require('packer').startup(function(use)
 
   use({ 'rose-pine/neovim', as = 'rose-pine' })
   use({ 'navarasu/onedark.nvim', as = 'onedark' })
-
+  use {
+    'nvim-tree/nvim-tree.lua',
+    requires = {
+      'nvim-tree/nvim-web-devicons', -- optional
+    },
+  }
   use('theprimeagen/vim-be-good')
 
   require('onedark').setup {
@@ -50,6 +55,12 @@ return require('packer').startup(function(use)
       require('Comment').setup()
     end
   }
+  use({
+    "stevearc/oil.nvim",
+    config = function()
+      require("oil").setup()
+    end,
+  })
   use('ray-x/go.nvim')
   use('ray-x/guihua.lua') -- recommended if need floating window support
 

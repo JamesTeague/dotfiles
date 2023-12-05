@@ -18,3 +18,5 @@ vim.env.TEST_ENV = "local"
 vim.keymap.set("n", "<leader>gt", [[:let $TEST_ENV = 'local' | GoTestFunc<CR>]], { desc = "Run Nearest Go Test" })
 vim.keymap.set("n", "<leader>gts", [[:let $TEST_ENV = 'local' | GoTestFunc -s <CR>]], { desc = "Select Go Tests to run" })
 vim.keymap.set("n", "<leader>gtf", [[:let $TEST_ENV = 'local' | GoTestFile <CR>]], { desc = "Run Go Tests in File" })
+
+vim.keymap.set("n", "<leader>gp", ":GoPkgOutline<CR>", { desc = "View Go Package Outline" })
