@@ -1,6 +1,8 @@
 local go = require('go')
 
-go.setup()
+go.setup({
+  icons = { breakpoint = '🔴' }
+})
 
 local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
 vim.api.nvim_create_autocmd("BufWritePre", {
