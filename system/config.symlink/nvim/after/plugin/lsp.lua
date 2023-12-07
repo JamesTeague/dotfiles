@@ -45,6 +45,8 @@ lsp.on_attach(function(_, bufnr)
     { buffer = bufnr, remap = false, desc = "Go to Previous" })
   vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end,
     { buffer = bufnr, remap = false, desc = "Signature Help" })
+  vim.keymap.set("n", "<C-h>", function() vim.lsp.buf.signature_help() end,
+    { buffer = bufnr, remap = false, desc = "Signature Help" })
   vim.keymap.set("n", "<leader>re", function() vim.lsp.buf.rename() end,
     { buffer = bufnr, remap = false, desc = "Rename Variable" })
   vim.keymap.set("n", "<leader>ca", function() vim.lsp.buf.code_action() end,

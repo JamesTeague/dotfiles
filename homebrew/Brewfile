@@ -60,7 +60,7 @@ cask "bitwarden"
 cask "discord"
 cask "docker"
 cask "google-chrome"
-cask "ytmdesktop-youtube-music"
+cask "yt-music"
 cask "logseq"
 cask "flameshot"
 

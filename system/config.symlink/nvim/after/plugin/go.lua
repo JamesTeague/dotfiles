@@ -22,3 +22,4 @@ vim.keymap.set("n", "<leader>gts", [[:let $TEST_ENV = 'local' | GoTestFunc -s <C
 vim.keymap.set("n", "<leader>gtf", [[:let $TEST_ENV = 'local' | GoTestFile <CR>]], { desc = "Run Go Tests in File" })
 
 vim.keymap.set("n", "<leader>gp", ":GoPkgOutline<CR>", { desc = "View Go Package Outline" })
+vim.keymap.set("n", "<leader>gm", ":GoMockGen -s<CR>", { desc = "Generate Go Mock for Interface by source" })
