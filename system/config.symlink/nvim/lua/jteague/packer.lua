@@ -48,6 +48,9 @@ return require('packer').startup(function(use)
   use('mbbill/undotree')
   use('tpope/vim-fugitive')
   use('lewis6991/gitsigns.nvim')
+  use { 'akinsho/git-conflict.nvim', tag = "v1.2.2", config = function()
+    require('git-conflict').setup()
+  end }
   use('voldikss/vim-floaterm')
   use {
     'numToStr/Comment.nvim',
@@ -63,6 +66,7 @@ return require('packer').startup(function(use)
   })
   use('ray-x/go.nvim')
   use('ray-x/guihua.lua') -- recommended if need floating window support
+  use('ray-x/lsp_signature.nvim')
 
   -- Debugging
   use('jay-babu/mason-nvim-dap.nvim')
