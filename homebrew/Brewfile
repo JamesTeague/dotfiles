@@ -14,7 +14,8 @@ brew "zsh-completions"
 brew "zsh-syntax-highlighting"
 brew "zsh-vi-mode"
 
-tap jesseduffield/lazygit/lazygit
+tap "jesseduffield/lazygit"
+brew "jesseduffield/lazygit/lazygit"
 
 brew "go"
 brew "delve"

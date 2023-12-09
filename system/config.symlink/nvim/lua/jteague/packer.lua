@@ -48,6 +48,7 @@ return require('packer').startup(function(use)
   use('mbbill/undotree')
   use('tpope/vim-fugitive')
   use('lewis6991/gitsigns.nvim')
+  use('yorickpeterse/nvim-pqf')
   use { 'akinsho/git-conflict.nvim', tag = "v1.2.2", config = function()
     require('git-conflict').setup()
   end }

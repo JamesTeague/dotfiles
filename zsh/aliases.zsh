@@ -2,3 +2,4 @@ alias prune-branches="git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <
 alias vim="nvim"
 alias b="buku --suggest"
 alias reload!='. ~/.zshrc'
+alias lg='lazygit'
