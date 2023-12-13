@@ -3,3 +3,4 @@ alias vim="nvim"
 alias b="buku --suggest"
 alias reload!='. ~/.zshrc'
 alias lg='lazygit'
+alias ls="eza"

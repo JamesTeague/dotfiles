@@ -6,12 +6,12 @@
 # using Homebrew.
 
 personal=
+work=
 
 while getopts 'pw' flag; do
   case "${flag}" in
     p) personal=true ;;
-    w) personal=false ;;
-    *) exit 1 ;;
+    w) work=true ;;
   esac
 done
 
@@ -39,15 +39,18 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo "   Installing brew packages from Brewfile."
 brew bundle --file=${script_dir}/Brewfile;
 
-if ! $personal 
+if [ "$personal" = true ]
+then
+  echo Adding personal touches...
+
+  brew bundle --file=${script_dir}/Brewfile.Personal
+fi
+
+if [ "$work" = true ] 
 then
   echo Tailoring the work experience...
 
   brew bundle --file=${script_dir}/Brewfile.Work
-else
-  echo Adding personal touches...
-
-  brew bundle --file=${script_dir}/Brewfile.Personal
 fi
 
 exit 0

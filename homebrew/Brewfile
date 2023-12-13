@@ -47,6 +47,7 @@ brew "ddgr" # search web from terminal
 brew "khal" # calendar client
 brew "mutt" # email client
 brew "newsboat" # RSS/Atom news reader
+brew "httpie"
 
 tap "homebrew/cask-fonts"
 cask "font-alfa-slab-one"

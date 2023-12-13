@@ -9,7 +9,8 @@ set -e
 
 parentDirectory="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
 dotfilesDirectory="$(cd "$( dirname "$parentDirectory" )" && pwd -P)"
-personalInstall=true
+personalInstall=
+workInstall=
 
 displayUsageAndExit() {
 	echo "dot -- dotfiles management"
@@ -17,8 +18,10 @@ displayUsageAndExit() {
 	echo "Usage: dot [options]"
 	echo ""
 	echo "Options:"
-	echo "  -e, --edit    Open dotfiles directory for editing"
-	echo "  -h, --help    Show this help message and exit"
+	echo "  -e, --edit        Open dotfiles directory for editing"
+	echo "  -h, --help        Show this help message and exit"
+	echo "  -p, --personal    Add personal homebrew installation"
+	echo "  -w, --work        Add work homebrew installation"
 	exit
 }
 
@@ -32,7 +35,7 @@ while test $# -gt 0; do
 			exit
 			;;
     "-w"|"--work")
-      personalInstall=false
+      workInstall=true
       ;;
     "-p"|"--personal")
       personalInstall=true
@@ -51,11 +54,15 @@ grep -qxF "export DOTFILES=${DOTFILES}" $DOTFILES/zsh/zshenv.symlink || echo "ex
 # Set macOS defaults
 $DOTFILES/macos/set-defaults.sh
 
-  # Install homebrew
-if $personalInstall ; then
+# Install homebrew
+if [ "$personalInstall" = true ] && [ "$workInstall" = true ]; then
+  $DOTFILES/homebrew/setup.sh -pw 2>&1
+elif [ "$personalInstall" = true ]; then
   $DOTFILES/homebrew/setup.sh -p 2>&1
-else
+elif [ "$workInstall" = true ]; then
   $DOTFILES/homebrew/setup.sh -w 2>&1
+else
+  $DOTFILES/homebrew/setup.sh 2>&1
 fi
 
 # Upgrade homebrew
