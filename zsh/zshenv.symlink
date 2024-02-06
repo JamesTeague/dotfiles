@@ -7,3 +7,4 @@ export EDITOR="$VISUAL"
 
 export GPG_TTY=$(tty)
 export DOTFILES=/Users/jteague/dev/dotfiles
+. "$HOME/.cargo/env"

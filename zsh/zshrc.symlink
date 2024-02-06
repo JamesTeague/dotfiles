@@ -26,13 +26,6 @@ do
   source $file
 done
 
-# load everything but the path and completion files
-for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
-do
-  source $file
-done
-
-
 # Path to your oh-my-zsh installation.
 export ZSH="$(echo $HOME)/.oh-my-zsh"
 
@@ -62,11 +55,18 @@ do
   source $file
 done
 
-unset config_files
 
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_STYLES[path]='fg=magenta'
 ZSH_HIGHLIGHT_STYLES[double-hyphen-option]='fg=cyan'
 ZSH_HIGHLIGHT_STYLES[single-hyphen-option]='fg=cyan'
+
+# load everything but the path and completion files
+for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
+do
+  source $file
+done
+
+unset config_files
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
