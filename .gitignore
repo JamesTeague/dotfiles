@@ -5,10 +5,14 @@ Brewfile.lock.json
 Brewfile-Mac.lock.json
 .credentials
 .idea/*
-nvim/plugin/packer_compiled.lua
 gitconfig.local.symlink
 
+# System Applications
+/system/config.symlink/jgit/
+packer_compiled.lua
+
 # Work
+/work/
 *.work.lua
 Brewfile.Work.lock.json
 getSnykLSP.sh
