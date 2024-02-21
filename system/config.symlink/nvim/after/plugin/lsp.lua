@@ -76,6 +76,14 @@ lspconfig.tsserver.setup {
   single_file_support = false
 }
 
+lspconfig.gopls.setup {
+  settings = {
+    gopls = {
+      gofumpt = true
+    }
+  }
+}
+
 lsp.setup()
 
 vim.diagnostic.config({
