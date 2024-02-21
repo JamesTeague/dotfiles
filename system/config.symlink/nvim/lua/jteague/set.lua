@@ -6,6 +6,10 @@ vim.g.loaded_netrwPlugin = 1
 -- set termguicolors to enable highlight groups
 vim.opt.termguicolors = true
 
+-- enable spell checker
+vim.opt.spelllang = 'en_us'
+vim.opt.spell = true
+
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
