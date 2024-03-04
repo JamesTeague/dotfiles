@@ -49,6 +49,7 @@ brew "mutt" # email client
 brew "newsboat" # RSS/Atom news reader
 brew "httpie"
 brew "atuin" # better history
+brew "btop" # better top and htop
 
 tap "homebrew/cask-fonts"
 cask "font-alfa-slab-one"
