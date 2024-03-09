@@ -22,6 +22,7 @@ return require('packer').startup(function(use)
     },
   }
   use('theprimeagen/vim-be-good')
+  use('rcarriga/nvim-notify')
 
   require('onedark').setup {
     style = 'warmer',
