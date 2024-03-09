@@ -17,6 +17,9 @@ brew "zsh-vi-mode"
 tap "jesseduffield/lazygit"
 brew "jesseduffield/lazygit/lazygit"
 
+tap "jesseduffield/lazydocker"
+brew "jesseduffield/lazydocker/lazydocker"
+
 brew "go"
 brew "delve"
 brew "python3"
