@@ -76,6 +76,15 @@ return require('packer').startup(function(use)
   use('ray-x/guihua.lua') -- recommended if need floating window support
   use('ray-x/lsp_signature.nvim')
 
+  -- Database Utilities
+  use('tpope/vim-dadbod')
+  use {
+     'kristijanhusak/vim-dadbod-ui',
+     requires = {
+       { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' } }
+     }
+  }
+
   -- Debugging
   use('jay-babu/mason-nvim-dap.nvim')
   use('mfussenegger/nvim-dap')
