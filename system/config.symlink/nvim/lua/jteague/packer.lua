@@ -66,6 +66,12 @@ return require('packer').startup(function(use)
       require("oil").setup()
     end,
   })
+  use {
+    'VonHeikemen/searchbox.nvim',
+     requires = {
+       {'MunifTanjim/nui.nvim'}
+     }
+  }
   use('ray-x/go.nvim')
   use('ray-x/guihua.lua') -- recommended if need floating window support
   use('ray-x/lsp_signature.nvim')
