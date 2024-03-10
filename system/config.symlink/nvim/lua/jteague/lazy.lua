@@ -12,9 +12,3 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup('jteague.plugins')
-
---require('onedark').setup {
---  style = 'warmer',
---  transparent = true
---}
---require('onedark').load()
