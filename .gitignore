@@ -10,6 +10,7 @@ gitconfig.local.symlink
 # System Applications
 /system/config.symlink/jgit/
 packer_compiled.lua
+lazy-lock.json
 
 # Work
 /work/
