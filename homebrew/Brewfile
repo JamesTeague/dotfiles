@@ -53,6 +53,7 @@ brew "newsboat" # RSS/Atom news reader
 brew "httpie"
 brew "atuin" # better history
 brew "btop" # better top and htop
+brew "zellij"
 
 tap "homebrew/cask-fonts"
 cask "font-alfa-slab-one"
