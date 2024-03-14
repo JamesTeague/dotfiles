@@ -1,24 +1,19 @@
 return {
-  {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-    dependencies = {"nvim-treesitter/nvim-treesitter-textobjects"},
+  { -- Highlight, edit, and navigate code
+    'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate',
+    dependencies = {'nvim-treesitter/nvim-treesitter-textobjects'},
     config = function ()
       require 'nvim-treesitter.configs'.setup {
         -- A list of parser names, or "all" (the five listed parsers should always be installed)
         ensure_installed = {
-          "javascript",
-          "typescript",
-          "go",
-          "rust",
-          "c",
-          "lua",
-          "query",
-          "sql",
-          "helm",
-          "terraform",
-          "markdown",
-          "markdown_inline",
+          'go',
+          'rust',
+          'c',
+          'lua',
+          'sql',
+          'markdown',
+          'bash',
         },
 
         -- Install parsers synchronously (only applied to `ensure_installed`)

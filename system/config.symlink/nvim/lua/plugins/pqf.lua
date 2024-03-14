@@ -1,6 +1,6 @@
 return {
   {
-    'tzachar/highlight-undo.nvim',
+    'yorickpeterse/nvim-pqf',
     opts = {},
   },
 }
