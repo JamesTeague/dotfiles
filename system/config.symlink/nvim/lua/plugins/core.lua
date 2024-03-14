@@ -37,6 +37,7 @@ return {
       require('which-key').register {
         ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
         ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
+        ['<leader>g'] = { name = '[G]it/[G]o', _ = 'which_key_ignore' },
         ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
         ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
         ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
@@ -54,7 +55,24 @@ return {
 
   { -- Highlight lines and changes that were undone or redone
     'tzachar/highlight-undo.nvim',
-    opts = {},
+    opts = {
+      duration = 500,
+      undo = {
+        hlgroup = 'HighlightUndoHL',
+        mode = 'n',
+        lhs = 'u',
+        map = 'undo',
+        opts = {}
+      },
+      redo = {
+        hlgroup = 'HighlightUndoHL',
+        mode = 'n',
+        lhs = '<C-r>',
+        map = 'redo',
+        opts = {}
+      },
+      highlight_for_count = true,
+    },
   },
 
   { -- Collection of various small independent plugins/modules
@@ -95,27 +113,40 @@ return {
     end,
   },
   { -- Change case of text
-    "johmsalas/text-case.nvim",
-    dependencies = { "nvim-telescope/telescope.nvim" },
+    'johmsalas/text-case.nvim',
+    dependencies = { 'nvim-telescope/telescope.nvim' },
     config = function()
-      require("textcase").setup({})
-      require("telescope").load_extension("textcase")
+      require('textcase').setup({})
+      require('telescope').load_extension('textcase')
     end,
     keys = {
-      "ga", -- Default invocation prefix
-      { "ga.", "<cmd>TextCaseOpenTelescope<CR>", mode = { "n", "x" }, desc = "Telescope" },
+      'ga', -- Default invocation prefix
+      { 'ga.', '<cmd>TextCaseOpenTelescope<CR>', mode = { 'n', 's' }, desc = 'Telescope' },
     },
     cmd = {
       -- NOTE: The Subs command name can be customized via the option "substitude_command_name"
-      "Subs",
-      "TextCaseOpenTelescope",
-      "TextCaseOpenTelescopeQuickChange",
-      "TextCaseOpenTelescopeLSPChange",
-      "TextCaseStartReplacingCommand",
+      'Subs',
+      'TextCaseOpenTelescope',
+      'TextCaseOpenTelescopeQuickChange',
+      'TextCaseOpenTelescopeLSPChange',
+      'TextCaseStartReplacingCommand',
     },
     -- If you want to use the interactive feature of the `Subs` command right away, text-case.nvim
     -- has to be loaded on startup. Otherwise, the interactive feature of the `Subs` will only be
     -- available after the first executing of it or after a keymap of text-case.nvim has been used.
     lazy = true,
+  },
+  {
+    'ThePrimeagen/git-worktree.nvim',
+    dependencies = { 'nvim-telescope/telescope.nvim' },
+    config = function ()
+      require('telescope').load_extension('git_worktree')
+    end,
+    keys = {
+      { '<leader>gw', '<cmd>Telescope git_worktree<cr>', desc = '[G]it [W]orktree' },
+      { '<leader>gwc', function ()
+        require('telescope').extensions.git_worktree.create_git_worktree()
+      end, desc = '[G]it [W]orktree [C]reate' },
+    }
   },
 }

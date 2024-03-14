@@ -87,3 +87,5 @@ vim.opt.undofile = true
 
 -- Configure Color Column
 vim.opt.colorcolumn = '120'
+
+vim.opt.tabstop = 2
