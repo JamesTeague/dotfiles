@@ -53,28 +53,6 @@ return {
     opts = { signs = false }
   },
 
-  { -- Highlight lines and changes that were undone or redone
-    'tzachar/highlight-undo.nvim',
-    opts = {
-      duration = 500,
-      undo = {
-        hlgroup = 'HighlightUndoHL',
-        mode = 'n',
-        lhs = 'u',
-        map = 'undo',
-        opts = {}
-      },
-      redo = {
-        hlgroup = 'HighlightUndoHL',
-        mode = 'n',
-        lhs = '<C-r>',
-        map = 'redo',
-        opts = {}
-      },
-      highlight_for_count = true,
-    },
-  },
-
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
     config = function()
@@ -112,6 +90,14 @@ return {
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
+
+  { -- Highlight lines and changes that were undone or redone
+    'tzachar/highlight-undo.nvim',
+    -- HACK: This plugin **MUST** come after mini.nvim because of u and <c-r> remaps
+    -- https://github.com/tzachar/highlight-undo.nvim/issues/8#issuecomment-1595776700
+    opts = {},
+  },
+
   { -- Change case of text
     'johmsalas/text-case.nvim',
     dependencies = { 'nvim-telescope/telescope.nvim' },
