@@ -45,9 +45,12 @@ return {
       }
     end,
   },
-
-  -- Highlight todo, notes, etc in comments
   {
+    'karb94/neoscroll.nvim',
+    opts = {},
+  },
+
+  { -- Highlight todo, notes, etc in comments
     'folke/todo-comments.nvim',
     event = 'VimEnter',
     dependencies = { 'nvim-lua/plenary.nvim' },
