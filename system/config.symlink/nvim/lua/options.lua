@@ -88,4 +88,8 @@ vim.opt.undofile = true
 -- Configure Color Column
 vim.opt.colorcolumn = '120'
 
+-- Configure Tab to stop at 2
 vim.opt.tabstop = 2
+
+-- Disable Code Diagnostic in favor of lsp_lines plugin
+vim.diagnostic.config({virtual_text = false})
