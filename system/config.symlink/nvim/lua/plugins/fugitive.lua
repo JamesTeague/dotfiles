@@ -40,6 +40,7 @@ return {
             { buffer = bufnr, remap = false, desc = "Setup branch origin" });
         end,
       })
-    end
+    end,
+    enabled = false,
   }
 }
