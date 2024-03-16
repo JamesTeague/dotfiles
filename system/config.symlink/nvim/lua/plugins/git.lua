@@ -1,10 +1,28 @@
 return {
-  'lewis6991/gitsigns.nvim',
-  config = function ()
-    require('gitsigns').setup({
-      current_line_blame = true,
-      on_attach = function(bufnr)
-        local gs = package.loaded.gitsigns
+  {
+    'NeogitOrg/neogit',
+    dependencies = {
+      'nvim-lua/plenary.nvim',         -- required
+      'sindrets/diffview.nvim',        -- optional - Diff integration
+      'nvim-telescope/telescope.nvim',
+    },
+    keys = {
+      { '<leader>gs', '<cmd>Neogit<cr>', desc = '[G]it [S]tatus' },
+    },
+    config = true
+  },
+  {
+    'akinsho/git-conflict.nvim',
+    version = "*",
+    config = true
+  },
+  {
+    'lewis6991/gitsigns.nvim',
+    config = function ()
+      require('gitsigns').setup({
+        current_line_blame = true,
+        on_attach = function(bufnr)
+          local gs = package.loaded.gitsigns
 
         local function map(mode, l, r, opts)
           opts = opts or {}
@@ -47,4 +65,5 @@ return {
       end
     })
   end,
+},
 }
