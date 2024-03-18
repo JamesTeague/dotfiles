@@ -53,8 +53,8 @@ vim.opt.splitbelow = true
 -- Sets how neovim will display certain whitespace in the editor.
 --  See `:help 'list'`
 --  and `:help 'listchars'`
-vim.opt.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+-- vim.opt.list = true
+-- vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = 'split'
@@ -88,8 +88,8 @@ vim.opt.undofile = true
 -- Configure Color Column
 vim.opt.colorcolumn = '120'
 
--- Configure Tab to stop at 2
+-- Configure Tab distances
 vim.opt.tabstop = 2
-
--- Disable Code Diagnostic in favor of lsp_lines plugin
-vim.diagnostic.config({virtual_text = false})
+vim.opt.softtabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
