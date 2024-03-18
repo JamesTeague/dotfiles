@@ -26,6 +26,15 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 -- reload current color scheme to pick up colors override if it was set up in a lazy plugin definition fashion
 vim.cmd.colorscheme(vim.g.colors_name)
 
+-- HACK: This may be a hack. Want to disable virtual_text because of the lsp_lines plugin.
+-- see `:help lsp_lines.nvim-setup
+vim.api.nvim_create_autocmd('VimEnter', {
+  desc = 'Disable virtual_text upon enter',
+  callback = function()
+    -- Disable Code Diagnostic in favor of lsp_lines plugin
+    vim.diagnostic.config({ virtual_text = false })
+  end,
+})
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
