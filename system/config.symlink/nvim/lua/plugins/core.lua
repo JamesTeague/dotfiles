@@ -9,7 +9,7 @@ return {
   --  This is equivalent to:
   --    require('Comment').setup({})
 
-  -- "gc" to comment visual regions/lines
+  -- 'gc' to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
 
   -- NOTE: Plugins can also be configured to run lua code when they are loaded.
@@ -27,7 +27,7 @@ return {
   -- after the plugin has been loaded:
   --  config = function() ... end
 
-  { -- Useful plugin to show you pending keybinds.
+  {                     -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     config = function() -- This is the function that runs, AFTER loading
@@ -36,7 +36,7 @@ return {
       -- Document existing key chains
       require('which-key').register {
         ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-        ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
+        ['<leader>d'] = { name = '[D]iagnostic/[D]ocument', _ = 'which_key_ignore' },
         ['<leader>g'] = { name = '[G]it/[G]o', _ = 'which_key_ignore' },
         ['<leader>h'] = { name = '[H]unk', _ = 'which_key_ignore' },
         ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
@@ -114,7 +114,7 @@ return {
       { 'ga.', '<cmd>TextCaseOpenTelescope<CR>', mode = { 'n', 's' }, desc = 'Telescope' },
     },
     cmd = {
-      -- NOTE: The Subs command name can be customized via the option "substitude_command_name"
+      -- NOTE: The Subs command name can be customized via the option 'substitude_command_name'
       'Subs',
       'TextCaseOpenTelescope',
       'TextCaseOpenTelescopeQuickChange',
@@ -129,14 +129,18 @@ return {
   {
     'ThePrimeagen/git-worktree.nvim',
     dependencies = { 'nvim-telescope/telescope.nvim' },
-    config = function ()
+    config = function()
       require('telescope').load_extension('git_worktree')
     end,
     keys = {
       { '<leader>gw', '<cmd>Telescope git_worktree<cr>', desc = '[G]it [W]orktree' },
-      { '<leader>gwc', function ()
-        require('telescope').extensions.git_worktree.create_git_worktree()
-      end, desc = '[G]it [W]orktree [C]reate' },
+      {
+        '<leader>gwc',
+        function()
+          require('telescope').extensions.git_worktree.create_git_worktree()
+        end,
+        desc = '[G]it [W]orktree [C]reate'
+      },
     }
   },
 }

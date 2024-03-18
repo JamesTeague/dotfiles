@@ -23,10 +23,10 @@ return {
       -- LSP stands for Language Server Protocol. It's a protocol that helps editors
       -- and language tooling communicate in a standardized fashion.
       --
-      -- In general, you have a "server" which is some tool built to understand a particular
+      -- In general, you have a 'server' which is some tool built to understand a particular
       -- language (such as `gopls`, `lua_ls`, `rust_analyzer`, etc). These Language Servers
       -- (sometimes called LSP servers, but that's kind of like ATM Machine) are standalone
-      -- processes that communicate with some "client" - in this case, Neovim!
+      -- processes that communicate with some 'client' - in this case, Neovim!
       --
       -- LSP provides Neovim with features like:
       --  - Go to definition
@@ -41,15 +41,13 @@ return {
       -- If you're wondering about lsp vs treesitter, you can check out the wonderfully
       -- and elegantly composed help section, `:help lsp-vs-treesitter`
 
-      local signs = { Error = "", Warn = "", Hint = "󰌵", Info = "" }
+      local signs = { Error = '', Warn = '', Hint = '󰌵', Info = '' }
       for type, icon in pairs(signs) do
-        local hl = "DiagnosticSign" .. type
+        local hl = 'DiagnosticSign' .. type
         vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
       end
 
       local config = {
-        -- Enable virtual text
-        virtual_text = false,
         -- show signs
         signs = {
           active = signs,
@@ -59,11 +57,11 @@ return {
         severity_sort = true,
         float = {
           focusable = false,
-          style = "minimal",
-          border = "rounded",
-          source = "always",
-          header = "",
-          prefix = "",
+          style = 'minimal',
+          border = 'rounded',
+          source = 'always',
+          header = '',
+          prefix = '',
         },
       }
 
@@ -191,7 +189,7 @@ return {
               -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
               diagnostics = { disable = { 'missing-fields' } },
               workspace = {
-                checkThirdParty = "Disable",
+                checkThirdParty = 'Disable',
               },
             },
           },
@@ -321,7 +319,7 @@ return {
     end,
   },
   {
-    "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+    'https://git.sr.ht/~whynothugo/lsp_lines.nvim',
     opts = {},
   },
 }
