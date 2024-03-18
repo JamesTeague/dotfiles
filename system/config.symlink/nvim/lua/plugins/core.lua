@@ -47,6 +47,7 @@ return {
   },
   {
     'karb94/neoscroll.nvim',
+    event = 'BufEnter',
     opts = {},
   },
 
@@ -97,6 +98,7 @@ return {
 
   { -- Highlight lines and changes that were undone or redone
     'tzachar/highlight-undo.nvim',
+    event = 'BufEnter',
     -- HACK: This plugin **MUST** come after mini.nvim because of u and <c-r> remaps
     -- https://github.com/tzachar/highlight-undo.nvim/issues/8#issuecomment-1595776700
     opts = {},
