@@ -48,7 +48,17 @@ return {
   {
     'karb94/neoscroll.nvim',
     event = 'BufEnter',
-    opts = {},
+    opts = {
+      mappings = {
+        '<C-u>',
+        '<C-d>',
+        '<C-b>',
+        '<C-f>',
+        'zt',
+        'zz',
+        'zb',
+      },
+    },
   },
 
   { -- Highlight todo, notes, etc in comments
