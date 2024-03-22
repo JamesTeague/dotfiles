@@ -155,4 +155,20 @@ return {
       },
     }
   },
+  {
+    'crnvl96/lazydocker.nvim',
+    event = 'VeryLazy',
+    opts = {},
+    keys = {
+      {
+        '<leader>ld',
+        '<cmd>LazyDocker<cr>',
+        desc =
+        '[L]azy [D]ocker'
+      },
+    },
+    dependencies = {
+      'MunifTanjim/nui.nvim',
+    }
+  },
 }
