@@ -7,10 +7,30 @@ return {
       'nvim-telescope/telescope.nvim',
     },
     keys = {
-      { '<leader>gs',   '<cmd>Neogit<cr>',                                                                  desc = '[G]it [S]tatus' },
-      { '<leader>grp',  '<cmd>DiffviewOpen origin/HEAD...HEAD --imply-local<cr>',                           desc = '[G]it [R]eview [P]ull' },
-      { '<leader>grpc', '<cmd>DiffviewFileHistory --range=origin/HEAD...HEAD --right-only --no-merges<cr>', desc = '[G]it [R]eview [P]ull [C]ommits' },
-      { '<leader>grs',  '<cmd>DiffviewFileHistory -g --range=stash<cr>',                                    desc = '[G]it [R]eview [S]tash' },
+      {
+        '<leader>gs',
+        '<cmd>Neogit<cr>',
+        desc =
+        '[G]it [S]tatus'
+      },
+      {
+        '<leader>grp',
+        '<cmd>DiffviewOpen origin/HEAD...HEAD --imply-local<cr>',
+        desc =
+        '[G]it [R]eview [P]ull'
+      },
+      {
+        '<leader>grpc',
+        '<cmd>DiffviewFileHistory --range=origin/HEAD...HEAD --right-only --no-merges<cr>',
+        desc =
+        '[G]it [R]eview [P]ull [C]ommits'
+      },
+      {
+        '<leader>grs',
+        '<cmd>DiffviewFileHistory -g --range=stash<cr>',
+        desc =
+        '[G]it [R]eview [S]tash'
+      },
     },
     config = true
   },
@@ -68,5 +88,27 @@ return {
         end
       })
     end,
+  },
+  {
+    'kdheepak/lazygit.nvim',
+    cmd = {
+      'LazyGit',
+      'LazyGitConfig',
+      'LazyGitCurrentFile',
+      'LazyGitFilter',
+      'LazyGitFilterCurrentFile',
+    },
+    keys = {
+      {
+        '<leader>lg',
+        '<cmd>LazyGit<cr>',
+        desc =
+        '[L]azy [G]it'
+      },
+    },
+    -- optional for floating window border decoration
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
   },
 }
