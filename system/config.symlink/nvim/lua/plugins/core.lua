@@ -157,7 +157,6 @@ return {
   },
   {
     'crnvl96/lazydocker.nvim',
-    event = 'VeryLazy',
     opts = {},
     keys = {
       {
