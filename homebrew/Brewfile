@@ -90,7 +90,8 @@ if OS.mac?
   cask "alfred"
   cask "rectangle"
   cask "via"
-  cask "macgpt"
+  cask "hiddenbar"
+  cask "stats"
 
   # Dependencies
   brew "blueutil" # for alfred airpod plugin
@@ -98,8 +99,6 @@ if OS.mac?
   # Dev Applications
   cask "iterm2"
   brew "slides"
-
-  cask "macgpt"
 
 elsif OS.linux?
   brew "xclip"
