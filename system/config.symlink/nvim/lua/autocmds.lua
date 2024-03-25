@@ -12,15 +12,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
--- Format on Save
-vim.api.nvim_create_autocmd('BufWritePre', {
-  desc = 'Format on save',
-  group = vim.api.nvim_create_augroup('LSPFormatOnSave', { clear = true }),
-  callback = function()
-    vim.lsp.buf.format()
-  end,
-})
-
 -- Prevent ColorScheme clears self-defined DAP icon colors
 vim.api.nvim_create_autocmd('ColorScheme', {
   pattern = '*',
