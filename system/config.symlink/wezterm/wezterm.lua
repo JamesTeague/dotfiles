@@ -1,9 +1,9 @@
-local wezterm = require 'wezterm'
+local wezterm = require("wezterm")
 return {
 	-- color_scheme = 'termnial.sexy',
-	color_scheme = 'Ibm3270',
+	color_scheme = "Ibm 3270 (High Contrast)",
 	enable_tab_bar = false,
-	font_size = 13.0,
+	font_size = 16.0,
 	-- macos_window_background_blur = 40,
 	-- macos_window_background_blur = 30,
 
@@ -17,19 +17,19 @@ return {
 	-- window_background_opacity = 1.0,
 	window_background_opacity = 0.75,
 	-- window_background_opacity = 0.25,
-	window_decorations = 'RESIZE',
+	window_decorations = "RESIZE",
 	keys = {
 		{
-			key = 'f',
-			mods = 'CTRL',
+			key = "f",
+			mods = "CTRL",
 			action = wezterm.action.ToggleFullScreen,
 		},
 	},
 	mouse_bindings = {
 		-- Ctrl-click will open the link under the mouse cursor
 		{
-			event = { Up = { streak = 1, button = 'Left' } },
-			mods = 'CTRL',
+			event = { Up = { streak = 1, button = "Left" } },
+			mods = "CTRL",
 			action = wezterm.action.OpenLinkAtMouseCursor,
 		},
 	},
