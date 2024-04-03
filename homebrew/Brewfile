@@ -30,6 +30,7 @@ brew "node"
 brew "npm" # required by lsp tsserver
 brew "make" # required by powerlevel10k on linux
 brew "gcc" # required by powerlevel10k, zsh on linux
+brew "libpq"
 
 # CLI tools
 brew "bat" # reading files (better cat)
