@@ -1,0 +1,87 @@
+packages:
+  core:
+    taps:
+    - 'jesseduffield/lazygit'
+    - 'jesseduffield/lazydocker'
+    - 'homebrew/cask-fonts'
+    - 'romkatv/powerlevel10k'
+    brews:
+    - 'bash'
+    - 'bash-completion'
+    - 'curl'
+    - 'wget'
+    - 'jq'
+    - 'git'
+    - 'grep'
+    - 'lua'
+    - 'neovim'
+    - 'ripgrep'
+    - 'zsh' # macOS ships with an old version
+    - 'zsh-autosuggestions'
+    - 'zsh-completions'
+    - 'zsh-syntax-highlighting'
+    - 'zsh-vi-mode'
+    - 'jesseduffield/lazygit/lazygit'
+    - 'jesseduffield/lazydocker/lazydocker'
+    - 'go'
+    - 'delve'
+    - 'python3'
+    - 'jupyterlab'
+    - 'deno'
+    - 'node'
+    - 'npm' # required by lsp tsserver
+    - 'make' # required by powerlevel10k on linux
+    - 'gcc' # required by powerlevel10k, zsh on linux
+    - 'libpq'
+    - 'bat' # reading files (better cat)
+    - 'gpg' # for signing git commits
+    - 'tmux'
+    - 'thefuck' # auto-correct mistyped commands
+    - 'zoxide' # easy navigation (better cd)
+    - 'tldr' # community-maintained docs (better man)
+    - 'scc' # count lines of code
+    - 'eza' # listing files (better ls)
+    - 'diff-so-fancy' # file comparisons (better diff)
+    - 'fdupes' # duplicate file finder
+    - 'fzf' # fuzzy file finder (better find)
+    - 'hyperfine' # command benchmarking
+    - 'rm-improved' # deletion tool (better rm)
+    - 'buku' # bookmark manager
+    - 'ddgr' # search web from terminal
+    - 'khal' # calendar client
+    - 'mutt' # email client
+    - 'newsboat' # RSS/Atom news reader
+    - 'httpie'
+    - 'atuin' # better history
+    - 'btop' # better top and htop
+    - 'slides' # presentations in the terminal
+    - 'powerlevel10k'
+    casks:
+    - 'font-alfa-slab-one'
+    - 'font-awesome-terminal-fonts'
+    - 'font-hack-nerd-font'
+    - 'font-lato'
+    - 'font-monocraft'
+    - 'font-roboto'
+    - 'bitwarden'
+    - 'discord'
+    - 'docker'
+    - 'google-chrome'
+    - 'yt-music'
+    - 'logseq'
+    - 'flameshot'
+    - 'wezterm'
+  darwin:
+    taps:
+    - 'homebrew/bundle'
+    brews:
+    - 'mas'
+    casks:
+    - 'alfred'
+    - 'rectangle'
+    - 'via'
+    - 'hiddenbar'
+    - 'stats'
+  linux:
+    brews:
+    - 'xclip'
