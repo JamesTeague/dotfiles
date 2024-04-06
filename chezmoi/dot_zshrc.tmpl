@@ -18,7 +18,7 @@ fi
 
 # all of our zsh files
 typeset -U config_files
-config_files=({{.chezmoi.sourceDir}}/exact_topics/*/*.zsh)
+config_files=(../{{.chezmoi.sourceDir}}/exact_topics/*/*.zsh)
 
 # load the path files
 for file in ${(M)config_files:#*/path.zsh}
