@@ -1,0 +1,26 @@
+#!/bin/bash
+
+brew bundle --no-lock --file=/dev/stdin <<EOF
+{{ if .personal -}}
+{{ range .packages.personal.darwin.taps -}}
+tap {{ . | quote }}
+{{ end -}}
+{{ range .packages.personal.darwin.brews -}}
+brew {{ . | quote }}
+{{ end -}}
+{{ range .packages.personal.darwin.casks -}}
+cask {{ . | quote }}
+{{ end -}}
+EOF
+{{ else - }}
+{{ range .packages.work.darwin.taps -}}
+tap {{ . | quote }}
+{{ end -}}
+{{ range .packages.work.darwin.brews -}}
+brew {{ . | quote }}
+{{ end -}}
+{{ range .packages.work.darwin.casks -}}
+cask {{ . | quote }}
+{{ end -}}
+EOF
+{{ end -}}

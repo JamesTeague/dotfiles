@@ -23,7 +23,7 @@ fail () {
   exit
 }
 
-info "Installing Tooling..."
+info "Installing Linux Tooling..."
 
 if exists brew
 then
@@ -34,13 +34,7 @@ else
 
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-  # Install the correct homebrew for each OS type
-  {{ if eq .chezmoi.os "darwin" -}}
-    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $(echo $HOME)/.zprofile
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-  {{ else if eq .chezmoi.os "linux" -}}
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $(echo $HOME)/.zprofile 
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  {{ end -}}
+  echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $(echo $HOME)/.zprofile 
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
