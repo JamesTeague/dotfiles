@@ -1,34 +1,37 @@
 [user]
   name = {{ .name }}
   email = {{ .email }}
-  signingkey = {{ .key }}
 [credential]
+  {{ if eq .chezmoi.os "darwin" -}}
   helper = osxkeychain
+  {{ else if eq .chezmoi.os "linux" -}}
+  helper = cache
+  {{ end -}}
 [commit]
-  gpgsign = {{ .gpgsign }}
+  gpgsign = true
 [core]
-	editor = nvim
-	autocrlf = input
-	pager = diff-so-fancy | less --tabs=4 -RF
+  editor = nvim
+  autocrlf = input
+  pager = diff-so-fancy | less --tabs=4 -RF
 [pager]
   diff = diff-so-fancy | less --tabs=4 -RF
 [interactive]
-	diffFilter = diff-so-fancy --patch
+  diffFilter = diff-so-fancy --patch
 [color]
-	ui = true
+ui = true
 [color "diff-highlight"]
-	oldNormal = red bold
-	oldHighlight = red bold 52
-	newNormal = green bold
-	newHighlight = green bold 22
+  oldNormal = red bold
+  oldHighlight = red bold 52
+  newNormal = green bold
+  newHighlight = green bold 22
 [color "diff"]
-	meta = 11
-	frag = magenta bold
-	func = 146 bold
-	commit = yellow bold
-	old = red bold
-	new = green bold
-	whitespace = red reverse
+  meta = 11
+  frag = magenta bold
+  func = 146 bold
+  commit = yellow bold
+  old = red bold
+  new = green bold
+  whitespace = red reverse
 [push]
-	default = simple
-	autoSetupRemote = true
+  default = simple
+  autoSetupRemote = true

@@ -85,3 +85,35 @@ packages:
   linux:
     brews:
     - 'xclip'
+  personal:
+    taps:
+    - 'homebrew/bundle'
+    casks:
+    - 'mullvadvpn'
+    - 'kindle'
+    - 'handbrake'
+    - 'rode-central'
+    darwin:
+      casks:
+      - 'microsoft-office'
+      mas:
+        FinalCutPro:
+          name: 'Final Cut Pro (10.6.5)'
+          id: 424389933
+        BrotherIPrint:
+          name: 'Brother iPrint&Scan'
+          id: 1193539993
+  work:
+    core:
+      taps:
+      - 'snyk/tap'
+      - 'localstacl/tap'
+      brews:
+      - 'synk'
+      - 'awscli'
+      - 'localstack-cli'
+      - 'stern'
+      - 'sqlc'
+      casks:
+      - 'postman'
+      - 'slack'
