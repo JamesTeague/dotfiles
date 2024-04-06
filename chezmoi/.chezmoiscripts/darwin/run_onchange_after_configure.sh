@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# defaults write com.apple.Accessibility ReduceMotionEnabled -bool true
+
+defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool false
+defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
+defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
+defaults write com.apple.finder ShowMountedServersOnDesktop -bool false
+defaults write com.apple.Finder AppleShowAllFiles true
+killall Finder
+
+defaults write com.apple.dock no-bouncing -bool true
+defaults write com.apple.dock orientation right 
+defaults write com.apple.dock autohide -bool true
+defaults write com.apple.dock show-recents -bool false
+# Turns off misson control rearrange spaces
+defaults write com.apple.dock mru-spaces -bool false
+# disable hot corners
+defaults write com.apple.dock wvous-tl-corner -int 0
+defaults write com.apple.dock wvous-tr-corner -int 0
+defaults write com.apple.dock wvous-bl-corner -int 0
+defaults write com.apple.dock wvous-br-corner -int 0
+killall Dock
+
+defaults write -g com.apple.swipescrolldirection -bool false
+
+defaults write com.apple.screencapture disable-shadow -bool true
+defaults write com.apple.screencapture type jpg
+mkdir -p ~/Screenshots
+defaults write com.apple.screencapture "location" -string "~/Screenshots"
+killall SystemUIServer
+
+defaults write com.apple.desktopservices DSDontWriteNetworkStores true
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+

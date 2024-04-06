@@ -1,0 +1,13 @@
+#!/bin/bash
+
+brew bundle --no-lock --file=/dev/stdin <<EOF
+{{ range .packages.core.taps -}}
+tap {{ . | quote }}
+{{ end -}}
+{{ range .packages.core.brews -}}
+brew {{ . | quote }}
+{{ end -}}
+{{ range .packages.core.casks -}}
+cask {{ . | quote }}
+{{ end -}}
+EOF
