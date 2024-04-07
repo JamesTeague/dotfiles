@@ -83,11 +83,14 @@ packages:
     - 'hiddenbar'
     - 'stats'
   linux:
+    taps:
     brews:
     - 'xclip'
+    casks:
   personal:
     taps:
     - 'homebrew/bundle'
+    brews:
     casks:
     - 'mullvadvpn'
     - 'kindle'
