@@ -1,0 +1,4 @@
+{{ $personal := promptBoolOnce . "personal" "Is this a personal install?" true }}
+
+[data]
+  personal = {{ $personal }}
