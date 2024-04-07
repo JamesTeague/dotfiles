@@ -12,7 +12,7 @@ brew {{ . | quote }}
 cask {{ . | quote }}
 {{ end -}}
 EOF
-{{ else - }}
+{{ else -}}
 {{ range .packages.work.linux.taps -}}
 tap {{ . | quote }}
 {{ end -}}
