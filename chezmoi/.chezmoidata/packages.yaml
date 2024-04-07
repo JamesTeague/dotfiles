@@ -94,6 +94,8 @@ packages:
     - 'handbrake'
     - 'rode-central'
     darwin:
+      taps:
+      brews:
       casks:
       - 'microsoft-office'
       mas:
