@@ -11,8 +11,7 @@ sh -c "$(curl -fsSL get.chezmoi.io)" -- init --apply JamesTeague
 
 Everything is organized by topic or area. If you decide to add a new tool or area to your configuration (i.e. Node),
 just add a `node` directory and drop your files in there. If the file has a `.zsh` extension it will automatically get
-picked up and included in your shell. Any file *or* directory that ends with `.symlink` will get symlinked, dropping the
-extenstion, into `$HOME` during the `script/bootstrap` execution.
+picked up and included in your shell. 
 
 ## Components
 
