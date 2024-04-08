@@ -1,8 +1,13 @@
 {{ $personal := promptBoolOnce . "personal" "Is this a personal install?" true }}
-{{ $name := promptStringOnce . "name" "Name:" }}
-{{ $email := promptStringOnce . "email" "Email Address:" }}
+{{ $name := promptStringOnce . "name" "Name" }}
+{{ $email := promptStringOnce . "email" "Email Address" }}
+{{ $headless := false }}
+{{- if eq .chezmoi.os "windows" -}}
+{{-  $headless = true -}}
+{{- end -}}
 
 [data]
   personal = {{ $personal }}
   name = {{ $name | quote }}
   email = {{ $email | quote }}
+  headless = {{ $headless }}
