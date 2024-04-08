@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# find all installers and run them iteratively
+find {{.chezmoi.homeDir}}/.topics | while read installer ; do /bin/bash -c "${installer}" ; done
+
