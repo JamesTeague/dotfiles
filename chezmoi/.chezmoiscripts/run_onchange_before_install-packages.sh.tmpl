@@ -58,7 +58,6 @@ cask {{ . | quote }}
 cask {{ . | quote }}
 {{ end -}}
 {{ end -}}
-EOF
 
 {{ if eq .chezmoi.os "darwin" -}}
 {{ if .personal -}}
@@ -107,4 +106,4 @@ cask {{ . | quote }}
 {{ end -}}
 {{ end -}}
 {{ end -}}
-
+EOF
