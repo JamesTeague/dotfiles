@@ -9,101 +9,115 @@ tap {{ . | quote }}
 
 # Add darwin taps
 {{ if eq .chezmoi.os "darwin" -}}
-{{ range .packages.darwin.taps -}}
-tap {{ . | quote }}
-{{ end -}}
+  {{ range .packages.darwin.taps -}}
+    tap {{ . | quote }}
+  {{ end -}}
+
+  {{ if .personal -}}
+    {{ range .packages.personal.darwin.taps -}}
+      tap {{ . | quote }}
+    {{ end -}}
+  {{ else }}
+    {{ range .packages.work.darwin.taps -}}
+      tap {{ . | quote }}
+    {{ end -}}
+  {{ end -}}
 {{ end -}}
 
 # Add linux taps
 {{ if eq .chezmoi.os "linux" -}}
-{{ range .packages.linux.taps -}}
-tap {{ . | quote }}
-{{ end -}}
+  {{ range .packages.linux.taps -}}
+    tap {{ . | quote }}
+  {{ end -}}
+
+  {{ if .personal -}}
+    {{ range .packages.personal.linux.taps -}}
+      tap {{ . | quote }}
+    {{ end -}}
+  {{ else }}
+    {{ range .packages.work.linux.taps -}}
+      tap {{ . | quote }}
+    {{ end -}}
+  {{ end -}}
 {{ end -}}
 
 # Add Core Brews
 {{ range .packages.core.brews -}}
-brew {{ . | quote }}
+  brew {{ . | quote }}
 {{ end -}}
 
 # Add Darwin Brews
 {{ if eq .chezmoi.os "darwin" -}}
-{{ range .packages.darwin.brews -}}
-brew {{ . | quote }}
-{{ end -}}
+  {{ range .packages.darwin.brews -}}
+    brew {{ . | quote }}
+  {{ end -}}
+
+  {{ if .personal -}}
+    {{ range .packages.personal.darwin.brews -}}
+      tap {{ . | quote }}
+    {{ end -}}
+  {{ else }}
+    {{ range .packages.work.darwin.brews -}}
+      tap {{ . | quote }}
+    {{ end -}}
+  {{ end -}}
 {{ end -}}
 
 # Add Linux Brews
 {{ if eq .chezmoi.os "linux" -}}
-{{ range .packages.linux.brews -}}
-brew {{ . | quote }}
-{{ end -}}
+  {{ range .packages.linux.brews -}}
+    brew {{ . | quote }}
+  {{ end -}}
+
+  {{ if .personal -}}
+    {{ range .packages.personal.linux.brews -}}
+      tap {{ . | quote }}
+    {{ end -}}
+  {{ else }}
+    {{ range .packages.work.linux.brews -}}
+      tap {{ . | quote }}
+    {{ end -}}
+  {{ end -}}
 {{ end -}}
 
 # Add Core Casks
-{{ range .packages.core.casks -}}
-cask {{ . | quote }}
-{{ end -}}
+{{ if not .headless -}}
+  {{ range .packages.core.casks -}}
+    cask {{ . | quote }}
+  {{ end -}}
 
-# Add Darwin Casks
-{{ if eq .chezmoi.os "darwin" -}}
-{{ range .packages.darwin.casks -}}
-cask {{ . | quote }}
-{{ end -}}
-{{ end -}}
+  # Add Darwin Casks
+  {{ if eq .chezmoi.os "darwin" -}}
+    {{ range .packages.darwin.casks -}}
+      cask {{ . | quote }}
+    {{ end -}}
 
-# Add Linux Casks
-{{ if eq .chezmoi.os "linux" -}}
-{{ range .packages.linux.casks -}}
-cask {{ . | quote }}
-{{ end -}}
-{{ end -}}
+    {{ if .personal -}}
+      {{ range .packages.personal.darwin.casks -}}
+        cask {{ . | quote }}
+      {{ end -}}
+    {{ else }}
+      {{ range .packages.work.darwin.casks -}}
+        cask {{ . | quote }}
+      {{ end -}}
+    {{ end -}}
+  {{ end -}}
 
-{{ if eq .chezmoi.os "darwin" -}}
-{{ if .personal -}}
-{{ range .packages.personal.darwin.taps -}}
-tap {{ . | quote }}
-{{ end -}}
-{{ range .packages.personal.darwin.brews -}}
-brew {{ . | quote }}
-{{ end -}}
-{{ range .packages.personal.darwin.casks -}}
-cask {{ . | quote }}
-{{ end -}}
-{{ else }}
-{{ range .packages.work.darwin.taps -}}
-tap {{ . | quote }}
-{{ end -}}
-{{ range .packages.work.darwin.brews -}}
-brew {{ . | quote }}
-{{ end -}}
-{{ range .packages.work.darwin.casks -}}
-cask {{ . | quote }}
-{{ end -}}
-{{ end -}}
-{{ end -}}
+  # Add Linux Casks
+  {{ if eq .chezmoi.os "linux" -}}
+    {{ range .packages.linux.casks -}}
+      cask {{ . | quote }}
+    {{ end -}}
 
-{{ if eq .chezmoi.os "linux" -}}
-{{ if .personal -}}
-{{ range .packages.personal.linux.taps -}}
-tap {{ . | quote }}
-{{ end -}}
-{{ range .packages.personal.linux.brews -}}
-brew {{ . | quote }}
-{{ end -}}
-{{ range .packages.personal.linux.casks -}}
-cask {{ . | quote }}
-{{ end -}}
-{{ else }}
-{{ range .packages.work.linux.taps -}}
-tap {{ . | quote }}
-{{ end -}}
-{{ range .packages.work.linux.brews -}}
-brew {{ . | quote }}
-{{ end -}}
-{{ range .packages.work.linux.casks -}}
-cask {{ . | quote }}
-{{ end -}}
-{{ end -}}
+    {{ if .personal -}}
+      {{ range .packages.personal.linux.casks -}}
+        tap {{ . | quote }}
+      {{ end -}}
+    {{ else }}
+      {{ range .packages.work.linux.casks -}}
+        tap {{ . | quote }}
+      {{ end -}}
+    {{ end -}}
+  {{ end -}}
 {{ end -}}
 EOF
