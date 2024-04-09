@@ -78,7 +78,7 @@ packages:
     brews:
     - 'mas'
     casks:
-    - 'alfred'
+    - 'raycast'
     - 'rectangle'
     - 'via'
     - 'hiddenbar'
@@ -113,7 +113,7 @@ packages:
     core:
       taps:
       - 'snyk/tap'
-      - 'localstacl/tap'
+      - 'localstack/tap'
       brews:
       - 'synk'
       - 'awscli'
