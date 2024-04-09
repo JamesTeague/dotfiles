@@ -10,6 +10,7 @@ packages:
     - 'bash-completion'
     - 'curl'
     - 'wget'
+    - 'chezmoi'
     - 'jq'
     - 'git'
     - 'grep'
