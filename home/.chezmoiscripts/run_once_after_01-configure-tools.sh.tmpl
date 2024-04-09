@@ -1,5 +1,28 @@
 #!/bin/bash
 
+{{ template "utils" . }}
+
+info "Pouring Brew..."
+
+if exists brew
+then
+  info "Updating Homebrew..."
+  brew update
+else
+  info "Installing Homebrew for you."
+
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  {{ if eq .chezmoi.os "darwin" -}}
+  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $(echo $HOME)/.zprofile
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+  {{ else if eq .chezmoi.os "linux" -}}
+  echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $(echo $HOME)/.zprofile 
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  {{ end -}}
+fi
+
+{{ template "brew" . }}
+
 # Check if a GPG key already exists
 existing_keys=$(gpg --list-secret-keys --keyid-format LONG)
 
@@ -20,3 +43,4 @@ fi
 
 # Print the GPG public key
 gpg --armor --export $gpg_key_id
+

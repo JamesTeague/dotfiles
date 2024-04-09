@@ -1,0 +1,11 @@
+#!/bin/bash
+
+{{ template "utils" . }}
+
+if exists brew
+then
+  info "Updating Homebrew..."
+  brew update
+  {{ template "brew" . }}
+fi
+
