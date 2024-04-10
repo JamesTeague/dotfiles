@@ -2,13 +2,16 @@
 
 {{ template "utils.tmpl" . }}
 
+{{ if eq .chezmoi.os "darwin" -}}
+eval "$(/opt/homebrew/bin/brew shellenv)"
+{{ else if eq .chezmoi.os "linux" -}}
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+{{ end -}}
+
 {{ if lookPath "brew" }}
 info "Updating Homebrew..."
 brew update
-{{ else }}
-source_brew
-info "Updating Homebrew..."
-brew update
-{{ end }}
 
 {{ template "brew" . }}
+{{ end }}
+
