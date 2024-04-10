@@ -40,7 +40,9 @@ plugins=(
   git
   sudo
   web-search
+  {{ if not .personal }}
   kubernetes
+  {{ end }}
 )
 
 source $ZSH/oh-my-zsh.sh
