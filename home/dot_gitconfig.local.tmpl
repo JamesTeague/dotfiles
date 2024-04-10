@@ -1,0 +1,12 @@
+[user]
+  name = {{ .name }}
+  email = {{ .email }}
+  signingkey = gpgkey
+[credential]
+  {{ if eq .chezmoi.os "darwin" -}}
+  helper = osxkeychain
+  {{ else if eq .chezmoi.os "linux" -}}
+  helper = cache
+  {{ end -}}
+[commit]
+  gpgsign = true
