@@ -2,18 +2,3 @@
 {{- $scriptPath := printf "%s/scripts/generate-gpg-key.sh" .chezmoi.sourceDir -}}
 {{- $keyValue := output $scriptPath -}}
 {{- .chezmoi.stdin | replaceAllRegex "gpgkey" $keyValue -}}
-
-[user]
-  name = {{ .name }}
-  email = {{ .email }}
-  signingkey = gpgkey
-[credential]
-  {{ if eq .chezmoi.os "darwin" -}}
-  helper = osxkeychain
-  {{ else if eq .chezmoi.os "linux" -}}
-  helper = cache
-  {{ end -}}
-[commit]
-  gpgsign = true
-
-
