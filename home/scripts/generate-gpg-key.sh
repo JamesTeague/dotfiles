@@ -1,5 +1,13 @@
 #!/bin/bash
 
+if test "$(uname)" = "Darwin"
+then
+  eval "$(/opt/homebrew/bin/gpg shellenv)"
+elif test "$(expr substr $(uname -s) 1 5)" = "Linux"
+then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/gpg shellenv)"
+fi 
+
 # Check if a GPG key already exists
 existing_keys=$(gpg --list-secret-keys --keyid-format LONG)
 
