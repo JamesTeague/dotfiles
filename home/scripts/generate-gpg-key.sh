@@ -33,15 +33,9 @@ fi
 # gpg --armor --export $gpg_key_id
 cat <<'EOF'
 [user]
-  name = {{ .name }}
-  email = {{ .email }}
+  name = data-name
+  email = data-email
   signingkey = ${gpg_key_id}
-[credential]
-  {{ if eq .chezmoi.os "darwin" -}}
-  helper = osxkeychain
-  {{ else if eq .chezmoi.os "linux" -}}
-  helper = cache
-  {{ end -}}
 [commit]
   gpgsign = true
 EOF
