@@ -1,7 +1,7 @@
 {{- /* chezmoi:modify-template */ -}}
-{{- $helper := osxkeychain -}} 
+{{- $helper := "osxkeychain" -}} 
 {{- if eq .chezmoi.os "linux" -}}
-{{-    $helper = cache -}}
+{{-    $helper = "cache" -}}
 {{- end -}}
 {{- $scriptPath := printf "%s/scripts/generate-gpg-key.sh" .chezmoi.sourceDir -}}
 {{- $keyValue := output $scriptPath -}}
