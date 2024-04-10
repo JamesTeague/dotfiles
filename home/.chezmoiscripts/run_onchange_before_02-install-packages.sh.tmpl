@@ -1,0 +1,14 @@
+#!/bin/bash
+
+{{ template "utils.tmpl" . }}
+
+{{ if lookpath "brew" }}
+info "Updating Homebrew..."
+brew update
+{{ else }}
+source_brew
+info "Updating Homebrew..."
+brew update
+{{ end }}
+
+{{ template "brew" . }}

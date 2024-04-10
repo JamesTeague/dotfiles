@@ -1,6 +1,7 @@
 [user]
   name = {{ .name }}
   email = {{ .email }}
+  signingkey = GPGKEY
 [credential]
   {{ if eq .chezmoi.os "darwin" -}}
   helper = osxkeychain
