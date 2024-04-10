@@ -31,7 +31,7 @@ fi
 
 # Print the GPG public key
 # gpg --armor --export $gpg_key_id
-cat <<'EOF'
+cat << EOF
 [user]
   name = data-name
   email = data-email
