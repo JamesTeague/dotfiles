@@ -21,10 +21,3 @@ fail () {
   exit
 }
 
-source_brew () {
-  {{ if eq .chezmoi.os "darwin" -}}
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-  {{ else if eq .chezmoi.os "linux" -}}
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  {{ end -}}
-}
