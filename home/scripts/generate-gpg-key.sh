@@ -2,14 +2,14 @@
 
 if test "$(uname)" = "Darwin"
 then
-  eval "$(/opt/homebrew/bin/gpg shellenv)"
+  gpg="/opt/homebrew/bin/gpg"
 elif test "$(expr substr $(uname -s) 1 5)" = "Linux"
 then
-  eval "$(/home/linuxbrew/.linuxbrew/bin/gpg shellenv)"
+  gpg="/home/linuxbrew/.linuxbrew/bin/gpg"
 fi 
 
 # Check if a GPG key already exists
-existing_keys=$(gpg --list-secret-keys --keyid-format LONG)
+existing_keys=$($gpg --list-secret-keys --keyid-format LONG)
 
 if [[ -n "$existing_keys" ]]; then
   # Extract the GPG key ID from the existing keys
@@ -22,7 +22,7 @@ else
   gpg --full-generate-key
 
   # Extract the GPG key ID from the newly generated key
-  gpg_key_id=$(gpg --list-secret-keys --keyid-format LONG | grep -E "^sec" | awk '{print $2}' | cut -d '/' -f 2)
+  gpg_key_id=$($gpg --list-secret-keys --keyid-format LONG | grep -E "^sec" | awk '{print $2}' | cut -d '/' -f 2)
   # echo "GPG key generated successfully. Your GPG key ID is: $gpg_key_id"
   # git config --global user.signingkey $gpg_key_id     
   echo $gpg_key_id
