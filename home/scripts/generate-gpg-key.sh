@@ -19,7 +19,7 @@ if [[ -n "$existing_keys" ]]; then
   echo $gpg_key_id
 else
   # Generate a new GPG key
-  gpg --full-generate-key
+  $gpg --full-generate-key
 
   # Extract the GPG key ID from the newly generated key
   gpg_key_id=$($gpg --list-secret-keys --keyid-format LONG | grep -E "^sec" | awk '{print $2}' | cut -d '/' -f 2)
