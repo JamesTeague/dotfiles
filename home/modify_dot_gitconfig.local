@@ -4,5 +4,5 @@
 {{-    $helper = "cache" -}}
 {{- end -}}
 {{- $scriptPath := printf "%s/scripts/generate-gpg-key.sh" .chezmoi.sourceDir -}}
-{{- $keyValue := output $scriptPath -}}
-{{- .chezmoi.stdin | replaceAllRegex "data-name" .name | replaceAllRegex "data-email" .email | replaceAllRegex "data-helper" $helper -}}
+{{- $output := output $scriptPath -}}
+{{- $output | replaceAllRegex "data-name" .name | replaceAllRegex "data-email" .email | replaceAllRegex "data-helper" $helper -}}
