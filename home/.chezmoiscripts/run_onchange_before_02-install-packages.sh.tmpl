@@ -2,7 +2,7 @@
 
 {{ template "utils.tmpl" . }}
 
-{{ if lookpath "brew" }}
+{{ if lookPath "brew" }}
 info "Updating Homebrew..."
 brew update
 {{ else }}
