@@ -1,3 +1,8 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- $scriptPath := printf "%s/scripts/generate-gpg-key.sh" .chezmoi.sourceDir -}}
+{{- $keyValue := output $scriptPath -}}
+{{- .chezmoi.stdin | replaceAllRegex "gpgkey" $keyValue -}}
+
 [user]
   name = {{ .name }}
   email = {{ .email }}
@@ -11,7 +16,4 @@
 [commit]
   gpgsign = true
 
-{{- /* chezmoi:modify-template */ -}}
-{{- $scriptPath := printf "%s/scripts/generate-gpg-key.sh" .chezmoi.sourceDir -}}
-{{- $keyValue := output $scriptPath -}}
-{{- .chezmoi.stdin | replaceAllRegex "gpgkey" $keyValue -}}
+
