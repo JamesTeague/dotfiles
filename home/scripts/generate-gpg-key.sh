@@ -36,6 +36,8 @@ cat <<'EOF'
   name = data-name
   email = data-email
   signingkey = ${gpg_key_id}
+[credential]
+  helper = data-helper
 [commit]
   gpgsign = true
 EOF
