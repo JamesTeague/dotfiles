@@ -120,7 +120,7 @@ tap {{ . | quote }}
 {{ end -}}
 
 # Mas
-{{ if and (eq .chezmoi.os "darwin") (.headless) -}}
+{{ if and (eq .chezmoi.os "darwin") (not .headless) -}}
   {{ range $k, $v := .packages.personal.darwin.mas }}
     mas {{ dig $v "name" | quote }}, id: {{ dig $v "id" }}
   {{ end -}}
