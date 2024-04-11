@@ -121,3 +121,12 @@ packages:
       casks:
       - 'postman'
       - 'slack'
+    darwin:
+      taps:
+      brews:
+      casks:
+      mas:
+    linux:
+      taps:
+      brews:
+      casks:
