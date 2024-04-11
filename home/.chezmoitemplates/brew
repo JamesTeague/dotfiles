@@ -118,12 +118,4 @@ tap {{ . | quote }}
     {{ end -}}
   {{ end -}}
 {{ end -}}
-
-# Mas
-{{ if and (eq .chezmoi.os "darwin") (not .headless) -}}
-  {{ range $k, $v := .packages.personal.darwin.mas }}
-    mas {{ dig "name" "" $v | quote }}, id: {{ dig "id" "" $v }}
-  {{ end -}}
-{{ end -}}
-
 EOF
