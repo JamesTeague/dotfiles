@@ -74,12 +74,10 @@ packages:
     - 'wezterm'
   darwin:
     taps:
-    - 'homebrew/bundle'
     brews:
     - 'mas'
     casks:
     - 'raycast'
-    - 'rectangle'
     - 'via'
     - 'hiddenbar'
     - 'stats'
@@ -90,7 +88,6 @@ packages:
     casks:
   personal:
     taps:
-    - 'homebrew/bundle'
     brews:
     casks:
     - 'mullvadvpn'
@@ -102,6 +99,7 @@ packages:
       brews:
       casks:
       - 'microsoft-office'
+      - 'utm'
       mas:
         FinalCutPro:
           name: 'Final Cut Pro (10.6.5)'
