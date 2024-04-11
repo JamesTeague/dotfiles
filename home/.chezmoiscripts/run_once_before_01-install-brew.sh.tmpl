@@ -3,8 +3,6 @@
 {{ template "utils" }}
 
 {{ if lookPath "brew" }}
-  info "Updating Homebrew..."
-  brew update
 {{ else }}
   info "Installing Homebrew for you."
 
