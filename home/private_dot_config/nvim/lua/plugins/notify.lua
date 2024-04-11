@@ -7,6 +7,7 @@ return {
       })
       vim.notify = require('notify')
       vim.keymap.set('n', '<leader>nn', ':Telescope notify <CR>', { desc = 'View last messages' })
+      vim.keymap.set('n', '<leader>nd', '<cmd>Noice dismiss <CR>', { desc = '[N]otify [D]ismiss messages' })
     end
   },
   {
