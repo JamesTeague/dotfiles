@@ -1,4 +1,4 @@
-brew bundle --no-lock --file=/dev/stdin <<EOF
+brew bundle --no-lock --file=/dev/stdin << EOF
 
 # Add Core Taps
 {{ range .packages.core.taps -}}
@@ -118,4 +118,5 @@ tap {{ . | quote }}
     {{ end -}}
   {{ end -}}
 {{ end -}}
+#EOF
 EOF

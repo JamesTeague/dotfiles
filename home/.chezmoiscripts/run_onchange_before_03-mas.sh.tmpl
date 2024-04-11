@@ -1,5 +1,6 @@
+#!/bin/bash
 {{ if and (eq .chezmoi.os "darwin") (not .headless) -}}
   {{ range $k, $v := .packages.personal.darwin.mas }}
-    /opt/homebrew/bin/mas {{ dig "name" "" $v | quote }}, id: {{ dig "id" "" $v }}
+    /opt/homebrew/bin/mas install {{ dig "id" "" $v }}
   {{ end -}}
 {{ end -}}
