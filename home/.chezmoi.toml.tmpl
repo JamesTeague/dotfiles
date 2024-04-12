@@ -2,9 +2,11 @@
 {{ $name := promptStringOnce . "name" "Name" }}
 {{ $email := promptStringOnce . "email" "Email Address" }}
 {{ $headless := false }}
-{{- if eq .chezmoi.os "windows" -}}
-{{-  $headless = true -}}
-{{- end -}}
+{{ if eq .chezmoi.os "linux" }}
+{{   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
+{{-    $headless = true -}}
+{{   end }}
+{{ end }}
 
 [data]
   personal = {{ $personal }}
