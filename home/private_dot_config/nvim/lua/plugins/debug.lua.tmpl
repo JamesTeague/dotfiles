@@ -144,53 +144,7 @@ return {
       require('dap-go').setup({
         dap_configurations = {
           {{ if not .personal }}
-          {
-            name = "Project Workflows",
-            type = "go",
-            request = "launch",
-            mode = "debug",
-            program = "${workspaceFolder}/cmd/project_workflows/",
-            args = { "start" },
-            env = { ENVIRONMENT_NAME = "local" },
-          },
-          {
-            name = "Project Workflows w/ Localstack",
-            type = "go",
-            request = "launch",
-            mode = "debug",
-            program = "${workspaceFolder}/cmd/project_workflows/",
-            args = { "start", "--env-file", "${workspaceFolder}/.env.local" },
-            env = { ENVIRONMENT_NAME = "local" },
-          },
-          {
-            name = "Rendering Service",
-            type = "go",
-            request = "launch",
-            mode = "debug",
-            program = "${workspaceFolder}/cmd/rendering_service/",
-            args = { "start" },
-            env = {
-              ENVIRONMENT_NAME = "local",
-            },
-          },
-          {
-            name = "Rendering Service w/ Localstack",
-            type = "go",
-            request = "launch",
-            mode = "debug",
-            program = "${workspaceFolder}/cmd/rendering_service/",
-            args = { "start", "--env-file", "${workspaceFolder}/.env.local" },
-            env = { ENVIRONMENT_NAME = "local" },
-          },
-          {
-            name = "Shadow Detection",
-            type = "go",
-            request = "launch",
-            mode = "debug",
-            program = "${workspaceFolder}/cmd/sync_cli/",
-            args = { "shadowdetection", "--env-file", "${workspaceFolder}/.env.local.shadow" },
-            env = { ENVIRONMENT_NAME = "local" },
-          },
+          {{-  template "work-go-debug" -}}
           {{ end }}
         },
         delve = {
