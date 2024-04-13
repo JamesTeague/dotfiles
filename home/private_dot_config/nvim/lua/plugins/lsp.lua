@@ -52,6 +52,9 @@ return {
 				signs = {
 					active = signs,
 				},
+				inlay_hints = {
+					enabled = false,
+				},
 				update_in_insert = true,
 				underline = true,
 				severity_sort = true,
@@ -127,6 +130,11 @@ return {
 					--  For example, in C this would take you to the header
 					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 
+					-- Toggle inlay_hints
+					map("<leader>dh", function()
+						vim.lsp.inlay_hint.enable(event.buf, not vim.lsp.inlay_hint.is_enabled())
+					end, "[D]isplay [H]ints")
+
 					-- The following two autocommands are used to highlight references of the
 					-- word under your cursor when your cursor rests there for a little while.
 					--    See `:help CursorHold` for information about when this is executed
@@ -165,7 +173,13 @@ return {
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
 				-- clangd = {},
-				gopls = {},
+				gopls = {
+					["ui.inlayhint.hints"] = {
+						compositeLiteralFields = true,
+						constantValues = true,
+						parameterNames = true,
+					},
+				},
 				-- pyright = {},
 				-- rust_analyzer = {},
 				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -183,6 +197,9 @@ return {
 					-- capabilities = {},
 					settings = {
 						Lua = {
+							hint = {
+								enable = true,
+							},
 							completion = {
 								callSnippet = "Replace",
 							},
