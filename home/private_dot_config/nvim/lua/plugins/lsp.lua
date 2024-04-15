@@ -124,7 +124,7 @@ return {
 
 					-- Opens a popup that displays documentation about the word under your cursor
 					--  See `:help K` for why this keymap
-					map("K", vim.lsp.buf.hover, "Hover Documentation")
+					-- map("K", vim.lsp.buf.hover, "Hover Documentation")
 
 					-- WARN: This is not Goto Definition, this is Goto Declaration.
 					--  For example, in C this would take you to the header
@@ -364,6 +364,10 @@ return {
 	},
 	{
 		"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+		opts = {},
+	},
+	{
+		"neodev/lspsaga.nvim",
 		opts = {},
 		keys = {
 			{ "<leader>lic", "<cmd>Lspsaga incoming_calls<cr>", desc = "[L]ist [I]ncoming [C]alls" },
