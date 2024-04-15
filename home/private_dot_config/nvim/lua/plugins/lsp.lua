@@ -367,7 +367,7 @@ return {
 		opts = {},
 	},
 	{
-		"neodev/lspsaga.nvim",
+		"nvimdev/lspsaga.nvim",
 		opts = {},
 		keys = {
 			{ "<leader>lic", "<cmd>Lspsaga incoming_calls<cr>", desc = "[L]ist [I]ncoming [C]alls" },

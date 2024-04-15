@@ -2,14 +2,14 @@ return {
 	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
 	{ -- Replace Netrw
 		"stevearc/oil.nvim",
-		opts = {
-			view_options = {
-				show_hidden = true,
-			},
-		},
-		keys = {
-			{ "-", "<cmd>Oil<CR>", { desc = "Open Parent Directory" } },
-		},
+		config = function()
+			require("oil").setup({
+				view_options = {
+					show_hidden = true,
+				},
+			})
+			vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+		end,
 	},
 	-- 'gc' to comment visual regions/lines
 	{ "numToStr/Comment.nvim", opts = {} },
