@@ -270,7 +270,6 @@ return {
         lsp_fallback = true,
       },
     },
-    enabled = false,
   },
   { -- Autocompletion
     "hrsh7th/nvim-cmp",
