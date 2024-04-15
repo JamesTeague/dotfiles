@@ -14,6 +14,7 @@ return {
           'lua',
           'sql',
           'markdown',
+          'markdown_inline',
           'bash',
         },
 
