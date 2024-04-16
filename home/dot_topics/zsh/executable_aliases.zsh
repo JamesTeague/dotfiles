@@ -4,3 +4,4 @@ alias b="buku --suggest"
 alias reload='. ~/.zshrc'
 alias lg='lazygit'
 alias ls="eza"
+alias cz="chezmoi"
