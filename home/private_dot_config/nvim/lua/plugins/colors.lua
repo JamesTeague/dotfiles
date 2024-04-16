@@ -1,5 +1,5 @@
 function ColorMyPencils(color)
-  color = color or 'onedark'
+  color = color or "onedark"
   vim.cmd.colorscheme(color)
 
   -- vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
@@ -8,16 +8,16 @@ end
 
 return {
   {
-    'navarasu/onedark.nvim',
-    name = 'onedark',
+    "navarasu/onedark.nvim",
+    name = "onedark",
     config = function()
-      require('onedark').setup {
-        style = 'darker',
+      require("onedark").setup({
+        style = "darker",
         transparent = true,
-      }
-      require('onedark').load()
+      })
+      require("onedark").load()
 
       ColorMyPencils()
-    end
+    end,
   },
 }
