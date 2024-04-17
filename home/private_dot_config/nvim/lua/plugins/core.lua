@@ -11,7 +11,7 @@ return {
       default_file_explorer = true,
     },
     keys = {
-      { "-", "<CMD>Oil<CR>", { desc = "Open Parent Diretory" } },
+      { "E", "<CMD>Oil<CR>", { desc = "Open Parent Diretory" } },
     },
   },
   -- 'gc' to comment visual regions/lines
@@ -95,6 +95,21 @@ return {
       statusline.section_location = function()
         return "%2l:%-2v"
       end
+
+      require("mini.files").setup({
+        mappings = {
+          go_in_plus = "<CR>",
+          close = "<ESC>",
+        },
+        options = {
+          use_as_default_explorer = false,
+        },
+        windows = {
+          preview = true,
+          width_preview = 50,
+        },
+      })
+      vim.keymap.set("n", "-", require("mini.files").open, { desc = "Open File Explorer" })
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim

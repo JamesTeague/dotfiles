@@ -120,11 +120,4 @@ return {
       "nvim-lua/plenary.nvim",
     },
   },
-  {
-    "ahmedkhalf/project.nvim",
-    opts = {},
-    keys = {
-      { "<leader>pv", "<cmd>Telescope projects<CR>", { desc = "Show Recent Projects" } },
-    },
-  },
 }

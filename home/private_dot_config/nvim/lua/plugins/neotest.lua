@@ -1,6 +1,7 @@
 return {
   {
     "nvim-neotest/neotest",
+    event = "BufEnter",
     dependencies = {
       "nvim-neotest/neotest-go",
       "nvim-neotest/nvim-nio",

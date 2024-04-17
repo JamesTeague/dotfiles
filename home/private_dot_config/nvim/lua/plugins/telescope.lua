@@ -21,6 +21,17 @@ return {
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
       { "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
+      {
+        "ahmedkhalf/project.nvim",
+        opts = {},
+        keys = {
+          { "<leader>sp", "<cmd>Telescope projects<CR>", { desc = "[S]how Recent [P]rojects" } },
+        },
+        config = function(_, opts)
+          require("project_nvim").setup(opts)
+          require("telescope").load_extension("projects")
+        end,
+      },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that

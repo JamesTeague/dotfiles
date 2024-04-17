@@ -1,6 +1,7 @@
 return {
   { -- LSP Configuration & Plugins
     "neovim/nvim-lspconfig",
+    event = { "BufReadPost", "BufWritePost", "BufNewFile" },
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for neovim
       "williamboman/mason.nvim",
@@ -8,7 +9,6 @@ return {
       "WhoIsSethDaniel/mason-tool-installer.nvim",
 
       -- Useful status updates for LSP.
-      -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { "j-hui/fidget.nvim", opts = {} },
 
       -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
