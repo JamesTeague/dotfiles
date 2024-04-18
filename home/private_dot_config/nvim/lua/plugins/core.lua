@@ -11,7 +11,7 @@ return {
       default_file_explorer = true,
     },
     keys = {
-      { "E", "<CMD>Oil<CR>", { desc = "Open Parent Diretory" } },
+      { "<leader>pv", "<CMD>Oil<CR>", { desc = "Open Parent Directory" } },
     },
   },
   -- 'gc' to comment visual regions/lines
@@ -127,8 +127,8 @@ return {
   { -- Change case of text
     "johmsalas/text-case.nvim",
     dependencies = { "nvim-telescope/telescope.nvim" },
+    opts = {},
     config = function()
-      require("textcase").setup({})
       require("telescope").load_extension("textcase")
     end,
     keys = {
