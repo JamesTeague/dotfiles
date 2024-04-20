@@ -28,7 +28,6 @@ packages:
     - 'delve'
     - 'python3'
     - 'jupyterlab'
-    - 'deno'
     - 'node'
     - 'npm' # required by lsp tsserver
     - 'make' # required by powerlevel10k on linux
@@ -49,9 +48,6 @@ packages:
     - 'rm-improved' # deletion tool (better rm)
     - 'buku' # bookmark manager
     - 'ddgr' # search web from terminal
-    - 'khal' # calendar client
-    - 'mutt' # email client
-    - 'newsboat' # RSS/Atom news reader
     - 'httpie'
     - 'atuin' # better history
     - 'btop' # better top and htop
@@ -115,6 +111,7 @@ packages:
       brews:
       - 'synk'
       - 'awscli'
+      - 'khal' # calendar client
       - 'localstack-cli'
       - 'stern'
       - 'sqlc'

@@ -65,6 +65,9 @@ return {
             vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
           end
 
+          -- NOTE: Want to disable virtual_text because of the lsp_lines plugin.
+          vim.diagnostic.config({ virtual_text = false })
+
           local builtin = require("telescope.builtin")
 
           -- Jump to the definition of the word under your cursor.
