@@ -11,6 +11,15 @@ set -g pane-border-style 'fg=brightblack,bg=default'
 
 # vim movement in copy mode
 set -wg mode-keys vi
+bind -T copy-mode-vi v send-keys -X begin-selection
+{{ if eq .chezmoi.os "darwin" -}}
+bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel 'pbcopy' 
+{{ else if eq .chezmoi.os "linux" -}}
+bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel 'xclip -in -selection clipboard'
+{{- end }}
+
+# tmux cht.sh
+bind-key -r i run-shell "tmux neww tmux-cht.sh"
 
 # force terminal colors and italics to work
 set -g default-terminal "screen-256color"
