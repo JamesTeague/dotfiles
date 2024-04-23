@@ -5,5 +5,3 @@ alias reload='. ~/.zshrc'
 alias lg='lazygit'
 alias ls="eza"
 alias cz="chezmoi"
-
-bindkey -s ^f "tmux-sessionizer\n"

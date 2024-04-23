@@ -57,4 +57,9 @@ vim.keymap.set("n", "<leader>Y", [["+Y]], { desc = "Yank to end of line to clipb
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true, desc = "Add [X] to file permission" })
 
 -- Keybindsf for tmux
-vim.keymap.set("n", "<C-f>", ":silent !tmux neww tmux-sessionizer<CR>", { desc = "Change/Create Tmux Session at Dir" })
+vim.keymap.set(
+  "n",
+  "<C-F>",
+  ":silent !tmux neww tmux-sessionizer<CR>",
+  { noremap = true, desc = "Change/Create Tmux Session at Dir" }
+)

@@ -47,11 +47,6 @@ return {
       mappings = {
         "<C-u>",
         "<C-d>",
-        "<C-b>",
-        "<C-f>",
-        "zt",
-        "zz",
-        "zb",
       },
     },
   },
@@ -109,7 +104,9 @@ return {
           width_preview = 50,
         },
       })
-      vim.keymap.set("n", "-", require("mini.files").open, { desc = "Open File Explorer" })
+      vim.keymap.set("n", "-", function()
+        require("mini.files").open(vim.api.nvim_buf_get_name(0), false)
+      end, { desc = "Open File Explorer at Parent" })
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim

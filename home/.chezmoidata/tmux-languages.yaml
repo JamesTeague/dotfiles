@@ -1,0 +1,8 @@
+languages:
+  - "golang"
+  - "c"
+  - "cpp"
+  - "typescript"
+  - "rust"
+  - "bash"
+  - "sh"
