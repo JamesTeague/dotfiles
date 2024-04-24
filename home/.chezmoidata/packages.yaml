@@ -103,6 +103,10 @@ packages:
         BrotherIPrint:
           name: 'Brother iPrint&Scan'
           id: 1193539993
+      linux:
+        taps:
+        brews:
+        casks:
   work:
     core:
       taps:
