@@ -1,8 +1,6 @@
 packages:
   core:
     taps:
-    - 'jesseduffield/lazygit'
-    - 'jesseduffield/lazydocker'
     - 'homebrew/cask-fonts'
     - 'romkatv/powerlevel10k'
     brews:
@@ -22,8 +20,6 @@ packages:
     - 'zsh-completions'
     - 'zsh-syntax-highlighting'
     - 'zsh-vi-mode'
-    - 'jesseduffield/lazygit/lazygit'
-    - 'jesseduffield/lazydocker/lazydocker'
     - 'go'
     - 'delve'
     - 'python3'
@@ -70,8 +66,12 @@ packages:
     - 'wezterm'
   darwin:
     taps:
+    - 'jesseduffield/lazygit'
+    - 'jesseduffield/lazydocker'
     brews:
     - 'mas'
+    - 'jesseduffield/lazygit/lazygit'
+    - 'jesseduffield/lazydocker/lazydocker'
     casks:
     - 'raycast'
     - 'via'
