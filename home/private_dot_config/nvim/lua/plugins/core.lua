@@ -147,13 +147,21 @@ return {
     lazy = true,
   },
   {
-    "ThePrimeagen/git-worktree.nvim",
+    "polarmutex/git-worktree.nvim",
     dependencies = { "nvim-telescope/telescope.nvim" },
     config = function()
       require("telescope").load_extension("git_worktree")
     end,
     keys = {
-      { "<leader>gw", "<cmd>Telescope git_worktree<cr>", desc = "[G]it [W]orktree" },
+      {
+        "gw",
+        function()
+          require("telescope").extensions.git_worktree.git_worktrees({
+            path_display = {},
+          })
+        end,
+        desc = "[G]it [W]orktree",
+      },
       {
         "<leader>gwc",
         function()
