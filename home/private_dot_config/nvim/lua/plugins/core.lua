@@ -186,4 +186,10 @@ return {
       { "ms", "<Plug>(leap-from-window)", mode = { "n", "x", "o" }, desc = "Leap From Window" },
     },
   },
+  {
+    "vyfor/cord.nvim",
+    build = "./build",
+    event = "VeryLazy",
+    opts = {},
+  },
 }
