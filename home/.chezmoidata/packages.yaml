@@ -24,7 +24,6 @@ packages:
     - 'delve'
     - 'python3'
     - 'jupyterlab'
-    - 'node'
     - 'npm' # required by lsp tsserver
     - 'make' # required by powerlevel10k on linux
     - 'gcc' # required by powerlevel10k, zsh on linux
@@ -42,7 +41,6 @@ packages:
     - 'fzf' # fuzzy file finder (better find)
     - 'hyperfine' # command benchmarking
     - 'rm-improved' # deletion tool (better rm)
-    - 'buku' # bookmark manager
     - 'ddgr' # search web from terminal
     - 'httpie'
     - 'atuin' # better history
@@ -114,8 +112,8 @@ packages:
       - 'localstack/tap'
       brews:
       - 'synk'
+      - 'node'
       - 'awscli'
-      - 'khal' # calendar client
       - 'localstack-cli'
       - 'stern'
       - 'sqlc'
