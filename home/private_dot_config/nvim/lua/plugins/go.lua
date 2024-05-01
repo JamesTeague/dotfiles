@@ -10,6 +10,7 @@ return {
       { "<leader>gtf", "<cmd> GoTestFile <CR>", { desc = "Run [G]o [T]ests in [F]ile" } },
       { "<leader>gp", ":GoPkgOutline<CR>", { desc = "View Go Package Outline" } },
       { "<leader>gm", ":GoMockGen -s<CR>", { desc = "Generate Go Mock for Interface by source" } },
+      { "<leader>gif", ":GoIfErr<CR>", { desc = "Generate if err snippet" } },
     },
   },
   "ray-x/guihua.lua", -- recommended if need floating window support
