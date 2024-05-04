@@ -6,6 +6,10 @@ return {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
       "WhoIsSethDaniel/mason-tool-installer.nvim",
+      {
+        "mrcjkb/rustaceanvim",
+        version = "^4", -- Recommended
+      },
 
       -- Useful status updates for LSP.
       { "j-hui/fidget.nvim", opts = {} },
@@ -160,7 +164,7 @@ return {
           },
         },
         -- pyright = {},
-        rust_analyzer = {},
+        -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         tsserver = {},

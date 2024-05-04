@@ -18,6 +18,7 @@ return {
         },
         adapters = {
           require("neotest-go"),
+          require("rustaceanvim.neotest"),
         },
       })
       vim.keymap.set("n", "<leader>tm", require("neotest").run.run, { desc = "[T]est [M]ethod" })

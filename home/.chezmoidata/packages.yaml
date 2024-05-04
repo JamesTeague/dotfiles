@@ -14,6 +14,7 @@ packages:
     - 'grep'
     - 'lua'
     - 'neovim'
+    - 'rust-analyzer'
     - 'ripgrep'
     - 'zsh' # macOS ships with an old version
     - 'zsh-autosuggestions'
