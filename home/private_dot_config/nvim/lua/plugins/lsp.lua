@@ -336,6 +336,14 @@ return {
           { name = "path" },
         },
       })
+
+      -- setup vim-dadbod
+      cmp.setup.filetype({ "sql" }, {
+        sources = {
+          { name = "vim-dadbod-completion" },
+          { name = "buffer" },
+        },
+      })
     end,
   },
   {
@@ -348,7 +356,6 @@ return {
     keys = {
       { "<leader>lic", "<cmd>Lspsaga incoming_calls<cr>", desc = "[L]ist [I]ncoming [C]alls" },
       { "<leader>loc", "<cmd>Lspsaga outgoing_calls<cr>", desc = "[L]ist [O]utgoing [C]alls" },
-      { "<leader>ft", "<cmd>Lspsaga term_toggle<cr>", desc = "[F]loat [T]erm" },
       -- NOTE: Overwritten from lsp
       { "K", "<cmd>Lspsaga hover_doc<cr>", desc = "Hover Documentation" },
       { "<leader>pd", "<cmd>Lspsaga peek_definition<cr>", desc = "[P]eek [D]efinition" },

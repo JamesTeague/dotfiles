@@ -56,6 +56,18 @@ vim.keymap.set("n", "<leader>Y", [["+Y]], { desc = "Yank to end of line to clipb
 -- Keybinds to modify files
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true, desc = "Add [X] to file permission" })
 
+-- Keybinds for tabs
+vim.keymap.set("n", "<leader>1", "1gt", { noremap = true, desc = "Go to Tab 1" })
+vim.keymap.set("n", "<leader>2", "2gt", { noremap = true, desc = "Go to Tab 2" })
+vim.keymap.set("n", "<leader>3", "3gt", { noremap = true, desc = "Go to Tab 3" })
+vim.keymap.set("n", "<leader>4", "4gt", { noremap = true, desc = "Go to Tab 4" })
+vim.keymap.set("n", "<leader>5", "5gt", { noremap = true, desc = "Go to Tab 5" })
+
+vim.keymap.set("n", "<C-Left>", ":tabprevious", { noremap = true, desc = "Go to previous tab" })
+vim.keymap.set("n", "<C-Right>", ":tabnext", { noremap = true, desc = "Go to next tab" })
+vim.keymap.set("n", "<C-Up>", ":tabnew", { noremap = true, desc = "Create new tab" })
+vim.keymap.set("n", "<C-Down>", ":tabclose", { noremap = true, desc = "Delete tab" })
+
 -- Keybindsf for tmux
 vim.keymap.set(
   "n",

@@ -4,14 +4,20 @@ return {
     "stevearc/oil.nvim",
     event = "VimEnter",
     cmd = "Oil",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
     opts = {
       view_options = {
         show_hidden = true,
       },
       default_file_explorer = true,
+      keymaps = {
+        ["<C-h>"] = false,
+        ["<M-h>"] = "actions.select_split",
+      },
     },
     keys = {
-      { "<leader>pv", "<CMD>Oil<CR>", { desc = "Open Parent Directory" } },
+      { "-", "<CMD>Oil<CR>", { desc = "Open Parent Directory" } },
+      { "<leader>-", require("oil").toggle_float, { desc = "Open Parent Directory in floating window" } },
     },
   },
   -- 'gc' to comment visual regions/lines
@@ -90,23 +96,6 @@ return {
       statusline.section_location = function()
         return "%2l:%-2v"
       end
-
-      require("mini.files").setup({
-        mappings = {
-          go_in_plus = "<CR>",
-          close = "<ESC>",
-        },
-        options = {
-          use_as_default_explorer = false,
-        },
-        windows = {
-          preview = true,
-          width_preview = 50,
-        },
-      })
-      vim.keymap.set("n", "-", function()
-        require("mini.files").open(vim.api.nvim_buf_get_name(0), false)
-      end, { desc = "Open File Explorer at Parent" })
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
