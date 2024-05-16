@@ -34,7 +34,7 @@ return {
           active = signs,
         },
         inlay_hints = {
-          enabled = false,
+          enabled = true,
         },
         update_in_insert = true,
         underline = true,
@@ -70,6 +70,7 @@ return {
 
           -- NOTE: Want to disable virtual_text because of the lsp_lines plugin.
           vim.diagnostic.config({ virtual_text = false })
+          vim.lsp.inlay_hint.enable()
 
           local builtin = require("telescope.builtin")
 
