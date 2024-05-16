@@ -79,7 +79,7 @@ tap {{ . | quote }}
 {{ end -}}
 
 # Add Core Casks
-{{ if not .headless -}}
+{{ if not .wsl -}}
   {{ range .packages.core.casks -}}
     cask {{ . | quote }}
   {{ end -}}
