@@ -17,7 +17,7 @@ return {
     },
     keys = {
       { "-", "<CMD>Oil<CR>", { desc = "Open Parent Directory" } },
-      { "<leader>-", require("oil").toggle_float, { desc = "Open Parent Directory in floating window" } },
+      { "<leader>-", ":lua require('oil').toggle_float()<CR>", { desc = "Open Parent Directory in floating window" } },
     },
   },
   -- 'gc' to comment visual regions/lines
