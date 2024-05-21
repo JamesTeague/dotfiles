@@ -24,6 +24,7 @@ choco install googlechrome -y
 choco install bitwarden -y
 choco install wezterm -y
 choco install logseq -y
+choco install git.install -y
 
 winget install -e --id Olivia.VIA
 
