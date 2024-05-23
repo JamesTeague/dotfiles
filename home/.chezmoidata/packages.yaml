@@ -4,7 +4,7 @@ packages:
     - 'romkatv/powerlevel10k'
     brews:
     - 'bash'
-    - 'bash-completion'
+    - 'bash-completion@2'
     - 'curl'
     - 'wget'
     - 'chezmoi'
