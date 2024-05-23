@@ -1,7 +1,6 @@
 packages:
   core:
     taps:
-    - 'homebrew/cask-fonts'
     - 'romkatv/powerlevel10k'
     brews:
     - 'bash'
