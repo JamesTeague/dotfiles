@@ -8,8 +8,11 @@ return {
     opts = {
       view_options = {
         show_hidden = true,
+        natural_order = true,
       },
       default_file_explorer = true,
+      delete_to_trash = true,
+      skip_confirm_for_simple_edits = true,
       keymaps = {
         ["<C-h>"] = false,
         ["<M-h>"] = "actions.select_split",
@@ -182,6 +185,7 @@ return {
       { "M", "<Plug>(leap-backward)", mode = { "n", "x", "o" }, desc = "Leap Backward" },
       { "ms", "<Plug>(leap-from-window)", mode = { "n", "x", "o" }, desc = "Leap From Window" },
     },
+    enabled = false,
   },
   {
     "vyfor/cord.nvim",
