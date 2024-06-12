@@ -52,11 +52,11 @@ tap {{ . | quote }}
 
   {{ if .personal -}}
     {{ range .packages.personal.darwin.brews -}}
-      tap {{ . | quote }}
+      brew {{ . | quote }}
     {{ end -}}
   {{ else }}
     {{ range .packages.work.darwin.brews -}}
-      tap {{ . | quote }}
+      brew {{ . | quote }}
     {{ end -}}
   {{ end -}}
 {{ end -}}
