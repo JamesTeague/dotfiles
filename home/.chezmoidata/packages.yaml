@@ -73,6 +73,7 @@ packages:
     - 'jesseduffield/lazygit/lazygit'
     - 'jesseduffield/lazydocker/lazydocker'
     casks:
+    - 'shottr'
     - 'raycast'
     - 'via'
     - 'hiddenbar'
