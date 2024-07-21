@@ -21,3 +21,6 @@ getSnykLSP.sh
 # Personal
 *.personal.lua
 Brewfile.Personal.lock.json
+
+# NVIM
+.quicknote/
