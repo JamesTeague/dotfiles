@@ -63,12 +63,14 @@ vim.keymap.set("n", "<leader>3", "3gt", { noremap = true, desc = "Go to Tab 3" }
 vim.keymap.set("n", "<leader>4", "4gt", { noremap = true, desc = "Go to Tab 4" })
 vim.keymap.set("n", "<leader>5", "5gt", { noremap = true, desc = "Go to Tab 5" })
 
-vim.keymap.set("n", "<C-Left>", ":tabprevious", { noremap = true, desc = "Go to previous tab" })
-vim.keymap.set("n", "<C-Right>", ":tabnext", { noremap = true, desc = "Go to next tab" })
-vim.keymap.set("n", "<C-Up>", ":tabnew", { noremap = true, desc = "Create new tab" })
-vim.keymap.set("n", "<C-Down>", ":tabclose", { noremap = true, desc = "Delete tab" })
+vim.keymap.set("n", "<C-Left>", ":tabprevious<CR>", { noremap = true, desc = "Go to previous tab" })
+vim.keymap.set("n", "<C-Right>", ":tabnext<CR>", { noremap = true, desc = "Go to next tab" })
+vim.keymap.set("n", "<C-Up>", ":tabnew<CR>", { noremap = true, desc = "Create new tab" })
+vim.keymap.set("n", "<C-Down>", ":tabclose<CR>", { noremap = true, desc = "Delete tab" })
 
--- Keybindsf for tmux
+vim.keymap.set("n", "<leader>ll", ":Lazy<CR>", { noremap = true, desc = "Delete tab" })
+
+-- Keybinds for tmux
 vim.keymap.set(
   "n",
   "<C-F>",
