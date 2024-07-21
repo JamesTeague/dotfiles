@@ -5,3 +5,6 @@
 .idea
 .run
 **.iml
+
+# NVIM
+.quicknote/
