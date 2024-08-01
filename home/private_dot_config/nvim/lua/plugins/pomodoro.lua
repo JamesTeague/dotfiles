@@ -1,6 +1,6 @@
 return {
   {
-    "wthollingsworth/pomodoro.nvim",
+    "JamesTeague/pomodoro.nvim",
     depenencies = "MunifTanjim/nui.nvim",
     opts = {
       time_work = 25,
