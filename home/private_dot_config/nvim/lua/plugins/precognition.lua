@@ -3,4 +3,5 @@ return {
   event = "VeryLazy",
   branch = "inlay_hints",
   opts = {},
+  enabled = false,
 }
