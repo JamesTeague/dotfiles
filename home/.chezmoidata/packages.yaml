@@ -5,7 +5,6 @@ packages:
     brews:
     - 'bash'
     - 'bash-completion@2'
-    - 'curl'
     - 'wget'
     - 'chezmoi'
     - 'jq'
@@ -49,6 +48,7 @@ packages:
     - 'powerlevel10k'
     - 'tokei'
     - 'tree'
+    - 'w3m'
     casks:
     - 'font-alfa-slab-one'
     - 'font-awesome-terminal-fonts'
@@ -81,6 +81,7 @@ packages:
   linux:
     taps:
     brews:
+    - 'curl'
     - 'xclip'
     casks:
   personal:
