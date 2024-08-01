@@ -62,7 +62,6 @@ packages:
     - 'google-chrome'
     - 'yt-music'
     - 'logseq'
-    - 'flameshot'
     - 'wezterm'
   darwin:
     taps:
