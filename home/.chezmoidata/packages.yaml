@@ -122,6 +122,7 @@ packages:
       - 'localstack-cli'
       - 'stern'
       - 'sqlc'
+      - 'git-lfs'
       casks:
       - 'postman'
       - 'slack'
