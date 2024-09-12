@@ -29,4 +29,5 @@ return {
       require("telescope").load_extension("quicknote")
     end,
   },
+  enabled = false,
 }

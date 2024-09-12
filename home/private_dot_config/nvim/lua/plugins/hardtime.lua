@@ -7,4 +7,5 @@ return {
     showmode = false,
     disabled_filetypes = { "qf", "netrw", "lazy", "mason", "oil" },
   },
+  enabled = false,
 }
