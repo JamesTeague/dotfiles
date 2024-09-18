@@ -139,19 +139,27 @@ return {
     -- available after the first executing of it or after a keymap of text-case.nvim has been used.
     lazy = true,
   },
+
   {
     "polarmutex/git-worktree.nvim",
+    branch = "main",
     dependencies = { "nvim-telescope/telescope.nvim" },
     config = function()
+      vim.g.git_worktree = {
+        change_directory_command = "cd",
+        update_on_change = true,
+        update_on_change_command = "e",
+        clearjumps_on_change = true,
+        confirm_telescope_deletions = true,
+        autopush = false,
+      }
       require("telescope").load_extension("git_worktree")
     end,
     keys = {
       {
         "gw",
         function()
-          require("telescope").extensions.git_worktree.git_worktrees({
-            path_display = {},
-          })
+          require("telescope").extensions.git_worktree.git_worktree()
         end,
         desc = "[G]it [W]orktree",
       },
