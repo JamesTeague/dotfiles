@@ -68,7 +68,7 @@ vim.keymap.set("n", "<C-Right>", ":tabnext<CR>", { noremap = true, desc = "Go to
 vim.keymap.set("n", "<C-Up>", ":tabnew<CR>", { noremap = true, desc = "Create new tab" })
 vim.keymap.set("n", "<C-Down>", ":tabclose<CR>", { noremap = true, desc = "Delete tab" })
 
-vim.keymap.set("n", "<leader>ll", ":Lazy<CR>", { noremap = true, desc = "Delete tab" })
+vim.keymap.set("n", "<leader>ll", ":Lazy<CR>", { noremap = true, desc = "Open Lazy" })
 
 -- Keybinds for tmux
 vim.keymap.set(
