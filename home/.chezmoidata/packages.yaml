@@ -49,6 +49,7 @@ packages:
     - 'tokei'
     - 'tree'
     - 'w3m'
+    - 'ranger'
     casks:
     - 'font-alfa-slab-one'
     - 'font-awesome-terminal-fonts'
