@@ -27,3 +27,8 @@ ui = true
 [push]
   default = simple
   autoSetupRemote = true
+[filter "lfs"]
+  process = git-lfs filter-process
+  required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
