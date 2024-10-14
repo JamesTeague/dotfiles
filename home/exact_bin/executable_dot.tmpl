@@ -1,6 +1,7 @@
 #!/bin/bash
 
 brew update
+brew upgrade
 
 # find all installers and run them iteratively
 find {{.chezmoi.homeDir}}/.topics -name install.sh | while read installer ; do /bin/bash -c "${installer}" ; done
