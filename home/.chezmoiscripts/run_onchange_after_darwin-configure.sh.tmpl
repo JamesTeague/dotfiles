@@ -33,4 +33,6 @@ killall SystemUIServer
 
 defaults write com.apple.desktopservices DSDontWriteNetworkStores true
 defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+# Aerospace drag windows
+defaults write -g NSWindowShouldDragOnGesture -bool true
 {{ end -}}

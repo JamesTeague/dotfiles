@@ -64,6 +64,7 @@ packages:
     - 'yt-music'
     - 'logseq'
     - 'wezterm'
+    - 'nikitabobko/tap/aerospace'
   darwin:
     taps:
     - 'jesseduffield/lazygit'
