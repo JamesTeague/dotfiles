@@ -23,6 +23,25 @@ return {
       { "<leader>-", ":lua require('oil').toggle_float()<CR>", { desc = "Open Parent Directory in floating window" } },
     },
   },
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      lsp = {
+        signature = {
+          enabled = false,
+        },
+      },
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module='...'` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      -- "rcarriga/nvim-notify",
+    },
+  },
   -- 'gc' to comment visual regions/lines
   { "numToStr/Comment.nvim", opts = {} },
   { -- Useful plugin to show you pending keybinds.
@@ -60,7 +79,6 @@ return {
       },
     },
   },
-
   { -- Highlight todo, notes, etc in comments
     "folke/todo-comments.nvim",
     event = "VimEnter",
