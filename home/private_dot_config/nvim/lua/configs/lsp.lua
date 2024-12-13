@@ -81,7 +81,7 @@ local servers = {
       parameterNames = true,
     },
   },
-  tsserver = {},
+  ts_ls = {},
   lua_ls = {
     settings = {
       Lua = {
