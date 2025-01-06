@@ -30,7 +30,6 @@ packages:
     - 'bat' # reading files (better cat)
     - 'gpg' # for signing git commits
     - 'tmux'
-    - 'thefuck' # auto-correct mistyped commands
     - 'zoxide' # easy navigation (better cd)
     - 'tldr' # community-maintained docs (better man)
     - 'scc' # count lines of code
@@ -50,6 +49,7 @@ packages:
     - 'tree'
     - 'w3m'
     - 'ranger'
+    - 'uv'
     casks:
     - 'font-alfa-slab-one'
     - 'font-awesome-terminal-fonts'
@@ -65,6 +65,7 @@ packages:
     - 'logseq'
     - 'wezterm'
     - 'nikitabobko/tap/aerospace'
+    - 'ghostty'
   darwin:
     taps:
     - 'jesseduffield/lazygit'

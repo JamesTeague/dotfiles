@@ -14,12 +14,12 @@ return {
     },
     quickfile = { enabled = true },
     scratch = { enabled = true },
-    scroll = { enabled = false },
+    scroll = { enabled = true },
     statuscolumn = { enabled = true },
     words = { enabled = true },
     styles = {
       notification = {
-        -- wo = { wrap = true } -- Wrap notifications
+        wo = { wrap = true }, -- Wrap notifications
       },
     },
     zen = { enabled = true },

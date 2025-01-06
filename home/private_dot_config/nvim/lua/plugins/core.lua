@@ -69,16 +69,16 @@ return {
       })
     end,
   },
-  {
-    "karb94/neoscroll.nvim",
-    event = "BufEnter",
-    opts = {
-      mappings = {
-        "<C-u>",
-        "<C-d>",
-      },
-    },
-  },
+  -- {
+  --   "karb94/neoscroll.nvim",
+  --   event = "BufEnter",
+  --   opts = {
+  --     mappings = {
+  --       "<C-u>",
+  --       "<C-d>",
+  --     },
+  --   },
+  -- },
   { -- Highlight todo, notes, etc in comments
     "folke/todo-comments.nvim",
     event = "VimEnter",
