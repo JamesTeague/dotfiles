@@ -2,6 +2,7 @@ packages:
   core:
     taps:
     - 'romkatv/powerlevel10k'
+    - 'codecrafters-io/tap'
     brews:
     - 'bash'
     - 'bash-completion@2'
@@ -49,7 +50,7 @@ packages:
     - 'tree'
     - 'w3m'
     - 'ranger'
-    - 'uv'
+    - 'codecrafters'
     casks:
     - 'font-alfa-slab-one'
     - 'font-awesome-terminal-fonts'
@@ -63,7 +64,6 @@ packages:
     - 'google-chrome'
     - 'yt-music'
     - 'logseq'
-    - 'wezterm'
     - 'nikitabobko/tap/aerospace'
     - 'ghostty'
   darwin:
@@ -74,6 +74,7 @@ packages:
     - 'mas'
     - 'jesseduffield/lazygit/lazygit'
     - 'jesseduffield/lazydocker/lazydocker'
+    - 'geckodriver'
     casks:
     - 'shottr'
     - 'raycast'

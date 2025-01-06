@@ -8,11 +8,13 @@ return {
       -- NOTE: Must run `:Copilot auth` on new setups
       require("copilot").setup(opts)
     end,
+    enabled = false,
   },
   {
     "yetone/avante.nvim",
     event = "VeryLazy",
     lazy = false,
+    enabled = false,
     version = false, -- set this if you want to always pull the latest change
     opts = {
       provider = "copilot",
