@@ -127,6 +127,7 @@ packages:
       - 'stern'
       - 'sqlc'
       - 'git-lfs'
+      - 'dotnet@8'
       casks:
       - 'postman'
       - 'slack'

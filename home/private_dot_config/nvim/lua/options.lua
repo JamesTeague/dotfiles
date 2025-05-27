@@ -97,4 +97,4 @@ vim.opt.expandtab = true
 -- Configure Code Folding
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-vim.opt.foldenable = true
+vim.opt.foldenable = false
