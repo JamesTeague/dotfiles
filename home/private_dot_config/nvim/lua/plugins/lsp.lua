@@ -5,7 +5,7 @@ return {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
       "WhoIsSethDaniel/mason-tool-installer.nvim",
-      { "mrcjkb/rustaceanvim", version = "^4" },
+      { "mrcjkb/rustaceanvim", version = "^6" },
       -- Useful status updates for LSP.
       { "j-hui/fidget.nvim", opts = {} },
       { "folke/neodev.nvim", opts = {} },
