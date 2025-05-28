@@ -19,7 +19,6 @@ return {
   {
     "yetone/avante.nvim",
     event = "VeryLazy",
-    lazy = false,
     version = false, -- set this if you want to always pull the latest change
     opts = {
       ---@alias Provider "openai" | "copilot" | string
@@ -158,6 +157,7 @@ return {
       {
         -- Make sure to set this up properly if you have lazy=true
         "MeanderingProgrammer/render-markdown.nvim",
+        event = "VeryLazy",
         opts = {
           file_types = { "markdown", "Avante" },
         },
