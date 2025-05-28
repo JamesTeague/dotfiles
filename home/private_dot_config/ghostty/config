@@ -31,5 +31,5 @@ background = 000000
 foreground = fdfdfd
 # cursor = fdfdfd
 
-background-opacity = 0.75
+background-opacity = 0.95
 macos-titlebar-style = hidden

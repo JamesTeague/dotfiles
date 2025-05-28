@@ -1,7 +1,6 @@
 packages:
   core:
     taps:
-    - 'romkatv/powerlevel10k'
     - 'codecrafters-io/tap'
     brews:
     - 'bash'
@@ -45,12 +44,12 @@ packages:
     - 'atuin' # better history
     - 'btop' # better top and htop
     - 'slides' # presentations in the terminal
-    - 'powerlevel10k'
     - 'tokei'
     - 'tree'
     - 'w3m'
     - 'ranger'
     - 'codecrafters'
+    - 'starship'
     casks:
     - 'font-alfa-slab-one'
     - 'font-awesome-terminal-fonts'
