@@ -1,3 +1,5 @@
+---@diagnostic disable: undefined-global
+
 local signs = { Error = "", Warn = "", Hint = "󰌵", Info = "" }
 for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
