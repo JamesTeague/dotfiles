@@ -209,6 +209,7 @@ return {
     dependencies = {
       "MunifTanjim/nui.nvim",
     },
+    enabled = false,
   },
   "tpope/vim-dotenv",
   { -- Pretty Quick Fix Lists
