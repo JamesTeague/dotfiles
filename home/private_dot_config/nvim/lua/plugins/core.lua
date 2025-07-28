@@ -221,5 +221,10 @@ return {
     build = "./build",
     event = "VeryLazy",
     opts = {},
+    enabled = false,
+  },
+  {
+    "sphamba/smear-cursor.nvim",
+    opts = {},
   },
 }
