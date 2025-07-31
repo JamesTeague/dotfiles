@@ -1,6 +1,7 @@
 return {
   {
     "ray-x/go.nvim",
+    ft = "go",
     opts = {
       icons = { breakpoint = "🔴" },
     },
@@ -12,10 +13,5 @@ return {
       { "<leader>gm", ":GoMockGen -s<CR>", { desc = "Generate Go Mock for Interface by source" } },
       { "<leader>gif", ":GoIfErr<CR>", { desc = "Generate if err snippet" } },
     },
-  },
-  "ray-x/guihua.lua", -- recommended if need floating window support
-  {
-    "ray-x/lsp_signature.nvim",
-    opts = {},
   },
 }
