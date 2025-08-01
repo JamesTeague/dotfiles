@@ -19,6 +19,7 @@ return {
   {
     "yetone/avante.nvim",
     event = "VeryLazy",
+    lazy = false,
     version = false, -- set this if you want to always pull the latest change
     opts = {
       ---@alias Provider "openai" | "copilot" | string
@@ -33,13 +34,13 @@ return {
       },
       copilot = {
         endpoint = "https://api.githubcopilot.com",
-        model = "gpt-4o-2024-08-06",
-        -- model = "claude-3.5-sonnet",
+        -- model = "gpt-4o-2024-08-06",
+        model = "claude-3.7-sonnet",
         proxy = nil, -- [protocol://]host[:port] Use this proxy
         allow_insecure = false, -- Allow insecure server connections
         timeout = 30000, -- Timeout in milliseconds
         temperature = 0,
-        max_tokens = 4096,
+        max_tokens = 8192,
       },
       behaviour = {
         auto_suggestions = false, -- Experimental stage
