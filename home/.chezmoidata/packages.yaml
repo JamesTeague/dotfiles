@@ -1,7 +1,6 @@
 packages:
   core:
     taps:
-    - 'codecrafters-io/tap'
     brews:
     - 'bash'
     - 'bash-completion@2'
@@ -48,7 +47,6 @@ packages:
     - 'tree'
     - 'w3m'
     - 'ranger'
-    - 'codecrafters'
     - 'starship'
     casks:
     - 'font-alfa-slab-one'
