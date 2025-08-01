@@ -23,17 +23,17 @@ vim.api.nvim_create_autocmd("ColorScheme", {
   end,
 })
 
-vim.api.nvim_create_autocmd({ "BufReadPost", "FileReadPost" }, {
-  pattern = "*",
-  desc = "Open all code folds",
-  group = vim.api.nvim_create_augroup("open_folds", { clear = true }),
-  callback = function()
-    -- Add a small delay to ensure treesitter is ready
-    vim.defer_fn(function()
-      vim.cmd("normal! zR")
-    end, 100) -- 100ms delay
-  end,
-})
+-- vim.api.nvim_create_autocmd({ "BufReadPost", "FileReadPost" }, {
+--   pattern = "*",
+--   desc = "Open all code folds",
+--   group = vim.api.nvim_create_augroup("open_folds", { clear = true }),
+--   callback = function()
+--     -- Add a small delay to ensure treesitter is ready
+--     vim.defer_fn(function()
+--       vim.cmd("normal! zR")
+--     end, 100) -- 100ms delay
+--   end,
+-- })
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
