@@ -153,44 +153,17 @@ return {
     opts = {},
   },
   {
-    "polarmutex/git-worktree.nvim",
-    version = "^2",
+    "quiet-ghost/git-worktree.nvim",
     dependencies = { "nvim-telescope/telescope.nvim" },
     config = function()
-      local Hooks = require("git-worktree.hooks")
-      local config = require("git-worktree.config")
-
-      Hooks.register(Hooks.type.SWITCH, function(path, prev_path)
-        vim.notify("Moved from " .. prev_path .. " to " .. path)
-        -- check if current buffer is an oil buffer
-        if vim.fn.expand("%"):find("^oil:///") then
-          -- switch to new cwd in oil
-          require("oil").open(vim.fn.getcwd())
-        else
-          -- use built in hook for non oil buffers
-          Hooks.builtins.update_current_buffer_on_switch(path, prev_path)
-        end
-      end)
-
-      Hooks.register(Hooks.type.DELETE, function()
-        vim.cmd(config.update_on_change_command)
-      end)
-      require("telescope").load_extension("git_worktree")
+      require("worktree").setup()
+      require("telescope").load_extension("worktree")
     end,
     keys = {
       {
         "gw",
-        function()
-          require("telescope").extensions.git_worktree.git_worktree()
-        end,
+        ":Worktrees<CR>",
         desc = "[G]it [W]orktree",
-      },
-      {
-        "<leader>gwc",
-        function()
-          require("telescope").extensions.git_worktree.create_git_worktree()
-        end,
-        desc = "[G]it [W]orktree [C]reate",
       },
     },
   },

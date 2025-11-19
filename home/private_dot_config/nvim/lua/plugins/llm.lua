@@ -5,10 +5,30 @@ return {
     event = "InsertEnter",
     keys = {
       { "<leader>tc", ":Copilot suggestion toggle_auto_trigger<CR>", desc = "[T]oggle [C]opilot" },
+      {
+        "<C-x>",
+        function()
+          if require("copilot.suggestion").is_visible() then
+            require("copilot.suggestion").accept()
+          else
+            require("copilot.suggestion").toggle_auto_trigger()
+          end
+        end,
+        mode = "i",
+        desc = "Accept Copilot Suggestion",
+      },
     },
     opts = {
       suggestion = {
         auto_trigger = true,
+        keymap = {
+          accept = "<C-S-l>",
+          accept_word = false,
+          accept_line = false,
+          next = "<M-]>",
+          prev = "<M-[>",
+          dismiss = "<C-]>",
+        },
       },
     },
     config = function(opts)
@@ -17,14 +37,55 @@ return {
     end,
   },
   {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    cmd = "CopilotChat",
+    dependencies = {
+      { "nvim-lua/plenary.nvim", branch = "master" },
+    },
+    build = "make tiktoken",
+    keys = {
+      { "<leader>cc", ":CopilotChatToggle<CR>", desc = "[C]opilot [C]hat Toggle" },
+      { "<leader>cr", ":CopilotChatReset<CR>", desc = "[C]opilot [R]eset" },
+    },
+    opts = {
+      model = "claude-sonnet-4.5", -- AI model to use
+      temperature = 0.1, -- Lower = focused, higher = creative
+      -- window = {
+      --   layout = "vertical", -- 'vertical', 'horizontal', 'float'
+      --   width = 0.33, -- 50% of screen width
+      -- },
+      window = {
+        layout = "float",
+        width = 80, -- Fixed width in columns
+        height = 20, -- Fixed height in rows
+        border = "rounded", -- 'single', 'double', 'rounded', 'solid'
+        title = "🤖 AI Assistant",
+        zindex = 100, -- Ensure window stays on top
+      },
+      headers = {
+        user = "👤 You",
+        assistant = "🤖 Copilot",
+        tool = "🔧 Tool",
+      },
+
+      separator = "━━",
+      auto_fold = true, -- Automatically folds non-assistant messages
+      auto_insert_mode = true, -- Enter insert mode when opening
+    },
+  },
+  {
     "yetone/avante.nvim",
     event = "VeryLazy",
+    enabled = false,
     lazy = false,
     version = false, -- set this if you want to always pull the latest change
     opts = {
       ---@alias Provider "openai" | "copilot" | string
       provider = "copilot",
       auto_suggestions_provider = "copilot",
+      auto_apply_diff_after_generation = false, -- Don't auto-apply changes
+      auto_suggestions = false, -- Disable real-time auto-suggestions
+      auto_focus_sidebar = true, -- Jump to sidebar for review
       openai = {
         endpoint = "https://api.openai.com/v1",
         model = "gpt-4o",
@@ -35,7 +96,7 @@ return {
       copilot = {
         endpoint = "https://api.githubcopilot.com",
         -- model = "gpt-4o-2024-08-06",
-        model = "claude-3.7-sonnet",
+        -- model = "claude-3.7-sonnet",
         proxy = nil, -- [protocol://]host[:port] Use this proxy
         allow_insecure = false, -- Allow insecure server connections
         timeout = 30000, -- Timeout in milliseconds

@@ -99,4 +99,7 @@ unset __conda_setup
 {{ if not .personal }}
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /opt/homebrew/bin/terraform terraform
+
+# Added by Toolchest Makefile
+eval "$(/Users/jteague/.local/bin/mise activate zsh)"
 {{ end }}

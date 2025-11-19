@@ -1,5 +1,8 @@
 return {
   "laytan/cloak.nvim",
+  keys = {
+    { "<leader>cl", ":CloakToggle<CR>", { desc = "Toggle Cloak" } },
+  },
   opts = {
     enabled = true,
     cloak_character = "*",
