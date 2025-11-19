@@ -55,9 +55,11 @@ return {
       --   width = 0.33, -- 50% of screen width
       -- },
       window = {
-        layout = "float",
-        width = 80, -- Fixed width in columns
-        height = 20, -- Fixed height in rows
+        layout = "vertical", -- 'vertical', 'horizontal', 'float'
+        width = 0.33, -- 50% of screen width
+        -- layout = "float",
+        -- width = 80, -- Fixed width in columns
+        -- height = 20, -- Fixed height in rows
         border = "rounded", -- 'single', 'double', 'rounded', 'solid'
         title = "🤖 AI Assistant",
         zindex = 100, -- Ensure window stays on top
@@ -69,7 +71,7 @@ return {
       },
 
       separator = "━━",
-      auto_fold = true, -- Automatically folds non-assistant messages
+      auto_fold = false, -- Automatically folds non-assistant messages
       auto_insert_mode = true, -- Enter insert mode when opening
     },
   },
