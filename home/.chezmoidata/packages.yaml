@@ -30,7 +30,7 @@ packages:
     - 'gpg' # for signing git commits
     - 'tmux'
     - 'zoxide' # easy navigation (better cd)
-    - 'tldr' # community-maintained docs (better man)
+    - 'tlrc' # community-maintained docs (better man)
     - 'scc' # count lines of code
     - 'eza' # listing files (better ls)
     - 'diff-so-fancy' # file comparisons (better diff)
@@ -57,7 +57,7 @@ packages:
     - 'font-roboto'
     - 'bitwarden'
     - 'discord'
-    - 'docker'
+    - 'docker-desktop'
     - 'google-chrome'
     - 'yt-music'
     - 'logseq'
@@ -127,7 +127,7 @@ packages:
       - 'dotnet@8'
       casks:
       - 'postman'
-      - 'slack'
+      - 'microsoft-teams'
     darwin:
       taps:
       brews:
