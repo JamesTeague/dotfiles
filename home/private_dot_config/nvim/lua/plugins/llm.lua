@@ -46,7 +46,7 @@ return {
     },
     keys = {
       {
-        "<C-a>",
+        "<C-s>",
         function()
           require("opencode").ask("@this: ", { submit = true })
         end,
@@ -103,6 +103,12 @@ return {
       ---@type opencode.Opts
       vim.g.opencode_opts = {
         -- Your configuration, if any — see `lua/opencode/config.lua`, or "goto definition" on the type or field.
+        provider = {
+          enabled = "terminal",
+          terminal = {
+            -- ...
+          },
+        },
       }
 
       -- Required for `opts.events.reload`.
