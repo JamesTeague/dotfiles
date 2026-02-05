@@ -1,6 +1,7 @@
 packages:
   core:
     taps:
+    - 'anomalyco/tap'
     brews:
     - 'bash'
     - 'bash-completion@2'
@@ -48,6 +49,7 @@ packages:
     - 'w3m'
     - 'ranger'
     - 'starship'
+    - 'opencode'
     casks:
     - 'font-alfa-slab-one'
     - 'font-awesome-terminal-fonts'
