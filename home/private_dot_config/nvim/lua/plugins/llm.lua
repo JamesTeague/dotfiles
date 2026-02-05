@@ -96,8 +96,8 @@ return {
       },
 
       -- You may want these if you stick with the opinionated "<C-a>" and "<C-x>" above — otherwise consider "<leader>o…".
-      { "+", "<C-a>", { desc = "Increment under cursor", noremap = true } },
-      { "-", "<C-x>", { desc = "Decrement under cursor", noremap = true } },
+      -- { "+", "<C-a>", { desc = "Increment under cursor", noremap = true } },
+      -- { "-", "<C-x>", { desc = "Decrement under cursor", noremap = true } },
     },
     config = function()
       ---@type opencode.Opts
