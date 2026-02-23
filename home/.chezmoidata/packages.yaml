@@ -58,7 +58,6 @@ packages:
     - 'font-monocraft'
     - 'font-roboto'
     - 'bitwarden'
-    - 'discord'
     - 'docker-desktop'
     - 'google-chrome'
     - 'yt-music'
@@ -100,6 +99,7 @@ packages:
       - 'ollama'
       casks:
       - 'arc'
+      - 'discord'
       - 'microsoft-office'
       - 'utm'
       mas:
