@@ -1,0 +1,17 @@
+# Default: auto-detect text vs binary, normalize text to LF in index.
+* text=auto
+
+# chezmoi template files must render with a deterministic source line ending.
+# (The chezmoi:template:line-ending=native directive controls RENDERED output;
+# this rule controls SOURCE storage.) See PITFALLS.md Pitfall 4.
+*.tmpl text eol=lf
+
+# Shell + PowerShell scripts: LF in source. PowerShell 7+ handles LF fine on Windows.
+*.sh    text eol=lf
+*.ps1   text eol=lf
+
+# Common binary types — never normalize.
+*.png   binary
+*.jpg   binary
+*.ico   binary
+*.streamDeckProfile binary
