@@ -101,7 +101,7 @@
 
 ### Cross-OS Screenshot Tools
 
-- [ ] **SS-01**: Shottr installed on Mac via existing `darwin.casks.personal` (already in baseline)
+- [x] **SS-01**: Shottr installed on Mac via existing `darwin.casks.personal` (already in baseline) — verified by Plan 00.5-01: present in `home/.chezmoidata/packages.yaml` line 78 AND installed on Mac personal (`brew list --cask | grep shottr`)
 - [ ] **SS-02**: PicPick installed on Windows via `winget` for all Windows roles
 - [ ] **SS-03**: Flameshot config preserved in `private_dot_config/flameshot/` and gated to `role=dev + os=linux` (dormant until Linux laptop materializes)
 
@@ -211,7 +211,7 @@
 | LON-02 | Phase 4 | Pending |
 | LON-03 | Phase 4 | Pending |
 | LON-04 | Phase 4 | Pending |
-| SS-01 | Phase 0.5 | Pending |
+| SS-01 | Phase 0.5 | Complete (2026-05-27, Plan 00.5-01) |
 | SS-02 | Phase 2 | Pending |
 | SS-03 | Phase 0 | Pending |
 | PAR-01 | Phase 2 | Pending |

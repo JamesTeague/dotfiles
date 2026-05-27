@@ -41,7 +41,7 @@ A new machine — any OS in the fleet — can be set up day-1 via a single `chez
 - Pitfall 4 / line-ending drift → `.gitattributes` lands here so source files are LF-clean before any Windows work begins
 
 **Plans**: 6 plans
-- [ ] 00.5-01-wave0-harness-PLAN.md — Wave 0 harness (lib.sh/quick.sh/full.sh) + candidate-list + state-preview scaffolds + SS-01 verification
+- [x] 00.5-01-wave0-harness-PLAN.md — Wave 0 harness (lib.sh/quick.sh/full.sh) + candidate-list + state-preview scaffolds + SS-01 verification (completed 2026-05-27)
 - [ ] 00.5-02-docs-PLAN.md — docs/conventions.md + docs/dot_topics.md (AUD-05; live-tree-grounded, with Teague accuracy review)
 - [ ] 00.5-03-gitattributes-statepeek-PLAN.md — .gitattributes Mac personal (AUD-04 partial) + Mac personal chezmoi state capture into 00.5-state-preview.md
 - [ ] 00.5-04-flameshot-removal-PLAN.md — AUD-03: source delete + Mac personal destination cleanup (Pitfall C resolution)
@@ -181,7 +181,7 @@ A new machine — any OS in the fleet — can be set up day-1 via a single `chez
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 0.5. Audit & Documentation | 0/6 | Planned | - |
+| 0.5. Audit & Documentation | 1/6 | In progress | - |
 | 0. Structural Refactor | 0/? | Not started | - |
 | 1. VaultWarden + Secret Plane + Bootstrap Kit | 0/? | Not started | - |
 | 2. Windows-Native Support | 0/? | Not started | - |
