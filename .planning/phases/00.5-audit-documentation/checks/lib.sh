@@ -15,7 +15,13 @@
 #   pending MSG                         - yellow dot, increments PENDING_COUNT
 #                                         (treated as FAIL in STRICT mode)
 #   assert_file PATH                    - pass/pending/(strict-fail) on file
-#   assert_dir_missing PATH             - pass if absent, fail if present
+#   assert_dir_missing PATH             - pass if absent, pending/(strict-fail)
+#                                         if present (parallel to assert_file:
+#                                         "this artifact should have been
+#                                         removed by Wave N — strict gates the
+#                                         removal, default just notes it)
+#   assert_dir_missing_strict PATH      - pass if absent, FAIL if present
+#                                         (use for invariants, not Wave work)
 #   assert_grep PATTERN PATH            - pass if grep -q matches; fail otherwise
 #                                         (real fail — pattern missing in an
 #                                         existing file is broken state)
@@ -119,6 +125,19 @@ assert_file() {
 }
 
 assert_dir_missing() {
+  local path="$1"
+  if [[ ! -e "${path}" ]]; then
+    pass "directory absent: ${path}"
+  else
+    # Same pending/strict semantics as assert_file: this is wave-staged work
+    # ("removed by Plan 04") not a hard invariant.
+    pending "directory still present (not yet removed): ${path}"
+  fi
+}
+
+# Strict variant — use when "directory absent" is a HARD invariant, not
+# in-flight cleanup. Not currently used in Phase 0.5 but kept for symmetry.
+assert_dir_missing_strict() {
   local path="$1"
   if [[ ! -e "${path}" ]]; then
     pass "directory absent: ${path}"
