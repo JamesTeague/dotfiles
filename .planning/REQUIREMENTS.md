@@ -218,10 +218,10 @@
 | PAR-02 | Phase 2 | Pending |
 
 **Coverage:**
-- v1 requirements: 67 total
-- Mapped to phases: 67
+- v1 requirements: 69 total
+- Mapped to phases: 69
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-05-27*
-*Last updated: 2026-05-27 after initial definition (synthesized from discussion + research)*
+*Last updated: 2026-05-27 after roadmap creation (coverage count corrected: 69 reqs total)*
