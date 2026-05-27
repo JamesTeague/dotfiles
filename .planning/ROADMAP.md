@@ -40,7 +40,13 @@ A new machine — any OS in the fleet — can be set up day-1 via a single `chez
 - Pitfall 22 (`dot_topics/` undocumented) → resolved by docs/dot_topics.md
 - Pitfall 4 / line-ending drift → `.gitattributes` lands here so source files are LF-clean before any Windows work begins
 
-**Plans**: TBD
+**Plans**: 6 plans
+- [ ] 00.5-01-wave0-harness-PLAN.md — Wave 0 harness (lib.sh/quick.sh/full.sh) + candidate-list + state-preview scaffolds + SS-01 verification
+- [ ] 00.5-02-docs-PLAN.md — docs/conventions.md + docs/dot_topics.md (AUD-05; live-tree-grounded, with Teague accuracy review)
+- [ ] 00.5-03-gitattributes-statepeek-PLAN.md — .gitattributes Mac personal (AUD-04 partial) + Mac personal chezmoi state capture into 00.5-state-preview.md
+- [ ] 00.5-04-flameshot-removal-PLAN.md — AUD-03: source delete + Mac personal destination cleanup (Pitfall C resolution)
+- [ ] 00.5-05-packages-audit-PLAN.md — AUD-01 candidate analysis (Teague review checkpoint) + AUD-02 LIGHT normalization + approved-brew-bundle snapshot
+- [ ] 00.5-06-exit-gate-PLAN.md — Mac personal drift reconciliation + Mac work CRLF pre-check + Mac work state capture + HARD exit-gate diff on both Macs
 
 ---
 
@@ -175,7 +181,7 @@ A new machine — any OS in the fleet — can be set up day-1 via a single `chez
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 0.5. Audit & Documentation | 0/? | Not started | - |
+| 0.5. Audit & Documentation | 0/6 | Planned | - |
 | 0. Structural Refactor | 0/? | Not started | - |
 | 1. VaultWarden + Secret Plane + Bootstrap Kit | 0/? | Not started | - |
 | 2. Windows-Native Support | 0/? | Not started | - |
