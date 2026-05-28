@@ -18,8 +18,8 @@
 
 ### Audit & Cleanup (Phase 0.5)
 
-- [ ] **AUD-01**: Dead `packages.yaml` entries removed (orphaned/abandonware audit)
-- [ ] **AUD-02**: `personal/work.{core,darwin,linux}` nesting inconsistency normalized within current structure (pre-restructure)
+- [x] **AUD-01**: Dead `packages.yaml` entries removed (orphaned/abandonware audit)
+- [x] **AUD-02**: `personal/work.{core,darwin,linux}` nesting inconsistency normalized within current structure (pre-restructure)
 - [x] **AUD-03**: Orphaned `home/private_dot_config/flameshot/` deleted (Shottr replaced it on Mac)
 - [x] **AUD-04**: `.gitattributes` added enforcing `*.tmpl text eol=lf` (Windows line-ending hygiene)
 - [x] **AUD-05**: `docs/conventions.md` documenting structural decisions inherited from prior sessions
@@ -147,8 +147,8 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUD-01 | Phase 0.5 | Pending |
-| AUD-02 | Phase 0.5 | Pending |
+| AUD-01 | Phase 0.5 | Complete (2026-05-28, Plan 00.5-05) |
+| AUD-02 | Phase 0.5 | Complete (2026-05-28, Plan 00.5-05) |
 | AUD-03 | Phase 0.5 | Complete |
 | AUD-04 | Phase 0.5 | Complete |
 | AUD-05 | Phase 0.5 | Complete |
