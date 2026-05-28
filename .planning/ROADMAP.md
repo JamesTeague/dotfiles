@@ -42,8 +42,8 @@ A new machine — any OS in the fleet — can be set up day-1 via a single `chez
 
 **Plans**: 6 plans
 - [x] 00.5-01-wave0-harness-PLAN.md — Wave 0 harness (lib.sh/quick.sh/full.sh) + candidate-list + state-preview scaffolds + SS-01 verification (completed 2026-05-27)
-- [ ] 00.5-02-docs-PLAN.md — docs/conventions.md + docs/dot_topics.md (AUD-05; live-tree-grounded, with Teague accuracy review)
-- [ ] 00.5-03-gitattributes-statepeek-PLAN.md — .gitattributes Mac personal (AUD-04 partial) + Mac personal chezmoi state capture into 00.5-state-preview.md
+- [x] 00.5-02-docs-PLAN.md — docs/conventions.md + docs/dot_topics.md (AUD-05; live-tree-grounded, with Teague accuracy review) (completed 2026-05-28)
+- [x] 00.5-03-gitattributes-statepeek-PLAN.md — .gitattributes Mac personal (AUD-04 partial) + Mac personal chezmoi state capture into 00.5-state-preview.md (completed 2026-05-27)
 - [ ] 00.5-04-flameshot-removal-PLAN.md — AUD-03: source delete + Mac personal destination cleanup (Pitfall C resolution)
 - [ ] 00.5-05-packages-audit-PLAN.md — AUD-01 candidate analysis (Teague review checkpoint) + AUD-02 LIGHT normalization + approved-brew-bundle snapshot
 - [ ] 00.5-06-exit-gate-PLAN.md — Mac personal drift reconciliation + Mac work CRLF pre-check + Mac work state capture + HARD exit-gate diff on both Macs

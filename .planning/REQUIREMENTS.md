@@ -22,7 +22,7 @@
 - [ ] **AUD-02**: `personal/work.{core,darwin,linux}` nesting inconsistency normalized within current structure (pre-restructure)
 - [ ] **AUD-03**: Orphaned `home/private_dot_config/flameshot/` deleted (Shottr replaced it on Mac)
 - [x] **AUD-04**: `.gitattributes` added enforcing `*.tmpl text eol=lf` (Windows line-ending hygiene)
-- [ ] **AUD-05**: `docs/conventions.md` documenting structural decisions inherited from prior sessions
+- [x] **AUD-05**: `docs/conventions.md` documenting structural decisions inherited from prior sessions
 
 ### Secrets & Identity
 
@@ -151,7 +151,7 @@
 | AUD-02 | Phase 0.5 | Pending |
 | AUD-03 | Phase 0.5 | Pending |
 | AUD-04 | Phase 0.5 | Complete |
-| AUD-05 | Phase 0.5 | Pending |
+| AUD-05 | Phase 0.5 | Complete |
 | TAX-01 | Phase 0 | Pending |
 | TAX-02 | Phase 0 | Pending |
 | TAX-03 | Phase 0 | Pending |
