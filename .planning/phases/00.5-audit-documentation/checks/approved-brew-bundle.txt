@@ -1,0 +1,129 @@
+#!/bin/bash
+
+# exist checks if a command exist in shell
+exist() {
+  command -v "$1" >/dev/null 2>&1
+}
+
+info () {
+  printf "\r  [ \033[00;34m..\033[0m ] $1\n"
+}
+
+user () {
+  printf "\r  [ \033[0;33m??\033[0m ] $1\n"
+}
+
+success () {
+  printf "\r\033[2K  [ \033[00;32mOK\033[0m ] $1\n"
+}
+
+fail () {
+  printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
+  echo ''
+  exit
+}
+
+
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+info "Updating Homebrew..."
+brew update
+
+
+brew bundle --file=/dev/stdin << EOF
+
+# Add Core Taps
+tap "anomalyco/tap"
+# Add darwin taps
+tap "jesseduffield/lazygit"
+  tap "jesseduffield/lazydocker"
+  # Add linux taps
+# Add Core Brews
+brew "bash"
+brew "bash-completion@2"
+brew "wget"
+brew "chezmoi"
+brew "jq"
+brew "git"
+brew "grep"
+brew "lua"
+brew "neovim"
+brew "rust-analyzer"
+brew "ripgrep"
+brew "zsh"
+brew "zsh-autosuggestions"
+brew "zsh-completions"
+brew "zsh-syntax-highlighting"
+brew "zsh-vi-mode"
+brew "go"
+brew "delve"
+brew "python@3.14"
+brew "jupyterlab"
+brew "node"
+brew "make"
+brew "gcc"
+brew "libpq"
+brew "bat"
+brew "gnupg"
+brew "tmux"
+brew "zoxide"
+brew "tlrc"
+brew "scc"
+brew "eza"
+brew "diff-so-fancy"
+brew "fdupes"
+brew "fzf"
+brew "hyperfine"
+brew "rm-improved"
+brew "ddgr"
+brew "httpie"
+brew "atuin"
+brew "btop"
+brew "slides"
+brew "tokei"
+brew "tree"
+brew "w3m"
+brew "ranger"
+brew "starship"
+brew "opencode"
+# Add Darwin Brews
+brew "mas"
+  brew "jesseduffield/lazygit/lazygit"
+  brew "jesseduffield/lazydocker/lazydocker"
+  brew "geckodriver"
+  brew "ollama"
+    # Add Linux Brews
+# Add Core Casks
+cask "font-alfa-slab-one"
+  cask "font-awesome-terminal-fonts"
+  cask "font-hack-nerd-font"
+  cask "font-lato"
+  cask "font-monocraft"
+  cask "font-roboto"
+  cask "bitwarden"
+  cask "discord"
+  cask "docker-desktop"
+  cask "google-chrome"
+  cask "yt-music"
+  cask "logseq"
+  cask "nikitabobko/tap/aerospace"
+  cask "ghostty"
+  # Add Darwin Casks
+  cask "shottr"
+    cask "raycast"
+    cask "via"
+    cask "hiddenbar"
+    cask "stats"
+    cask "arc"
+      cask "microsoft-office"
+      cask "utm"
+      cask "mullvadvpn"
+      cask "kindle"
+      cask "handbrake"
+      cask "rode-central"
+      # Add Linux Casks
+  #EOF
+EOF
+
+

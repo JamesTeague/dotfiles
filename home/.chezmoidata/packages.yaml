@@ -21,14 +21,14 @@ packages:
     - 'zsh-vi-mode'
     - 'go'
     - 'delve'
-    - 'python3'
+    - 'python@3.14' # renamed from 'python3' (Phase 0.5 AUD-01)
     - 'jupyterlab'
-    - 'npm' # required by lsp tsserver
+    - 'node' # renamed from 'npm' (npm ships with node) — required by lsp tsserver (Phase 0.5 AUD-01)
     - 'make' # required by powerlevel10k on linux
     - 'gcc' # required by powerlevel10k, zsh on linux
     - 'libpq'
     - 'bat' # reading files (better cat)
-    - 'gpg' # for signing git commits
+    - 'gnupg' # renamed from 'gpg' (gpg is alias only) — for signing git commits (Phase 0.5 AUD-01)
     - 'tmux'
     - 'zoxide' # easy navigation (better cd)
     - 'tlrc' # community-maintained docs (better man)
@@ -89,10 +89,6 @@ packages:
     taps:
     brews:
     casks:
-    - 'mullvadvpn'
-    - 'kindle'
-    - 'handbrake'
-    - 'rode-central'
     darwin:
       taps:
       brews:
@@ -102,10 +98,11 @@ packages:
       - 'discord'
       - 'microsoft-office'
       - 'utm'
+      - 'mullvadvpn' # moved from personal.casks (Phase 0.5 AUD-02 LIGHT)
+      - 'kindle' # moved from personal.casks (Phase 0.5 AUD-02 LIGHT)
+      - 'handbrake' # moved from personal.casks (Phase 0.5 AUD-02 LIGHT)
+      - 'rode-central' # moved from personal.casks (Phase 0.5 AUD-02 LIGHT)
       mas:
-        FinalCutPro:
-          name: 'Final Cut Pro (10.6.5)'
-          id: 424389933
         BrotherIPrint:
           name: 'Brother iPrint&Scan'
           id: 1193539993
@@ -114,26 +111,19 @@ packages:
       brews:
       casks:
   work:
-    core:
-      taps:
-      - 'snyk/tap'
-      - 'localstack/tap'
-      brews:
-      - 'synk'
-      - 'node'
-      - 'awscli'
-      - 'localstack-cli'
-      - 'stern'
-      - 'sqlc'
-      - 'git-lfs'
-      - 'dotnet@8'
-      casks:
-      - 'postman'
-      - 'microsoft-teams'
     darwin:
       taps:
+      - 'snyk/tap' # moved from work.core.taps (Phase 0.5 AUD-02 LIGHT)
+      - 'localstack/tap' # moved from work.core.taps (Phase 0.5 AUD-02 LIGHT)
       brews:
+      - 'awscli' # moved from work.core.brews (Phase 0.5 AUD-02 LIGHT)
+      - 'localstack' # moved from work.core.brews + renamed from 'localstack-cli' (Phase 0.5 AUD-01)
+      - 'stern' # moved from work.core.brews (Phase 0.5 AUD-02 LIGHT)
+      - 'sqlc' # moved from work.core.brews (Phase 0.5 AUD-02 LIGHT)
+      - 'git-lfs' # moved from work.core.brews (Phase 0.5 AUD-02 LIGHT)
+      - 'dotnet@8' # moved from work.core.brews (Phase 0.5 AUD-02 LIGHT)
       casks:
+      - 'microsoft-teams' # moved from work.core.casks (Phase 0.5 AUD-02 LIGHT)
       mas:
     linux:
       taps:
