@@ -1,0 +1,356 @@
+=== PRE-reconciliation diff ===
+2026-05-29 14:15 CDT
+diff --git a/.chezmoiscripts/02-install-packages.sh b/.chezmoiscripts/02-install-packages.sh
+new file mode 100755
+index 0000000000000000000000000000000000000000..ff0dc784b46d34161d7da010d250c56e4f743e23
+--- /dev/null
++++ b/.chezmoiscripts/02-install-packages.sh
+@@ -0,0 +1,132 @@
++#!/bin/bash
++
++# exist checks if a command exist in shell
++exist() {
++  command -v "$1" >/dev/null 2>&1
++}
++
++info () {
++  printf "\r  [ \033[00;34m..\033[0m ] $1\n"
++}
++
++user () {
++  printf "\r  [ \033[0;33m??\033[0m ] $1\n"
++}
++
++success () {
++  printf "\r\033[2K  [ \033[00;32mOK\033[0m ] $1\n"
++}
++
++fail () {
++  printf "\r\033[2K  [\033[0;31mFAIL\033[0m] $1\n"
++  echo ''
++  exit
++}
++
++
++
++eval "$(/opt/homebrew/bin/brew shellenv)"
++
++info "Updating Homebrew..."
++brew update
++
++
++brew bundle --file=/dev/stdin << EOF
++
++# Add Core Taps
++tap "anomalyco/tap"
++# Add darwin taps
++tap "jesseduffield/lazygit"
++  tap "jesseduffield/lazydocker"
++  
++    tap "snyk/tap"
++    tap "localstack/tap"
++    # Add linux taps
++# Add Core Brews
++brew "bash"
++brew "bash-completion@2"
++brew "wget"
++brew "chezmoi"
++brew "jq"
++brew "git"
++brew "grep"
++brew "lua"
++brew "neovim"
++brew "rust-analyzer"
++brew "ripgrep"
++brew "zsh"
++brew "zsh-autosuggestions"
++brew "zsh-completions"
++brew "zsh-syntax-highlighting"
++brew "zsh-vi-mode"
++brew "go"
++brew "delve"
++brew "python@3.14"
++brew "jupyterlab"
++brew "node"
++brew "make"
++brew "gcc"
++brew "libpq"
++brew "bat"
++brew "gnupg"
++brew "tmux"
++brew "zoxide"
++brew "tlrc"
++brew "scc"
++brew "eza"
++brew "diff-so-fancy"
++brew "fdupes"
++brew "fzf"
++brew "hyperfine"
++brew "rm-improved"
++brew "ddgr"
++brew "httpie"
++brew "atuin"
++brew "btop"
++brew "slides"
++brew "tokei"
++brew "tree"
++brew "w3m"
++brew "ranger"
++brew "starship"
++brew "opencode"
++# Add Darwin Brews
++brew "mas"
++  brew "jesseduffield/lazygit/lazygit"
++  brew "jesseduffield/lazydocker/lazydocker"
++  brew "geckodriver"
++  
++    brew "awscli"
++    brew "localstack"
++    brew "stern"
++    brew "sqlc"
++    brew "git-lfs"
++    brew "dotnet@8"
++    # Add Linux Brews
++# Add Core Casks
++cask "font-alfa-slab-one"
++  cask "font-awesome-terminal-fonts"
++  cask "font-hack-nerd-font"
++  cask "font-lato"
++  cask "font-monocraft"
++  cask "font-roboto"
++  cask "bitwarden"
++  cask "docker-desktop"
++  cask "google-chrome"
++  cask "yt-music"
++  cask "logseq"
++  cask "nikitabobko/tap/aerospace"
++  cask "ghostty"
++  # Add Darwin Casks
++  cask "shottr"
++    cask "raycast"
++    cask "via"
++    cask "hiddenbar"
++    cask "stats"
++    
++      cask "microsoft-teams"
++      # Add Linux Casks
++  #EOF
++EOF
++
++
+diff --git a/.zshrc b/.zshrc
+index 040eea5ea8f69570b7a67941ac51c24446161d5e..0f4ee70aea06101f62002d6424d192a7b74b9f40 100644
+--- a/.zshrc
++++ b/.zshrc
+@@ -88,5 +88,3 @@
+ # Added by Toolchest Makefile
+ eval "$(/Users/jteague/.local/bin/mise activate zsh)"
+ 
+-
+-export NODE_EXTRA_CA_CERTS=/Users/jteague/.certs/CAcerts.pem
+diff --git a/bin/start-aws-mcp.sh b/bin/start-aws-mcp.sh
+deleted file mode 100755
+index bcb6a3d113b2b0bfe2611b6f6a68a54582b58792..0000000000000000000000000000000000000000
+--- a/bin/start-aws-mcp.sh
++++ /dev/null
+@@ -1,100 +0,0 @@
+-#!/usr/bin/env bash
+-#
+-# AWS MCP Server Launcher
+-#
+-# This script automatically starts the AWS API MCP (Model Context Protocol) server
+-# with proper environment setup and credential management.
+-#
+-# Purpose:
+-# - Creates and manages a Python virtual environment for the AWS MCP server
+-# - Installs/updates the awslabs.aws-api-mcp-server package
+-# - Handles AWS SSO authentication for the specified profile
+-# - Launches the MCP server with proper logging
+-#
+-# Usage:
+-#   start-aws-mcp.sh [-p profile]
+-#
+-# Examples:
+-#   start-aws-mcp.sh                    # Use default AWS profile
+-#   start-aws-mcp.sh -p production      # Use 'production' AWS profile
+-#   start-aws-mcp.sh -p dev-account     # Use 'dev-account' AWS profile
+-#
+-# Prerequisites:
+-# - AWS CLI installed and configured with SSO profiles
+-# - Python 3 available on PATH
+-# - Internet access for package installation
+-#
+-# The server will run in the foreground and log to ~/.mcp/logs/aws-api-mcp.YYYYMMDD.log
+-#
+-set -euo pipefail
+-
+-usage() {
+-  echo "Usage: $(basename "$0") [-p profile]" >&2
+-  echo "  -p profile   AWS CLI profile (SSO) to use (default: default)" >&2
+-}
+-
+-PROFILE="default"
+-while getopts ":p:h" opt; do
+-  case $opt in
+-    p) PROFILE="$OPTARG" ;;
+-    h) usage; exit 0 ;;
+-    :) echo "Option -$OPTARG requires an argument" >&2; usage; exit 2 ;;
+-    \?) echo "Invalid option -$OPTARG" >&2; usage; exit 2 ;;
+-  esac
+-done
+-shift $((OPTIND-1))
+-
+-# ----- Configuration -----
+-SERVER_PKG="awslabs.aws-api-mcp-server"   # latest each start (no pin)
+-VENV_DIR="${HOME}/.mcp/envs/aws-api-mcp"
+-LOG_DIR="${HOME}/.mcp/logs"
+-mkdir -p "$LOG_DIR"
+-LOG_FILE="${LOG_DIR}/aws-api-mcp.$(date +%Y%m%d).log"
+-
+-log() { printf '%s %s\n' "$(date -u +'%Y-%m-%dT%H:%M:%SZ')" "$*" >> "$LOG_FILE"; }
+-
+-log "--- wrapper start (profile=$PROFILE) pid=$$ ---"
+-
+-# Find python3
+-if command -v python3 >/dev/null 2>&1; then
+-  PYBIN=$(command -v python3)
+-elif command -v python >/dev/null 2>&1; then
+-  PYBIN=$(command -v python)
+-else
+-  log "ERROR: python3 not found on PATH"
+-  echo "python3 not found; cannot start AWS MCP server" >&2
+-  exit 127
+-fi
+-
+-# Create venv if missing
+-if [[ ! -x "${VENV_DIR}/bin/python" ]]; then
+-  log "Creating virtualenv at ${VENV_DIR}"
+-  mkdir -p "$(dirname "$VENV_DIR")"
+-  "$PYBIN" -m venv "$VENV_DIR" || { log "ERROR: venv creation failed"; echo "venv creation failed" >&2; exit 1; }
+-  "${VENV_DIR}/bin/python" -m pip install --upgrade --quiet pip || log "WARN: pip upgrade failed"
+-fi
+-
+-VPY="${VENV_DIR}/bin/python"
+-
+-# Ensure package present (latest each run; could add caching heuristic if needed)
+-if ! "$VPY" -c "import awslabs.aws_api_mcp_server" 2>/dev/null; then
+-  log "Installing $SERVER_PKG (initial)"
+-  "$VPY" -m pip install --quiet "$SERVER_PKG" || { log "ERROR: initial install failed"; echo "Server package install failed" >&2; exit 1; }
+-else
+-  # Attempt a lightweight upgrade check (non-fatal if offline)
+-  log "Upgrading $SERVER_PKG (attempt)"
+-  "$VPY" -m pip install --quiet --upgrade "$SERVER_PKG" || log "WARN: upgrade attempt failed"
+-fi
+-
+-log "Ensuring SSO credentials for profile=$PROFILE"
+-if ! aws sts get-caller-identity --profile "$PROFILE" >/dev/null 2>&1; then
+-  log "Triggering aws sso login for $PROFILE"
+-  aws sso login --profile "$PROFILE" || { log "ERROR: aws sso login failed"; echo "aws sso login failed" >&2; exit 1; }
+-fi
+-
+-export AWS_PROFILE="$PROFILE"
+-export AWS_SDK_LOAD_CONFIG=1
+-
+-log "Launching server via console script"
+-exec "${VENV_DIR}/bin/awslabs.aws-api-mcp-server" 2>>"$LOG_FILE"
+-
+
+=== ~/.config/flameshot/ contents (pre-cleanup) ===
+.rw-r--r-- 147 jteague 11 Apr  2024 flameshot.ini
+=== APPLY output ===
+  [ [00;34m..[0m ] Updating Homebrew...
+==> Updating Homebrew...
+Already up-to-date.
+Fetching chezmoi, git, lua, neovim, rust-analyzer, zsh-completions, go, delve, python@3.14, jupyterlab, node, libpq, gnupg, tmux, tlrc, scc, diff-so-fancy, fzf, httpie, atuin, btop, tree, starship, opencode, mas, jesseduffield/lazygit/lazygit, jesseduffield/lazydocker/lazydocker, awscli, localstack, stern, sqlc, dotnet@8, nikitabobko/tap/aerospace, hiddenbar
+Using anomalyco/tap
+Using jesseduffield/lazygit
+Using jesseduffield/lazydocker
+Using snyk/tap
+Using localstack/tap
+Using bash
+Using bash-completion@2
+Using wget
+Upgrading chezmoi
+Using jq
+Upgrading git
+Using grep
+Upgrading lua
+Upgrading neovim
+Upgrading rust-analyzer
+Using ripgrep
+Using zsh
+Using zsh-autosuggestions
+Upgrading zsh-completions
+Using zsh-syntax-highlighting
+Using zsh-vi-mode
+Upgrading go
+Upgrading delve
+Upgrading python@3.14
+Upgrading jupyterlab
+Upgrading node
+Using make
+Using gcc
+Upgrading libpq
+Using bat
+Upgrading gnupg
+Upgrading tmux
+Using zoxide
+Upgrading tlrc
+Upgrading scc
+Using eza
+Upgrading diff-so-fancy
+Using fdupes
+Upgrading fzf
+Using hyperfine
+Using rm-improved
+Using ddgr
+Upgrading httpie
+Upgrading atuin
+Upgrading btop
+Using slides
+Using tokei
+Upgrading tree
+Using w3m
+Using ranger
+Upgrading starship
+Upgrading opencode
+Upgrading mas
+Upgrading jesseduffield/lazygit/lazygit
+Upgrading jesseduffield/lazydocker/lazydocker
+Using geckodriver
+Upgrading awscli
+
+
+=== Post-apply state (zshrc skipped — needs reconciliation) ===
+2026-05-29 14:36 CDT
+
+--- Flameshot surgical cleanup ---
+/Users/jteague/.config/flameshot/flameshot.ini
+/Users/jteague/.config/flameshot/
+zsh: no such file or directory: --key=/Users/jteague/.config/flameshot/flameshot.ini
+zsh: no such file or directory: --key=/Users/jteague/.config/flameshot
+
+--- .zshrc proposed change (full diff for decision) ---
+diff --git a/.zshrc b/.zshrc
+index 040eea5ea8f69570b7a67941ac51c24446161d5e..0f4ee70aea06101f62002d6424d192a7b74b9f40 100644
+--- a/.zshrc
++++ b/.zshrc
+@@ -88,5 +88,3 @@
+ # Added by Toolchest Makefile
+ eval "$(/Users/jteague/.local/bin/mise activate zsh)"
+ 
+-
+-export NODE_EXTRA_CA_CERTS=/Users/jteague/.certs/CAcerts.pem
+
+--- All remaining drift (chezmoi diff -x externals, full) ---
+diff --git a/.zshrc b/.zshrc
+index 040eea5ea8f69570b7a67941ac51c24446161d5e..0f4ee70aea06101f62002d6424d192a7b74b9f40 100644
+--- a/.zshrc
++++ b/.zshrc
+@@ -88,5 +88,3 @@
+ # Added by Toolchest Makefile
+ eval "$(/Users/jteague/.local/bin/mise activate zsh)"
+ 
+-
+-export NODE_EXTRA_CA_CERTS=/Users/jteague/.certs/CAcerts.pem
+=== END ===
