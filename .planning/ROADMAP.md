@@ -12,7 +12,7 @@ A new machine — any OS in the fleet — can be set up day-1 via a single `chez
 
 ## Phases
 
-- [ ] **Phase 0.5: Audit & Documentation** — Defensible baseline of conventions + dead-config removal before any structural change (zero apply risk)
+- [x] **Phase 0.5: Audit & Documentation** — Defensible baseline of conventions + dead-config removal before any structural change (zero apply risk) — **CLOSED 2026-05-29** (6/6 plans, 6 requirements, both-Mac gate PASS via 1 justified escalation)
 - [ ] **Phase 0: Structural Refactor** — Land the `role × personal × os × wsl` taxonomy on a branch with `chezmoi diff` empty on both Macs as merge gate
 - [ ] **Phase 1: VaultWarden + Secret Plane + Bootstrap Kit** — Credential plane (GPG canonical + per-purpose SSH) AND disaster-recovery fallback land together
 - [ ] **Phase 2: Windows-Native Support** — pwsh + winget + Stream Deck + role=gaming + role=lite all share Windows infrastructure

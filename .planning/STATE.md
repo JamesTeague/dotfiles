@@ -3,39 +3,39 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: "Completed `00.5-05-packages-audit-PLAN.md` 2026-05-28T03:35Z (AUD-01 + AUD-02 done; Wave 2 fully closed; Plan 06 exit-gate is the final Phase 0.5 deliverable)."
-last_updated: "2026-05-28T03:35Z"
+stopped_at: "Completed Phase 00.5 (Audit & Documentation) 2026-05-29 — all 6 plans closed (01..06); 6/6 requirements verified (SS-01, AUD-01..05); both-Mac exit gate PASS (Mac personal EMPTY ✓, Mac work via single justified escalation); 9 Phase 0 follow-ups captured. Next focus: Phase 0 (Structural Refactor)."
+last_updated: "2026-05-29T20:30Z"
 progress:
   total_phases: 6
-  completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  completed_phases: 1
+  total_plans: 6
+  completed_plans: 6
 ---
 
 # Project State: chezmoi Modernization
 
-**Last updated:** 2026-05-28
+**Last updated:** 2026-05-29
 
 ## Project Reference
 
 **Core Value:** A new machine — any OS in the fleet — can be set up day-1 via a single `chezmoi init --apply` flow (plus VaultWarden login + GitHub PAT for HTTPS clone bootstrap) and arrive at a fully-configured, identity-signed, role-appropriate state without artisanal touch-up.
 
-**Current Focus:** Phase 0.5 (Audit & Documentation) — Wave 1 fully closed (Plans 01 + 02 + 03). Wave 2 FULLY CLOSED (Plan 04 AUD-03 + Plan 05 AUD-01 + AUD-02). Plan 06 exit-gate is the final Phase 0.5 deliverable.
+**Current Focus:** **Phase 0.5 CLOSED 2026-05-29.** All 6 plans done, all 6 requirements verified, both-Mac exit gate PASS, 9 Phase 0 follow-ups + 1 open escalation captured. **Next: Phase 0 (Structural Refactor)** — load-bearing taxonomy work the rest of the roadmap depends on.
 
 ## Current Position
 
-**Phase:** 00.5-audit-documentation
-**Plan:** Wave 1 complete (01 + 02 + 03); Wave 2 complete (04 + 05); Plan 06 exit-gate remains
-**Status:** Plan 05 landed; only Plan 06 (exit-gate) remains in Phase 0.5
-**Progress:** Phase 0/6 plans done · 0.5 sub-progress 5/6 plans `█████░`
+**Phase:** 00.5-audit-documentation — CLOSED
+**Plan:** All 6 plans complete (01..06)
+**Status:** Phase 0.5 closed; ready for Phase 0 planning
+**Progress:** Phase 1/6 phases done · 0.5 sub-progress 6/6 plans `██████`
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
 | Phases planned | 1/6 (0.5 planned; others pending) |
-| Phases complete | 0/6 |
-| Plans complete (Phase 0.5) | 5/6 |
+| Phases complete | 1/6 (0.5) |
+| Plans complete (Phase 0.5) | 6/6 |
 | v1 requirements mapped | 69/69 |
 | v1 requirements complete | 6/69 (SS-01, AUD-01, AUD-02, AUD-03, AUD-04, AUD-05) |
 | Pitfalls mitigated in roadmap | 11 of 22 surfaced in PITFALLS.md (the critical ones); Pitfall 22 (dot_topics undocumented) resolved by Plan 02; Pitfall D (run_onchange re-fire on packages.yaml change) mitigated by Plan 05's approved-brew-bundle snapshot |
@@ -47,6 +47,7 @@ progress:
 | 00.5-03 gitattributes-statepeek | 2 | 2 | 3m |
 | 00.5-04 flameshot-removal | 3 (2 auto + 1 human-verify) | 1 source-delete + 2 planning notes; destination + 2 entryState keys (off-tree) | 25m active (spanned checkpoint pause) |
 | 00.5-05 packages-audit | 3 (2 auto + 1 human-verify) | 3 (packages.yaml + candidates.md + approved-brew-bundle.txt) | 45m active (spanned checkpoint pause) |
+| 00.5-06 exit-gate | 6 (3 auto + 3 human-verify) | 4 created (drift-reconciliation, exit-gate-report, state captures ×2, recovery script) + 2 modified (state-preview, packages.yaml line 120 hot-patch) | ~3h active across 2 sessions |
 
 ## Accumulated Context
 
@@ -91,11 +92,16 @@ progress:
 - **(Plan 05)** Upstream-formula-rename pattern: when upstream renames (python3 → python@3.14, npm → node, gpg → gnupg), edit in place (RENAME, not DELETE+ADD). Verify the canonical name is already installed on the active machine to confirm brew bundle re-fire is no-op. RENAME and MOVE can apply together (localstack-cli → localstack across blocks).
 - **(Plan 05)** chezmoi apply --dry-run --verbose exits NONZERO when it hits a pre-existing interactive prompt in source (e.g., .zshrc:80 DEBUG=1). Filter dry-run output by pattern OR reconcile drift first — exit-code gating alone produces false negatives. Plan 06 input.
 - **(Plan 05)** Snapshot-byte-equal verification: `chezmoi execute-template < template > /tmp/out && diff /tmp/out checks/approved-snapshot.txt` is the canonical "packages.yaml didn't accidentally change" gate. full.sh step 5 owns this. Re-snapshot when packages.yaml legitimately changes (next: Phase 0 TAX-05).
+- **(Plan 06)** Capture-to-file-then-commit pattern for human-in-loop reconciliation when operator is on a different machine with limited paste budget (here: Mac work physical access, no SSH per Bluebeam policy). Redirect outputs to `.planning/.../captures/<task>.txt`, commit + push from operator machine, pull + read on planner machine. Used 3× in Plan 06.
+- **(Plan 06)** Foreground-vs-redirect distinction for `chezmoi apply`: when apply may prompt (sudo, kext, package conflict), run in foreground NOT via heredoc-with-redirect (prompts disappear, look like hangs). Canonical stuck-on-tty diagnostic: `ps aux | grep ... | grep STAT` — look for `S+`.
+- **(Plan 06)** Single-justified-escalation gate-pass pattern: when reconciliation requires introducing a new axis Phase 0 owns (here: employer axis for Bluebeam corporate cert), document the entry as explicit escalation in drift-reconciliation.md with justification, accept non-empty diff for THAT entry only, close via "empty OR only justified escalations" criterion. Applied for `.zshrc` NODE_EXTRA_CA_CERTS on Mac work.
+- **(Plan 06)** `exact_<dir>`-as-root-cause diagnosis: when `chezmoi diff` shows destination as `deleted file mode 100755` with FULL content, file isn't in entryState — it's an `exact_` directive enforcing dir contents. `chezmoi state delete` won't help; either rename source dir OR move destination to non-`exact_`-managed location. Caught for `~/bin/start-aws-mcp.sh` on Mac work; resolved by `mv ~/bin/start-aws-mcp.sh ~/.local/bin/`.
+- **(Plan 06)** zsh `--key=...` CLI flag parsing pitfall: when heredoc rendering splits `--key` from `=/path`, zsh EQUALS option treats `=/path` as a command-path lookup → `zsh: no such file or directory: --key=/...`. Workaround: space-separated `--key /path`. Surfaced on Mac work chezmoi 2.69.4; not reproduced on Mac personal 2.70.4.
+- **(Plan 06)** Plan 05 reality correction: `localstack-cli` was NOT misnamed — both `localstack` (deprecated, sunset 2027-04-12) and `localstack-cli` (maintained) exist in `localstack/tap`. Plan 05's candidate review only checked the proposed-new name. Reverted in `3725e90`. Phase 0 package-audit re-pass should verify proposed renames against (a) is-new-deprecated, (b) does-old-still-exist.
 
 ### Open TODOs
-- Phase 0.5 nearly complete. Wave 1 fully closed (Plans 01 + 02 + 03). Wave 2 fully closed (Plan 04 AUD-03 done; Plan 05 AUD-01 + AUD-02 done). Only Plan 06 (exit-gate) remains.
-- **Plan 06 carries the Mac work portion of AUD-04** (CRLF-in-index pre-check + `.gitattributes` validation) — human-in-loop per Pitfall E. Cannot be autonomously verified from Mac personal.
-- **Plan 06 also carries the Mac work portion of state-preview** (scriptState + entryState capture + cross-machine deltas) — human-in-loop, requires physical or SSH access.
+- **Phase 0.5 CLOSED.** Read `.planning/phases/00.5-audit-documentation/00.5-SUMMARY.md` (phase-level) and `00.5-exit-gate-report.md` (load-bearing close) before starting Phase 0.
+- **Phase 0 starts with 9 follow-ups + 1 open escalation** documented in `00.5-drift-reconciliation.md` "Phase 0 follow-ups" section. HIGH PRIORITY ones: #6 employer/site axis missing; #9 `home/exact_bin/` too strict.
 
 ### Blockers
 - None.
@@ -107,16 +113,16 @@ progress:
 
 ## Session Continuity
 
-**Last action:** Completed Plan 00.5-05 (packages-audit, AUD-01 + AUD-02). 3-task plan: candidate list populated via two-signal cross-check (00.5-packages-candidates.md, bd8148b) → human-verify checkpoint approved by Teague with explicit fallback rule ("Decision overrides Recommendation; blank Decision → Recommendation verbatim") → Final Commit Manifest derived + applied (b8094e6). Manifest summary: 4 DELETE / 5 MOVE group ops (12 items) / 3 RENAME / 1 POST-CLEANUP (work.core block removed) / 61 KEEP / 2 deferred categories. Verified: YAML structurally valid (ruby YAML.load_file passes); chezmoi execute-template renders 129 lines cleanly; approved-brew-bundle.txt snapshot captured at SHA256 18007775...565a00; full.sh step 5 byte-exact diff PASS; quick.sh stays at 12 PASS / 0 PENDING / 0 FAIL; `.zshrc:80` DEBUG=1 confirmed untouched. Pitfall D mitigated: dry-run shows 02-install-packages.sh pending re-fire with new hash (1758801412...), and all 3 renamed brews (python@3.14, node, gnupg) are already installed on Mac personal — brew bundle re-fire will be no-op.
+**Last action:** Completed Plan 00.5-06 (exit-gate, AUD-04) — closing all of Phase 0.5. 6-task plan executed across 2 sessions (Task 1 on 2026-05-27 evening Mac personal drift reconciliation; Tasks 2-6 on 2026-05-29 afternoon Mac work). Mac personal exit gate verified EMPTY ✓ at SHA `8a7c6d0` (post-rebase, post-Pitfall-D apply, post-localstack-fix). Mac work exit gate PASS via single justified escalation (`.zshrc` `export NODE_EXTRA_CA_CERTS=/Users/jteague/.certs/CAcerts.pem` — Bluebeam corporate cert, escalated to Phase 0 employer-axis design). Mid-flight reconciliations on Mac work: (a) Plan 05 reality correction — `localstack` reverted to `localstack-cli` (Plan 05's MISNAMED diagnosis was backwards; `localstack` is upstream-deprecated). (b) flameshot residue cleanup (manual `rm -rf` worked; `chezmoi state delete --key=...` errored on 2.69.4 zsh — non-blocking; space-separated form worked second time). (c) `~/bin/start-aws-mcp.sh` `exact_bin` directive discovery — initial entryState-orphan hypothesis was wrong; root cause is `home/exact_bin/` strict-mode directive; resolved by `mv` to `~/.local/bin/`. 9 Phase 0 follow-ups captured across `00.5-drift-reconciliation.md` (8 + 1 from Plans 04/05 + 3 new from Plan 06 Task 5: #6 employer axis, #7 chezmoi version-skew, #8/#9 chezmoi behavior + exact_ directive).
 
-PRIOR action (preserved from previous session entry): Completed Plan 00.5-04 (flameshot-removal, AUD-03). 3-task plan: baseline capture (fd18ccd) → `git rm` source flameshot/ (5ebf307) → human-verify checkpoint approved state-only by Teague → surgical destination + entryState cleanup on Mac personal (2dd08a2, empty commit; out-of-tree ops). Empirical research delta: post-source-delete, `chezmoi managed` and `chezmoi diff -x externals` both silent on flameshot; entryState was the only orphan trace (Pitfall C surface narrower than predicted).
+PRIOR action: Completed Plan 00.5-05 (packages-audit, AUD-01 + AUD-02). 3-task plan with decision-merge fallback (Decision overrides Recommendation; blank → Recommendation verbatim). Manifest summary: 4 DELETE / 5 MOVE group ops (12 items) / 3 RENAME / 1 POST-CLEANUP (work.core block removed) / 61 KEEP / 2 deferred categories. Note: the `localstack-cli → localstack` RENAME was REVERTED in Plan 06 Task 5 (Plan 05's reality-correction miss; see Plan 06 commit `3725e90`).
 
-**Next action:** Plan 06 (exit-gate) — Mac personal `.zshrc` DEBUG=1 reconciliation + Mac work CRLF pre-check + Mac work `chezmoi diff -x externals` + Mac work state-preview capture. Final Phase 0.5 deliverable; Plan 06 inputs now include Plan 04's `chezmoi state dump | grep <path>` clean-check pattern AND Plan 05's dry-run-exit-code finding (.zshrc TTY prompt causes nonzero exit; filter by pattern OR reconcile drift first).
+**Next action:** Phase 0 (Structural Refactor) — role × personal × os × wsl taxonomy work. Start with `/gsd:plan-phase 0` (or `/gsd:discuss-phase 0` if more context-gathering needed first). Phase 0 inherits 9 follow-ups + 1 open escalation from Phase 0.5 — see `00.5-SUMMARY.md` "Phase 0 entry artifacts" section for read order.
 
-**Stopped at:** Completed `00.5-05-packages-audit-PLAN.md` 2026-05-28T03:35Z (AUD-01 + AUD-02 done; Wave 2 fully closed; Plan 06 exit-gate is the final Phase 0.5 deliverable).
+**Stopped at:** Completed `00.5-06-exit-gate-PLAN.md` 2026-05-29 (AUD-04 closed; both-Mac gate PASS; Phase 0.5 fully closed).
 
-**Open questions for next session:** None at Plan 05 level. Phase-level reminders carried forward: Mac work CRLF pre-check + Mac work `chezmoi diff -x externals` exit-gate + Mac work state-preview capture are human-in-loop Plan 06 tasks; Mac personal `.zshrc` DEBUG=1 drift reconciliation also Plan 06; for `work.darwin.*` newly-activated entries from Plan 05's moves, Plan 06 should verify Mac work `brew bundle` outcome (idempotent if installed; reviewable installs otherwise).
+**Open questions for next session:** None at Phase 0.5 level. Phase 0 should: (a) decide employer/site axis design (escalation owner), (b) decide `home/exact_bin/` rename vs `~/.local/bin/` standard for employer-local tooling, (c) standardize chezmoi version across both Macs (Mac work 2.69.4 → 2.70.4), (d) read all Phase 0 follow-ups #1-#9 in `00.5-drift-reconciliation.md` before scoping the structural refactor.
 
 ---
 *State initialized: 2026-05-27 after roadmap creation*
-*Last updated: 2026-05-28 after Plan 00.5-05 completion (AUD-01 + AUD-02 closed; Wave 2 fully closed; Plan 06 exit-gate is final Phase 0.5 deliverable)*
+*Last updated: 2026-05-29 after Plan 00.5-06 completion — Phase 0.5 CLOSED (all 6 plans done, all 6 requirements verified, both-Mac exit gate PASS)*
