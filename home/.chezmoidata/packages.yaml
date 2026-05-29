@@ -117,7 +117,7 @@ packages:
       - 'localstack/tap' # moved from work.core.taps (Phase 0.5 AUD-02 LIGHT)
       brews:
       - 'awscli' # moved from work.core.brews (Phase 0.5 AUD-02 LIGHT)
-      - 'localstack' # moved from work.core.brews + renamed from 'localstack-cli' (Phase 0.5 AUD-01)
+      - 'localstack-cli' # moved from work.core.brews (Phase 0.5 AUD-02 LIGHT); Plan 05 candidate review's "rename to localstack" was a reality-correction miss (localstack formula is deprecated upstream, sunset 2027-04-12; localstack-cli is the maintained one) — reverted Phase 0.5 Plan 06 Task 5
       - 'stern' # moved from work.core.brews (Phase 0.5 AUD-02 LIGHT)
       - 'sqlc' # moved from work.core.brews (Phase 0.5 AUD-02 LIGHT)
       - 'git-lfs' # moved from work.core.brews (Phase 0.5 AUD-02 LIGHT)
