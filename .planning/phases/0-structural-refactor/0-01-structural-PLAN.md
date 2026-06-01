@@ -25,7 +25,7 @@ files_modified:
   - home/private_dot_local/bin/executable_tmux-sessionizer
   - home/private_dot_config/flameshot/flameshot.ini
 autonomous: true
-requirements: [TAX-01, TAX-02, TAX-03, TAX-04, TAX-05, TAX-06, TAX-07, SS-03]
+requirements: [TAX-01, TAX-02, TAX-03, TAX-04, TAX-05, TAX-06, TAX-07, SEC-05, SS-03]
 must_haves:
   truths:
     - "`role` is a `promptChoiceOnce` field with values dev|gaming|lite, default dev, in home/.chezmoi.toml.tmpl"
