@@ -31,7 +31,7 @@ must_haves:
     - "`role` is a `promptChoiceOnce` field with values dev|gaming|lite, default dev, in home/.chezmoi.toml.tmpl"
     - "All existing prompts in home/.chezmoi.toml.tmpl remain `*Once` variants (no `promptString` non-Once present)"
     - "home/.chezmoidata/packages.yaml has the new shape: packages.roles.dev.{core,darwin,linux} + packages.overlays.{personal,work}.<os>"
-    - "home/.chezmoitemplates/brew consumes the new shape and the 4 Linux-overlay keyword bugs (lines ~70-78 and ~110-118) are fixed (`brew` and `cask` in the right keyword positions)"
+    - "home/.chezmoitemplates/brew consumes the new shape and the 4 Linux-overlay keyword bugs from the pre-rewrite file (audit refs: old lines ~70-78 + ~110-118) are fixed BY the rewrite emitting `brew` and `cask` correctly in the new linux loops (verified by grep of the rewritten file, not by line-range diff)"
     - "home/.chezmoiscripts/run_onchange_before_02-install-packages.sh.tmpl has a loud-fail `{{ if not (hasKey . \"role\") }}{{ fail ... }}` guard at top"
     - "home/.chezmoiscripts/run_onchange_before_03-mas.sh.tmpl is rewritten to consume the new overlay shape (outer darwin/wsl gates moved to .chezmoiignore; body simplifies to `{{ if .personal }}`)"
     - "home/.chezmoiignore is templated and gates aerospace+darwin-configure+03-mas to darwin, flameshot to linux+not-wsl+role=dev, preserves `.oh-my-zsh/cache/**`"
@@ -358,6 +358,7 @@ NOTE: This task creates the harness BEFORE source-tree changes, so the harness w
     - The 4 empty Linux placeholders (linux.*, work.darwin.* keys with empty list values that are not load-bearing) are pruned per CONTEXT.md Q4. Consumer template (brew) will use `hasKey` — keys with non-empty lists stay; truly-empty placeholders are removed.
     - `grep -c "^#" home/.chezmoidata/packages.yaml` shows the move-history comments removed (Q3). The trimmed `localstack-cli` warning remains as a single comment line.
     - `grep promptString home/.chezmoi.toml.tmpl | grep -v Once` returns empty (Pitfall 1 — all prompts are *Once variants).
+    - Every entry under `packages.overlays.personal.darwin.mas` is a YAML dict with both `name:` and `id:` keys (precondition for Plan 02's /Applications/ guard). `ruby -r yaml -e 'h = YAML.load_file("home/.chezmoidata/packages.yaml"); mas = h.dig("packages","overlays","personal","darwin","mas") || {}; mas.each { |k,v| raise "mas entry #{k} missing name" unless v.is_a?(Hash) && v["name"] && !v["name"].to_s.empty?; raise "mas entry #{k} missing id" unless v["id"] }'` exits 0.
   </behavior>
   <action>
 **Sub-task 1A — `home/.chezmoi.toml.tmpl`:**
@@ -379,6 +380,15 @@ Read current `home/.chezmoidata/packages.yaml`. Mechanically map the existing ke
 - `packages.work.darwin.{brews,casks,taps}` → `packages.overlays.work.darwin.{brews,casks,taps}`
 - `packages.work.linux.*` → drop if empty; otherwise → `packages.overlays.work.linux.*`
 
+**Mas `name:` key validation/addition (hoisted from Plan 02 per checker warning #2):**
+
+During the `packages.personal.darwin.mas` → `packages.overlays.personal.darwin.mas` restructure, iterate every mas entry and verify each is a dict with both `name:` (human-readable App Store/.app bundle name) and `id:` keys. If any entry is missing `name:`, do ONE of the following (in this order of preference):
+
+1. **If running on Mac personal at edit time:** read `/Applications/` for the canonical `.app` bundle name and add `name: "Bundle Name"` to that entry verbatim. Use double-quoted YAML scalar to handle ampersands/spaces (e.g., `name: "Brother iPrint&Scan"`).
+2. **Otherwise (off-machine or app missing):** HALT this sub-task with a clear error listing every mas `id:` that lacks a `name:` key, and require Teague to fill in the canonical names before continuing. Do not invent names — wrong names propagate into Plan 02's `[ ! -d "/Applications/${app_name}.app" ]` guard and silently disable the skip path.
+
+Rationale: Plan 02 Task 1's guard depends on `dig "name" "" $v` resolving to the real `.app` bundle name. Missing-name entries would render `[ ! -d "/Applications/.app" ]` (always true → mas install fires → Spotlight re-index + sudo prompt on Brother iPrint et al.). Plan 01 Task 1 already owns `packages.yaml`, so the validation/addition fits cleanly here; Plan 02 becomes truly single-file.
+
 Drop ALL move-history comments (Q3). KEEP the single load-bearing `localstack-cli` warning trimmed to one line above the localstack-cli formula entry (per CONTEXT.md Q3 + Phase 0.5 Plan 05 + Plan 06 reality correction in commit `3725e90`: `localstack-cli` is the maintained formula; `localstack` is upstream-deprecated).
 
 **Style preservation:** This is a 131-line file. Use Phase 0.5 Plan 05 "hand-edit-over-yaml-roundtrip pattern" — targeted Edit tool calls preserve single-quote/inline-comment style. Do NOT round-trip through PyYAML/ruamel — that'll churn quoting and key order.
@@ -389,7 +399,7 @@ Drop ALL move-history comments (Q3). KEEP the single load-bearing `localstack-cl
 - Diff the rendered brew output (after Task 2's brew template rewrite) against a known-good snapshot — defer this to Task 2's verify since the brew rewrite is what consumes the new shape.
   </action>
   <verify>
-    <automated>bash .planning/phases/0-structural-refactor/checks/lib.sh 2>/dev/null; ruby -r yaml -e 'h = YAML.load_file("home/.chezmoidata/packages.yaml"); raise "missing roles.dev.core" unless h.dig("packages","roles","dev","core"); raise "missing overlays.personal.darwin" unless h.dig("packages","overlays","personal","darwin"); raise "missing overlays.work.darwin" unless h.dig("packages","overlays","work","darwin"); puts "ok"' && chezmoi execute-template --init --promptString name=t --promptString email=t@t --promptBool personal=true --promptChoice role=dev < home/.chezmoi.toml.tmpl | grep -E '^  role = "dev"$' && chezmoi execute-template --init --promptString name=t --promptString email=t@t --promptBool personal=true --promptChoice role=dev < home/.chezmoi.toml.tmpl | grep -c '<no value>' | grep -q '^0$'</automated>
+    <automated>bash .planning/phases/0-structural-refactor/checks/lib.sh 2>/dev/null; ruby -r yaml -e 'h = YAML.load_file("home/.chezmoidata/packages.yaml"); raise "missing roles.dev.core" unless h.dig("packages","roles","dev","core"); raise "missing overlays.personal.darwin" unless h.dig("packages","overlays","personal","darwin"); raise "missing overlays.work.darwin" unless h.dig("packages","overlays","work","darwin"); mas = h.dig("packages","overlays","personal","darwin","mas") || {}; mas.each { |k,v| raise "mas entry #{k} missing name" unless v.is_a?(Hash) && v["name"] && !v["name"].to_s.empty?; raise "mas entry #{k} missing id" unless v["id"] }; puts "ok"' && chezmoi execute-template --init --promptString name=t --promptString email=t@t --promptBool personal=true --promptChoice role=dev < home/.chezmoi.toml.tmpl | grep -E '^  role = "dev"$' && chezmoi execute-template --init --promptString name=t --promptString email=t@t --promptBool personal=true --promptChoice role=dev < home/.chezmoi.toml.tmpl | grep -c '<no value>' | grep -q '^0$'</automated>
   </verify>
   <done>
     packages.yaml structurally valid with new shape; chezmoi.toml.tmpl renders `role = "dev"` and zero `<no value>` strings. Maps to TAX-01, TAX-02, TAX-05. (TAX-03 + TAX-04 are inherited — `.chezmoi.os` and `.wsl` already work; no new code needed.)
@@ -415,9 +425,11 @@ Drop ALL move-history comments (Q3). KEEP the single load-bearing `localstack-cl
 
 Read current `home/.chezmoitemplates/brew` (~123 lines). Rewrite consumer against new path structure per `<interfaces>` above. Preserve the existing 6-branch copy-paste structure for the overlay × OS section (DRY refactor is YAGNI per Q5).
 
-**4 Linux-overlay bug fixes (inline as part of rewrite):**
+**4 Linux-overlay bug fixes — fixed BY WRITING THE NEW TEMPLATE CORRECTLY:**
 
-Current state (verify by reading the file): lines ~70-78 are inside a `{{ if eq .chezmoi.os "linux" }}` branch iterating over linux brews but emit `tap {{ . | quote }}` (wrong keyword). Same for lines ~110-118 in the linux casks branch (emit `tap` instead of `cask`). In the NEW shape rewrite, the corresponding loops MUST emit `brew {{ . | quote }}` and `cask {{ . | quote }}` respectively. This is a bugfix-via-rewrite — the bug doesn't survive the rewrite if the new code is correct.
+The 4 bugs are NOT separate edit operations against the old file. Since Task 2 rewrites the brew template wholesale (against the new `packages.roles.dev.*` + `packages.overlays.*` traversal), the fixes are simply: the new Linux-overlay loops emit the correct keywords (`brew {{ . | quote }}` for brews loops, `cask {{ . | quote }}` for casks loops). If the rewrite is correct, the bugs cannot survive.
+
+Old-file audit-trail reference (NOT edit targets — line numbers are against the PRE-rewrite file): lines ~70-78 were inside a `{{ if eq .chezmoi.os "linux" }}` branch iterating over linux brews but emitted `tap {{ . | quote }}` (wrong keyword); lines ~110-118 were in the linux casks branch but emitted `tap` instead of `cask`. After the rewrite the new file's line numbers are unrelated — those locations no longer exist. Verification is by grepping the REWRITTEN file for correct keyword emission (see <verify> below), not by checking specific line ranges in either the old or new file.
 
 Add `hasKey` defense at every overlay-path traversal: `{{ if hasKey .packages.overlays "personal" -}}` etc. — protects against runtime errors when an overlay is absent. (Q4 says we PRUNE empty placeholders; hasKey is the consumer-side defense.)
 

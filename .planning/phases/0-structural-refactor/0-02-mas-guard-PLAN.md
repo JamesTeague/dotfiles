@@ -91,7 +91,7 @@ packages:
             id: 1193539993
           # ... other mas entries
 ```
-Verify the actual keys in `packages.yaml` after Plan 01 — `name` key MUST exist for each mas entry, else the `dig` falls back to "" and the bash test becomes `[ ! -d "/Applications/.app" ]` (always true → no skip → silent regression). If any entry is missing `name`, ADD it as part of this task (read /Applications/ to discover the canonical .app bundle name).
+Verify the actual keys in `packages.yaml` after Plan 01 — `name` key MUST exist for each mas entry, else the `dig` falls back to "" and the bash test becomes `[ ! -d "/Applications/.app" ]` (always true → no skip → silent regression). Plan 01 Task 1 (Sub-task 1B) owns the validation/addition of missing `name:` keys. Plan 02 only ASSERTS this invariant as a read-only precondition (see Sub-task 1A) — if the assertion fails, Plan 02 HALTS and surfaces the gap. Plan 02 must not mutate `packages.yaml`.
 </interfaces>
 </context>
 
@@ -110,11 +110,26 @@ Verify the actual keys in `packages.yaml` after Plan 01 — `name` key MUST exis
     - The file body remains wrapped by `{{ if .personal }}` (outer darwin+not-wsl gating is in .chezmoiignore from Plan 01 — do not re-add).
   </behavior>
   <action>
-**Sub-task 1A — Pre-flight: verify packages.yaml mas entries have `name` keys.**
+**Sub-task 1A — Pre-flight: ASSERT packages.yaml mas entries have `name:` and `id:` keys (read-only precondition).**
 
-Read `home/.chezmoidata/packages.yaml` and inspect every entry under `packages.overlays.personal.darwin.mas`. Each must be a dict with `name:` and `id:` keys. If any entry is missing `name`, halt and (a) check `/Applications/` on the current Mac for the canonical `.app` bundle name, (b) add `name: "Bundle Name"` to that entry verbatim (use double-quoted YAML scalar to handle ampersands/spaces like `Brother iPrint&Scan`). Use Phase 0.5 Plan 05 hand-edit pattern (no PyYAML round-trip — preserve quoting style).
+Plan 01 Task 1 (Sub-task 1B) is responsible for ensuring every entry under `packages.overlays.personal.darwin.mas` has both `name:` and `id:` keys. Plan 02 only ASSERTS this precondition — it does NOT mutate `packages.yaml`.
 
-If you ADD any `name:` keys, note it in the commit message — that's a packages.yaml mutation outside the locked Plan 02 scope; flag in plan SUMMARY.
+Run the precondition check:
+```bash
+ruby -r yaml -e '
+  h = YAML.load_file("home/.chezmoidata/packages.yaml")
+  mas = h.dig("packages","overlays","personal","darwin","mas") || {}
+  mas.each do |k,v|
+    raise "mas entry #{k} missing name (Plan 01 Task 1 invariant violated)" unless v.is_a?(Hash) && v["name"] && !v["name"].to_s.empty?
+    raise "mas entry #{k} missing id (Plan 01 Task 1 invariant violated)"   unless v["id"]
+  end
+  puts "mas name/id precondition OK"
+'
+```
+
+If this assertion FAILS, HALT immediately. The failure means Plan 01 Task 1's mas name-key validation step did not run or did not address all entries. Do NOT patch packages.yaml from inside Plan 02 — Plan 02 is locked to a single file (`home/.chezmoiscripts/run_onchange_before_03-mas.sh.tmpl`) per the merge-gate-purity constraint (CONTEXT.md three-commit lock). The executor must surface the gap and route it back to Plan 01.
+
+This is a behavior-revision per checker warning #2: contingent `packages.yaml` mutation has been hoisted to Plan 01 Task 1. Plan 02 stays truly single-file.
 
 **Sub-task 1B — Rewrite `03-mas.sh.tmpl`:**
 
@@ -192,7 +207,7 @@ This isn't strictly required (the verify command below covers it) but keeps the 
 <output>
 After completion, create `.planning/phases/0-structural-refactor/0-02-SUMMARY.md` documenting:
 - The before/after diff of `03-mas.sh.tmpl` (line counts: ~12 → ~25)
-- Whether Sub-task 1A required adding any `name:` keys to packages.yaml mas entries (and which)
+- Confirmation that Sub-task 1A's precondition assertion passed on the first run (i.e., Plan 01 Task 1 Sub-task 1B correctly populated all `name:` keys). If the assertion required a re-route to Plan 01, document that here.
 - One rendered example block (e.g., Brother iPrint) showing the expected runtime behavior
 - Note about expected re-fire on cutover (Pitfall 2 — content SHA change triggers run_onchange re-fire; intentional)
 - Hand-off pointer to Plan 03 (docs)
