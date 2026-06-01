@@ -73,7 +73,17 @@ A new machine — any OS in the fleet — can be set up day-1 via a single `chez
 - Pitfall 9 (renaming variables → silent `<no value>`) → pre-flight grep + `chezmoi execute-template` pass on fixture data documented as part of cutover
 - Pitfall 11 (`run_once_` state survives refactors) → `generate-gpg-key.sh` is DELETED, not renamed; script-state audit is a line-item
 
-**Plans**: TBD
+**Plans:** 3 plans (sequential — three commits paralleling three plans; mas-guard MUST land after structural so the merge-gate diff stays pure)
+
+Plans:
+- [ ] 0-01-structural-PLAN.md — structural taxonomy cut (role × personal × os × wsl): packages.yaml restructure, .chezmoiignore templating, brew/03-mas consumer rewrite, exact_bin teardown, hasKey loud-fail guard, flameshot re-stage, Wave 0 harness, cutover-phase-0.sh artifact
+- [ ] 0-02-mas-guard-PLAN.md — `03-mas.sh.tmpl` `/Applications/<App>.app` pre-check around `mas install` (resolves 0.5 follow-up #4 + Pitfall mas-list-Apple-ID-invisibility)
+- [ ] 0-03-docs-PLAN.md — `docs/conventions.md` § 10 update: AUD-02 LIGHT remainder + goal amendments + 5 follow-up pitfall notes + `.localrc`/`~/.local/bin/` pattern + LNX-05 locked decision
+
+**Goal amendments (from 0-CONTEXT.md — supersede Success Criteria above):**
+- SC #5 (generate-gpg-key.sh deletion) DEFERRED to Phase 1 — script is load-bearing via home/modify_dot_gitconfig.local:6 modify-template
+- SC #2 (.chezmoiignore single gating point) reframed to FILE PRESENCE ONLY; template-internal runtime logic stays in templates
+- Add .localrc + ~/.local/bin/ employer-local pattern documentation (resolves 0.5 follow-ups #6 + #9)
 
 ---
 
