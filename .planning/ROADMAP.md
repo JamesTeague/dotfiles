@@ -76,7 +76,7 @@ A new machine — any OS in the fleet — can be set up day-1 via a single `chez
 **Plans:** 3 plans (sequential — three commits paralleling three plans; mas-guard MUST land after structural so the merge-gate diff stays pure)
 
 Plans:
-- [ ] 0-01-structural-PLAN.md — structural taxonomy cut (role × personal × os × wsl): packages.yaml restructure, .chezmoiignore templating, brew/03-mas consumer rewrite, exact_bin teardown, hasKey loud-fail guard, flameshot re-stage, Wave 0 harness, cutover-phase-0.sh artifact
+- [x] 0-01-structural-PLAN.md — structural taxonomy cut (role × personal × os × wsl): packages.yaml restructure, .chezmoiignore templating, brew/03-mas consumer rewrite, exact_bin teardown, hasKey loud-fail guard, flameshot re-stage, Wave 0 harness, cutover-phase-0.sh artifact
 - [ ] 0-02-mas-guard-PLAN.md — `03-mas.sh.tmpl` `/Applications/<App>.app` pre-check around `mas install` (resolves 0.5 follow-up #4 + Pitfall mas-list-Apple-ID-invisibility)
 - [ ] 0-03-docs-PLAN.md — `docs/conventions.md` § 10 update: AUD-02 LIGHT remainder + goal amendments + 5 follow-up pitfall notes + `.localrc`/`~/.local/bin/` pattern + LNX-05 locked decision
 
@@ -192,7 +192,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 0.5. Audit & Documentation | 5/6 | In progress | - |
-| 0. Structural Refactor | 0/? | Not started | - |
+| 0. Structural Refactor | 1/3 | In progress | - |
 | 1. VaultWarden + Secret Plane + Bootstrap Kit | 0/? | Not started | - |
 | 2. Windows-Native Support | 0/? | Not started | - |
 | 3. WSL Greenfield | 0/? | Not started | - |

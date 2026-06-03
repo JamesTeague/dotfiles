@@ -2,32 +2,32 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-stopped_at: "Completed Phase 00.5 (Audit & Documentation) 2026-05-29 — all 6 plans closed (01..06); 6/6 requirements verified (SS-01, AUD-01..05); both-Mac exit gate PASS (Mac personal EMPTY ✓, Mac work via single justified escalation); 9 Phase 0 follow-ups captured. Next focus: Phase 0 (Structural Refactor)."
-last_updated: "2026-05-29T20:30Z"
+status: in_progress
+stopped_at: "Plan 0-01 (Structural Refactor — structural taxonomy cut) COMPLETE 2026-06-03 — 6/6 tasks, Wave 0 harness 22/22 PASS, cutover-phase-0.sh committed as artifact (NOT executed — operator runs post-merge per CLAUDE.md collaborative-mode). generate-gpg-key.sh PRESERVED per goal amendment (deferred to Phase 1). Next: Plan 0-02 (mas-guard) → Plan 0-03 (docs). After merge: operator runs cutover-phase-0.sh on Mac personal first, then Mac work."
+last_updated: "2026-06-03T05:00Z"
 progress:
   total_phases: 6
   completed_phases: 1
-  total_plans: 6
-  completed_plans: 6
+  total_plans: 9
+  completed_plans: 7
 ---
 
 # Project State: chezmoi Modernization
 
-**Last updated:** 2026-05-29
+**Last updated:** 2026-06-03
 
 ## Project Reference
 
 **Core Value:** A new machine — any OS in the fleet — can be set up day-1 via a single `chezmoi init --apply` flow (plus VaultWarden login + GitHub PAT for HTTPS clone bootstrap) and arrive at a fully-configured, identity-signed, role-appropriate state without artisanal touch-up.
 
-**Current Focus:** **Phase 0.5 CLOSED 2026-05-29.** All 6 plans done, all 6 requirements verified, both-Mac exit gate PASS, 9 Phase 0 follow-ups + 1 open escalation captured. **Next: Phase 0 (Structural Refactor)** — load-bearing taxonomy work the rest of the roadmap depends on.
+**Current Focus:** **Phase 0 IN PROGRESS** — Plan 0-01 (structural taxonomy cut) closed 2026-06-03. Next: Plan 0-02 (mas guard) → Plan 0-03 (docs). After merge: operator runs `cutover-phase-0.sh` on Mac personal first, then Mac work.
 
 ## Current Position
 
-**Phase:** 00.5-audit-documentation — CLOSED
-**Plan:** All 6 plans complete (01..06)
-**Status:** Phase 0.5 closed; ready for Phase 0 planning
-**Progress:** Phase 1/6 phases done · 0.5 sub-progress 6/6 plans `██████`
+**Phase:** 0-structural-refactor — IN PROGRESS
+**Plan:** 0-01 complete (1/3); 0-02 next
+**Status:** Plan 0-01 landed atomically across 6 commits + Wave 0 gate GREEN; cutover script committed as artifact awaiting operator execution post-merge
+**Progress:** Phase 1/6 phases done · Phase 0 sub-progress 1/3 plans `███░░░░░░░`
 
 ## Performance Metrics
 
