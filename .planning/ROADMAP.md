@@ -78,7 +78,7 @@ A new machine — any OS in the fleet — can be set up day-1 via a single `chez
 Plans:
 - [x] 0-01-structural-PLAN.md — structural taxonomy cut (role × personal × os × wsl): packages.yaml restructure, .chezmoiignore templating, brew/03-mas consumer rewrite, exact_bin teardown, hasKey loud-fail guard, flameshot re-stage, Wave 0 harness, cutover-phase-0.sh artifact
 - [x] 0-02-mas-guard-PLAN.md — `03-mas.sh.tmpl` `/Applications/<App>.app` pre-check around `mas install` (resolves 0.5 follow-up #4 + Pitfall mas-list-Apple-ID-invisibility)
-- [ ] 0-03-docs-PLAN.md — `docs/conventions.md` § 10 update: AUD-02 LIGHT remainder + goal amendments + 5 follow-up pitfall notes + `.localrc`/`~/.local/bin/` pattern + LNX-05 locked decision
+- [x] 0-03-docs-PLAN.md — `docs/conventions.md` § 10 update: AUD-02 LIGHT remainder + goal amendments + 5 follow-up pitfall notes + `.localrc`/`~/.local/bin/` pattern + LNX-05 locked decision (completed 2026-06-03)
 
 **Goal amendments (from 0-CONTEXT.md — supersede Success Criteria above):**
 - SC #5 (generate-gpg-key.sh deletion) DEFERRED to Phase 1 — script is load-bearing via home/modify_dot_gitconfig.local:6 modify-template
@@ -192,7 +192,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 0.5. Audit & Documentation | 5/6 | In progress | - |
-| 0. Structural Refactor | 2/3 | In progress | - |
+| 0. Structural Refactor | 3/3 | In progress (awaiting cutover verification) | - |
 | 1. VaultWarden + Secret Plane + Bootstrap Kit | 0/? | Not started | - |
 | 2. Windows-Native Support | 0/? | Not started | - |
 | 3. WSL Greenfield | 0/? | Not started | - |

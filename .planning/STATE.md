@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: "Plan 0-02 (mas guard) COMPLETE 2026-06-03 — 1/1 task, Wave 0 harness 23/23 PASS (Section 11 added), /Applications/<App>.app guard committed at 85f288b. Next: Plan 0-03 (docs). After all 3 Phase 0 plans: operator runs cutover-phase-0.sh on Mac personal first, then Mac work."
-last_updated: "2026-06-03T06:00Z"
+stopped_at: "Phase 0 plans 3/3 COMPLETE 2026-06-03 — Plan 0-03 (docs) committed at 6405eed. docs/conventions.md § 10 expanded (173→301 lines): goal amendments, employer-local pattern, LNX-05, 5 follow-up pitfall notes, 6 AUD-02 LIGHT dispositions. TAX-08 verified. Wave 0 harness 23/23 PASS. Awaiting operator-driven cutover ritual (Mac personal first, then Mac work). NOT marked Phase 0 complete — verification step (chezmoi diff -x externals EMPTY on both Macs) runs after cutover."
+last_updated: "2026-06-03T07:00Z"
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 9
-  completed_plans: 8
+  completed_plans: 9
 ---
 
 # Project State: chezmoi Modernization
@@ -24,10 +24,10 @@ progress:
 
 ## Current Position
 
-**Phase:** 0-structural-refactor — IN PROGRESS
-**Plan:** 0-02 complete (2/3); 0-03 next
-**Status:** Plan 0-01 (structural) + Plan 0-02 (mas guard) landed; Wave 0 harness 23/23 PASS; cutover script committed as artifact awaiting operator execution post-merge
-**Progress:** Phase 1/6 phases done · Phase 0 sub-progress 2/3 plans `██████░░░░`
+**Phase:** 0-structural-refactor — 3/3 plans landed; awaiting verification
+**Plan:** 0-03 complete (3/3) — all Phase 0 plans done
+**Status:** Plans 0-01 (structural) + 0-02 (mas guard) + 0-03 (docs) landed; Wave 0 harness 23/23 PASS; awaiting operator cutover ritual + chezmoi diff -x externals EMPTY on both Macs before Phase 0 can be marked complete
+**Progress:** Phase 1/6 phases done · Phase 0 sub-progress 3/3 plans `██████████`
 
 ## Performance Metrics
 
@@ -48,6 +48,7 @@ progress:
 | 00.5-04 flameshot-removal | 3 (2 auto + 1 human-verify) | 1 source-delete + 2 planning notes; destination + 2 entryState keys (off-tree) | 25m active (spanned checkpoint pause) |
 | 00.5-05 packages-audit | 3 (2 auto + 1 human-verify) | 3 (packages.yaml + candidates.md + approved-brew-bundle.txt) | 45m active (spanned checkpoint pause) |
 | 00.5-06 exit-gate | 6 (3 auto + 3 human-verify) | 4 created (drift-reconciliation, exit-gate-report, state captures ×2, recovery script) + 2 modified (state-preview, packages.yaml line 120 hot-patch) | ~3h active across 2 sessions |
+| 0-03-docs | 1 | 1 modified (docs/conventions.md +128 lines) | ~15m |
 
 ## Accumulated Context
 
@@ -99,9 +100,20 @@ progress:
 - **(Plan 06)** zsh `--key=...` CLI flag parsing pitfall: when heredoc rendering splits `--key` from `=/path`, zsh EQUALS option treats `=/path` as a command-path lookup → `zsh: no such file or directory: --key=/...`. Workaround: space-separated `--key /path`. Surfaced on Mac work chezmoi 2.69.4; not reproduced on Mac personal 2.70.4.
 - **(Plan 06)** Plan 05 reality correction: `localstack-cli` was NOT misnamed — both `localstack` (deprecated, sunset 2027-04-12) and `localstack-cli` (maintained) exist in `localstack/tap`. Plan 05's candidate review only checked the proposed-new name. Reverted in `3725e90`. Phase 0 package-audit re-pass should verify proposed renames against (a) is-new-deprecated, (b) does-old-still-exist.
 
+### Phase 0 Decisions (from completed plans)
+- **(Plan 0-01)** packages.core.casks (fonts, bitwarden, docker-desktop) → roles.dev.darwin.casks (all were Mac-only; correct OS-gated placement).
+- **(Plan 0-01)** roles.dev.linux kept non-empty (curl, xclip); empty taps/casks pruned; consumer uses hasKey defense.
+- **(Plan 0-01)** exact_bin → private_dot_local/bin/: 5 personal-identity utilities now at ~/.local/bin/ (first on PATH via mise).
+- **(Plan 0-01)** cutover-phase-0.sh committed as artifact awaiting operator execution post-merge; NOT executed during plan.
+- **(Plan 0-02)** /Applications/<App>.app file-presence guard wraps every mas install call; skip-with-echo when bundle present (resolves mas-list Apple ID invisibility pitfall).
+- **(Plan 0-02)** chezmoi execute-template --init not needed for 03-mas.sh.tmpl smoke test (.chezmoidata/ always loaded; --init is only needed for .chezmoi.toml.tmpl init-time functions).
+- **(Plan 0-03)** AUD-02 LIGHT inconsistencies #4+#5 (packages.yaml dead-code shape) RESOLVED by Plan 01 restructure; inconsistencies #1, #2, #3, #6 DEFERRED to Phase 1+ (rename changes destination file mode; OS-subdir layout is Phase 3).
+- **(Plan 0-03)** state-forge pattern documented: legitimate ONLY when underlying reality verified by another mechanism; never blind-forge. See docs/conventions.md § 10.4.4.
+- **(Plan 0-03)** LNX-05 locked decision documented: NO Linux Homebrew; Phase 3 owns apt+mise consumer. See docs/conventions.md § 10.3.
+
 ### Open TODOs
-- **Phase 0.5 CLOSED.** Read `.planning/phases/00.5-audit-documentation/00.5-SUMMARY.md` (phase-level) and `00.5-exit-gate-report.md` (load-bearing close) before starting Phase 0.
-- **Phase 0 starts with 9 follow-ups + 1 open escalation** documented in `00.5-drift-reconciliation.md` "Phase 0 follow-ups" section. HIGH PRIORITY ones: #6 employer/site axis missing; #9 `home/exact_bin/` too strict.
+- **Phase 0.5 CLOSED.** Phase 0 source-tree work ALSO COMPLETE (3/3 plans). Next: operator-driven cutover ritual on both Macs.
+- **Phase 0 cutover required** before Phase 0 can be marked complete: run `bash .planning/phases/0-structural-refactor/cutover-phase-0.sh` on Mac personal (first), then Mac work. Verify `chezmoi diff -x externals` EMPTY on both after cutover.
 
 ### Blockers
 - None.
@@ -117,9 +129,9 @@ progress:
 
 PRIOR action: Completed Plan 00.5-05 (packages-audit, AUD-01 + AUD-02). 3-task plan with decision-merge fallback (Decision overrides Recommendation; blank → Recommendation verbatim). Manifest summary: 4 DELETE / 5 MOVE group ops (12 items) / 3 RENAME / 1 POST-CLEANUP (work.core block removed) / 61 KEEP / 2 deferred categories. Note: the `localstack-cli → localstack` RENAME was REVERTED in Plan 06 Task 5 (Plan 05's reality-correction miss; see Plan 06 commit `3725e90`).
 
-**Next action:** Phase 0 (Structural Refactor) — role × personal × os × wsl taxonomy work. Start with `/gsd:plan-phase 0` (or `/gsd:discuss-phase 0` if more context-gathering needed first). Phase 0 inherits 9 follow-ups + 1 open escalation from Phase 0.5 — see `00.5-SUMMARY.md` "Phase 0 entry artifacts" section for read order.
+**Next action:** Operator-driven cutover ritual on Mac personal first, then Mac work. See `.planning/phases/0-structural-refactor/cutover-phase-0.sh`. Run in collaborative mode (not autonomous) per CLAUDE.md §4. After cutover: `chezmoi diff -x externals` EMPTY on both Macs = Phase 0 merge gate PASS → mark Phase 0 complete.
 
-**Stopped at:** Completed `00.5-06-exit-gate-PLAN.md` 2026-05-29 (AUD-04 closed; both-Mac gate PASS; Phase 0.5 fully closed).
+**Stopped at:** Phase 0 plans 3/3 complete 2026-06-03 (Plan 0-03 docs, commit 6405eed). Awaiting cutover verification.
 
 **Open questions for next session:** None at Phase 0.5 level. Phase 0 should: (a) decide employer/site axis design (escalation owner), (b) decide `home/exact_bin/` rename vs `~/.local/bin/` standard for employer-local tooling, (c) standardize chezmoi version across both Macs (Mac work 2.69.4 → 2.70.4), (d) read all Phase 0 follow-ups #1-#9 in `00.5-drift-reconciliation.md` before scoping the structural refactor.
 
