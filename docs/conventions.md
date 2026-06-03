@@ -157,17 +157,145 @@ This command is the load-bearing **exit gate** for Phase 0.5 and the **merge gat
 
 ---
 
-## 10. Known inconsistencies (flagged for Phase 0 normalization)
+## 10. Phase 0 Patterns, Follow-up Pitfalls, and AUD-02 Remainder
 
-These are real-tree inconsistencies surfaced during the Phase 0.5 audit. They are documented here so a reader is not confused; they are deliberately NOT normalized in this phase because doing so would change destination file modes and produce a non-empty `chezmoi diff` (breaking the phase exit gate).
+This section captures Phase 0 goal amendments, the employer-local pattern, the Linux package management locked decision, five follow-up pitfall/pattern notes from the Phase 0.5 disposition table, and the six AUD-02 LIGHT inconsistencies with their Phase 0 resolution status.
 
-1. **`home/dot_topics/rust/path.zsh`** lacks the `executable_` prefix that every other `path.zsh` in this tree carries. Phase 0 normalization will rename to `executable_path.zsh`.
-2. **`home/dot_topics/system/path.zsh.tmpl`** lacks the `executable_` prefix. Phase 0 normalization will rename to `executable_path.zsh.tmpl`.
-3. **`run_onchange_after_darwin-configure.sh.tmpl`** lacks a numeric `NN-` prefix and routes by OS via its filename rather than via the (not-yet-existing) OS subdirectory structure. Phase 0 will move OS routing into subdirectory layout.
-4. **`packages.yaml` `personal.{taps,brews,casks}` at top level AND nested `personal.darwin.{...}` block** — the top-level entries are dead code at the template level (the `brew` partial only ranges over `personal.darwin.*` and `personal.linux.*`). Phase 0.5 Plan 05 normalizes these moves; Phase 0 restructures the whole role × OS axis.
-5. **`packages.yaml` `work.core.{taps,brews,casks}`** — also dead code at the template level (template ranges over `work.darwin.*` and `work.linux.*`, not `work.core`). Phase 0.5 Plan 05 handles the move.
-6. **`.DS_Store` at repo root** is a macOS Finder artifact and probably should be in `.gitignore` if it isn't already; not in scope for Phase 0.5.
+---
+
+### 10.1 Phase 0 Goal Amendments (supersede ROADMAP Success Criteria)
+
+#### 10.1.1 `generate-gpg-key.sh`: DEFERRED to Phase 1 (NOT deleted in Phase 0)
+
+The ROADMAP Phase 0 SC #5 reads "`home/scripts/generate-gpg-key.sh` is DELETED from the source tree." This was **amended before Phase 0 code work began** (see `0-CONTEXT.md` Amendment #1).
+
+**Rationale:** The script is load-bearing. `home/modify_dot_gitconfig.local` is a chezmoi `modify_` template (line 6): on every `chezmoi apply` it executes this script, captures stdout, and writes the result as `~/.gitconfig.local`. Deleting the script in Phase 0 breaks `git commit -S` on the next apply. Phase 1 owns the atomic VaultWarden-canonical-GPG-key landing — delete + `modify_dot_gitconfig.local` rewrite happen together as part of SEC-* requirements.
+
+The Phase 0 Wave 0 harness (`.planning/phases/0-structural-refactor/checks/quick.sh`) includes a positive assertion that `home/scripts/generate-gpg-key.sh` is STILL PRESENT, ensuring no accidental deletion slips through Phase 0.
+
+#### 10.1.2 `.chezmoiignore`: FILE PRESENCE only (not template-internal logic)
+
+The ROADMAP Phase 0 SC #2 calls `.chezmoiignore` "the single gating decision point." This was **reframed** (see `0-CONTEXT.md` Amendment #3/2):
+
+**Interpretation:** `home/.chezmoiignore` gates whether a **file exists at the destination at all**. Template-internal runtime logic — for example, `{{ if eq .chezmoi.os "darwin" }}` blocks inside a script body — stays in templates. `.chezmoiignore` cannot gate logic inside a file; it can only gate the file's presence.
+
+**Phase 0 gates in `home/.chezmoiignore` (file-presence only):**
+- `~/.oh-my-zsh/cache/**` — inherited externals cache noise
+- `home/private_dot_config/aerospace/` → darwin only
+- `home/private_dot_config/flameshot/` → `role=dev + os=linux + not wsl`
+- `home/.chezmoiscripts/run_onchange_after_darwin-configure.sh.tmpl` → darwin only
+- `home/.chezmoiscripts/run_onchange_before_03-mas.sh.tmpl` → darwin + not wsl
+
+---
+
+### 10.2 Employer-Local Pattern: `~/.localrc` + `~/.local/bin/`
+
+This is the resolution for Phase 0.5 follow-ups #6 (employer `NODE_EXTRA_CA_CERTS` escalation) and #9 (`exact_bin` teardown); the **code-side resolutions** live in Plan 01's `exact_bin` teardown and the `cutover-phase-0.sh` migration step. This section documents the pattern.
+
+**Pattern:** Personal-identity content stays chezmoi-managed. Employer/site-local content stays per-machine in:
+
+- `~/.localrc` — sourced by `home/dot_zshrc.tmpl` lines 4-7 (already in source tree). Add employer-specific env vars here (e.g., `export NODE_EXTRA_CA_CERTS=/Users/jteague/.certs/CAcerts.pem` for Bluebeam corporate Node TLS). Not chezmoi-managed.
+- `~/.local/bin/` — first on PATH via mise. Employer-specific scripts go here (e.g., `start-aws-mcp.sh` for Bluebeam AWS tooling, moved here in Phase 0.5 Plan 06). Not chezmoi-managed.
+
+**Why this beats a 5th templated axis (employer/site axis):**
+1. Content (e.g., `NODE_EXTRA_CA_CERTS` path) references employer-IT-provisioned files out-of-band — templating one line of indirection adds nothing.
+2. Dotfiles are personal-identity; employer config leaks and contaminates the repo over time.
+3. Pattern is half-adopted already (Phase 0.5 Plan 06 confirmed `~/.local/bin/` on PATH via mise; `start-aws-mcp.sh` was already moved there).
+
+**Mac work cutover:** the `cutover-phase-0.sh` script autodetects Mac work via `grep -q NODE_EXTRA_CA_CERTS ~/.zshrc` and migrates the line to `~/.localrc` before `chezmoi init --apply` runs.
+
+---
+
+### 10.3 LNX-05 Locked Decision: NO Linux Homebrew
+
+**Decision:** Linux install scripts use **apt + mise only**. Homebrew on Linux (`linuxbrew`) is explicitly excluded.
+
+**Rationale:** Homebrew on Linux is a divergence from the platform's native package graph. apt handles system-level tools; mise handles language runtimes and developer tools (already the pattern on Mac for mise-managed tools like Node, Python, Ruby). The `packages.yaml` shape supports this: `roles.dev.linux.brews` keys exist in the YAML (see `home/.chezmoidata/packages.yaml`) but the Phase 3 consumer will use apt + mise to satisfy them — NOT `brew bundle`. The `brew` partial template (`home/.chezmoitemplates/brew`) renders Linux output but Phase 3's apt/mise consumer is the intended runtime.
+
+**Phase 3** owns the apt + mise consumer scripts in `home/.chezmoiscripts/linux/`. Phase 0 commits the YAML shape (`roles.dev.linux.{brews,casks,taps}`) as the declarative inventory; Phase 3 writes the installer that reads it.
+
+---
+
+### 10.4 Phase 0.5 Follow-up Pitfall/Pattern Notes (docs-owned: #1, #2, #3, #5, #8)
+
+These five items were identified during Phase 0.5 reconciliation and disposition-tabled for documentation in Phase 0. The code-side fixes for the related issues (#4 `/Applications/` guard, #6 `.localrc` migration, #7 version floor, #9 `exact_bin` teardown) live in Plans 01 and 02.
+
+#### 10.4.1 `chezmoi state dump` as canonical clean-check utility (follow-up #1)
+
+`chezmoi state dump` prints the full contents of `chezmoistate.boltdb` as JSON. Use it for ad-hoc "is my state bucket clean?" inspection when `chezmoi managed` and `chezmoi diff` are both silent but something feels wrong.
+
+**Example use case:** Phase 0.5 Plan 04 found that `chezmoi managed | grep flameshot` and `chezmoi diff -x externals | grep flameshot` returned nothing after a source-delete, even though flameshot still had stale `entryState` keys in the database. The only discovery surface for orphaned-state-only entries is `chezmoi state dump | grep -i flameshot`.
+
+**NOT a load-bearing gate:** This is a utility for manual investigation, not a Phase 0 verify gate. Do not gate on `chezmoi state dump` output in automated checks — state bucket entries are not consistently structured across chezmoi versions.
+
+#### 10.4.2 `chezmoi apply --dry-run --verbose` exits nonzero on interactive TTY prompts (follow-up #2)
+
+When `home/dot_zshrc.tmpl` line 80 (or equivalent) contains an interactive `DEBUG=1` question, `chezmoi apply --dry-run --verbose` exits nonzero even though the source is otherwise valid. This is a false-positive failure.
+
+**Mitigation options:**
+- Filter dry-run output: `chezmoi apply --dry-run --verbose 2>&1 | grep "no value"` — the absence of `"no value"` lines is the actual gate.
+- Reconcile pre-existing drift before running (chezmoi apply removes the prompt line, then dry-run passes cleanly).
+- Do NOT gate automation on `--dry-run` exit code alone when the source tree may have interactive prompts.
+
+The `cutover-phase-0.sh` script uses the filtered-grep approach (step 8 of the cutover ritual).
+
+#### 10.4.3 `mas list` Apple ID invisibility (follow-up #3)
+
+`mas list` only shows apps under the **currently signed-in Apple ID**. Apps installed under a different Apple ID — or sideloaded/provisioned before `mas` could index them — are visible in `/Applications/` but absent from `mas list`.
+
+**Example:** `Brother iPrint&Scan.app` was in `/Applications/` on Mac personal but invisible to `mas list`. The warning `Warning: Found a likely App Store app that is not indexed in Spotlight in /Applications/Brother iPrint&Scan.app` is the canonical signature.
+
+**Practical fix:** File-presence guard around every `mas install` call — see `home/.chezmoiscripts/run_onchange_before_03-mas.sh.tmpl` (Plan 02). The guard checks `[[ ! -d "/Applications/${app_name}.app" ]]` and skips the install if the bundle already exists, bypassing the Apple ID mismatch entirely.
+
+#### 10.4.4 `chezmoi state set` (state-forge) pattern (follow-up #5)
+
+`chezmoi state set --bucket=entryState --key=<absolute-path> ...` is the symmetric inverse of `chezmoi state delete`. Use it when the **underlying reality has been verified by another mechanism** but chezmoi's state bucket doesn't reflect it.
+
+**Example:** Phase 0.5 Plan 06 Task 1 used state-forge for `~/.chezmoiscripts/03-mas.sh`. Brother iPrint&Scan was confirmed installed via `ls /Applications/ | grep -i brother`, but `mas install` would fail (Spotlight re-index sudo prompt in non-TTY context). Forging the `contentsSHA256` from the old rendered value to the new one told chezmoi "this scripted intent is already satisfied" — which was TRUE.
+
+**Caveat:** State-forge is legitimate ONLY when reality is verified by another mechanism. Never blind-forge. Document the justification in the commit message or a planning note (see `00.5-drift-reconciliation.md` for the Pattern 06 justification).
+
+**Command form:** `chezmoi state set --bucket=entryState --key /absolute/path/to/file` (space-separated `--key /path` form — see § 10.4.5 for the `=` form pitfall).
+
+#### 10.4.5 Pitfall C re-validation: source-delete does NOT auto-remove destination on either chezmoi 2.69.4 or 2.70.4 (follow-up #8)
+
+**Empirical result (Phase 0.5, both machines):** After `git rm` of a source file and `chezmoi apply`, the destination file remains. This was confirmed on:
+- Mac personal: chezmoi 2.70.4 — `chezmoi diff -x externals` silent; destination still present; only entryState retained the orphan.
+- Mac work: chezmoi 2.69.4 — same behavior.
+
+**The only mechanism that removes the destination is operator-driven `rm`** (plus optional `chezmoi state delete --bucket=entryState --key /path` for state hygiene; the destination delete is the load-bearing part).
+
+**For bulk source-deletes** (e.g., `home/exact_bin/` teardown in Plan 01): the `exact_` directive on the source directory IS the mechanism — `exact_` enforces that the destination directory contains ONLY entries in the source tree. When you delete the `exact_` source dir and run `chezmoi apply`, the destination dir is pruned. This is the ONLY path where apply auto-removes; a normal (non-`exact_`) source-delete does not.
+
+**CLI form note (from follow-up #7):** On Mac work with chezmoi 2.69.4 + zsh, `chezmoi state delete --bucket=entryState --key=/path` (equals sign) triggers a zsh EQUALS option parse error. Use space-separated form: `chezmoi state delete --bucket=entryState --key /path`.
+
+---
+
+### 10.5 AUD-02 LIGHT Remainder (6 inherited Phase 0.5 inconsistencies)
+
+These six inconsistencies were surfaced during the Phase 0.5 audit and documented in the original § 10. They were deliberately NOT normalized in Phase 0.5 because doing so would change destination file modes and produce a non-empty `chezmoi diff`, breaking the phase exit gate.
+
+Phase 0 disposition is noted for each. Items marked **RESOLVED** were fixed by Plan 01's restructure. Items marked **DEFERRED** remain in the source tree and require a future rename or restructure.
+
+1. **`home/dot_topics/rust/path.zsh`** lacks the `executable_` prefix that every other `path.zsh` in this tree carries.
+   **Phase 0 disposition: DEFERRED** — rename to `executable_path.zsh` is Phase 1+ work. The rename would set the executable bit at destination, producing a non-empty `chezmoi diff`. Not touched in Phase 0 to keep the merge gate clean.
+
+2. **`home/dot_topics/system/path.zsh.tmpl`** lacks the `executable_` prefix.
+   **Phase 0 disposition: DEFERRED** — same rationale as item 1 above.
+
+3. **`run_onchange_after_darwin-configure.sh.tmpl`** lacks a numeric `NN-` prefix and routes by OS via its filename rather than the (not-yet-existing) OS subdirectory structure.
+   **Phase 0 disposition: DEFERRED** — the OS-subdir layout (`darwin/`, `linux/`, `windows/`) is a Phase 3 deliverable. Phase 0 added `.chezmoiignore` gating for this file (darwin-only) which is the clean interim solution.
+
+4. **`packages.yaml` `personal.{taps,brews,casks}` at top level AND nested `personal.darwin.{...}` block** — the top-level entries were dead code at the template level.
+   **Phase 0 disposition: RESOLVED** — Plan 01 restructured `packages.yaml` to `roles.dev.{core,darwin,linux}` + `overlays.{personal,work}.darwin`. The old `personal.*` / `work.*` top-level shape is gone. See `home/.chezmoidata/packages.yaml` for current shape.
+
+5. **`packages.yaml` `work.core.{taps,brews,casks}`** — also dead code at the template level (template ranged over `work.darwin.*` and `work.linux.*`, not `work.core`).
+   **Phase 0 disposition: RESOLVED** — same Plan 01 restructure as item 4. The `work.core` key no longer exists.
+
+6. **`.DS_Store` at repo root** — macOS Finder artifact; uncertain `.gitignore` coverage.
+   **Phase 0 disposition: DEFERRED** — confirmed in `.gitignore` (repo root) as of Phase 0.5 inspection. If Finder re-creates it, the file will be ignored by git. Low priority; no Phase 1+ plan references this.
 
 ---
 
 *Document populated from live-tree inspection per Phase 0.5 CONTEXT.md decision: "inspect the actual tree to derive content — do not invent conventions."*
+*§ 10 expanded in Phase 0 Plan 03 (2026-06-03): goal amendments, employer-local pattern, LNX-05, follow-up pitfall notes, AUD-02 LIGHT dispositions.*
