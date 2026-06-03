@@ -179,6 +179,12 @@ if [[ -f .planning/phases/0-structural-refactor/cutover-phase-0.sh ]]; then
 fi
 
 # ---------------------------------------------------------------------------
+# Section 11: Plan 02 — mas guard in 03-mas.sh.tmpl
+# ---------------------------------------------------------------------------
+header "Plan 02: mas /Applications/ guard in 03-mas.sh.tmpl"
+assert_grep '/Applications/' home/.chezmoiscripts/run_onchange_before_03-mas.sh.tmpl
+
+# ---------------------------------------------------------------------------
 # Summary
 # ---------------------------------------------------------------------------
 summary

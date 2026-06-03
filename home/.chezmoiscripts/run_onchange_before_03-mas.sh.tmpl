@@ -1,6 +1,11 @@
 #!/bin/bash
 {{ if .personal -}}
   {{ range $k, $v := .packages.overlays.personal.darwin.mas }}
-/opt/homebrew/bin/mas install {{ dig "id" "" $v }}
+    app_name={{ dig "name" "" $v | quote }}
+    if [ ! -d "/Applications/${app_name}.app" ]; then
+      /opt/homebrew/bin/mas install {{ dig "id" "" $v }}
+    else
+      echo "Skipping mas install: ${app_name}.app already present"
+    fi
   {{ end -}}
 {{ end -}}
