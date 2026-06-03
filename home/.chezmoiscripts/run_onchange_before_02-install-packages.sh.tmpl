@@ -1,4 +1,5 @@
 #!/bin/bash
+{{ if not (hasKey . "role") }}{{ fail "Role not set. Run: chezmoi init --apply" }}{{ end }}
 
 {{ template "utils" . }}
 
