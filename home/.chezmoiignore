@@ -1,1 +1,14 @@
+# .oh-my-zsh cache (pre-existing)
 .oh-my-zsh/cache/**
+
+# Darwin-only files
+{{ if ne .chezmoi.os "darwin" }}
+private_dot_config/aerospace/**
+.chezmoiscripts/run_onchange_after_darwin-configure.sh.tmpl
+.chezmoiscripts/run_onchange_before_03-mas.sh.tmpl
+{{ end }}
+
+# Linux-dev-non-wsl-only files (flameshot)
+{{ if or (ne .chezmoi.os "linux") .wsl (ne .role "dev") }}
+private_dot_config/flameshot/**
+{{ end }}
