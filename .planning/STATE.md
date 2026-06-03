@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: "Plan 0-01 (Structural Refactor — structural taxonomy cut) COMPLETE 2026-06-03 — 6/6 tasks, Wave 0 harness 22/22 PASS, cutover-phase-0.sh committed as artifact (NOT executed — operator runs post-merge per CLAUDE.md collaborative-mode). generate-gpg-key.sh PRESERVED per goal amendment (deferred to Phase 1). Next: Plan 0-02 (mas-guard) → Plan 0-03 (docs). After merge: operator runs cutover-phase-0.sh on Mac personal first, then Mac work."
-last_updated: "2026-06-03T05:00Z"
+stopped_at: "Plan 0-02 (mas guard) COMPLETE 2026-06-03 — 1/1 task, Wave 0 harness 23/23 PASS (Section 11 added), /Applications/<App>.app guard committed at 85f288b. Next: Plan 0-03 (docs). After all 3 Phase 0 plans: operator runs cutover-phase-0.sh on Mac personal first, then Mac work."
+last_updated: "2026-06-03T06:00Z"
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 9
-  completed_plans: 7
+  completed_plans: 8
 ---
 
 # Project State: chezmoi Modernization
@@ -25,9 +25,9 @@ progress:
 ## Current Position
 
 **Phase:** 0-structural-refactor — IN PROGRESS
-**Plan:** 0-01 complete (1/3); 0-02 next
-**Status:** Plan 0-01 landed atomically across 6 commits + Wave 0 gate GREEN; cutover script committed as artifact awaiting operator execution post-merge
-**Progress:** Phase 1/6 phases done · Phase 0 sub-progress 1/3 plans `███░░░░░░░`
+**Plan:** 0-02 complete (2/3); 0-03 next
+**Status:** Plan 0-01 (structural) + Plan 0-02 (mas guard) landed; Wave 0 harness 23/23 PASS; cutover script committed as artifact awaiting operator execution post-merge
+**Progress:** Phase 1/6 phases done · Phase 0 sub-progress 2/3 plans `██████░░░░`
 
 ## Performance Metrics
 
