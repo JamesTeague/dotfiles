@@ -1,131 +1,119 @@
 packages:
-  core:
-    taps:
-    - 'anomalyco/tap'
-    brews:
-    - 'bash'
-    - 'bash-completion@2'
-    - 'wget'
-    - 'chezmoi'
-    - 'jq'
-    - 'git'
-    - 'grep'
-    - 'lua'
-    - 'neovim'
-    - 'rust-analyzer'
-    - 'ripgrep'
-    - 'zsh' # macOS ships with an old version
-    - 'zsh-autosuggestions'
-    - 'zsh-completions'
-    - 'zsh-syntax-highlighting'
-    - 'zsh-vi-mode'
-    - 'go'
-    - 'delve'
-    - 'python@3.14' # renamed from 'python3' (Phase 0.5 AUD-01)
-    - 'jupyterlab'
-    - 'node' # renamed from 'npm' (npm ships with node) — required by lsp tsserver (Phase 0.5 AUD-01)
-    - 'make' # required by powerlevel10k on linux
-    - 'gcc' # required by powerlevel10k, zsh on linux
-    - 'libpq'
-    - 'bat' # reading files (better cat)
-    - 'gnupg' # renamed from 'gpg' (gpg is alias only) — for signing git commits (Phase 0.5 AUD-01)
-    - 'tmux'
-    - 'zoxide' # easy navigation (better cd)
-    - 'tlrc' # community-maintained docs (better man)
-    - 'scc' # count lines of code
-    - 'eza' # listing files (better ls)
-    - 'diff-so-fancy' # file comparisons (better diff)
-    - 'fdupes' # duplicate file finder
-    - 'fzf' # fuzzy file finder (better find)
-    - 'hyperfine' # command benchmarking
-    - 'rm-improved' # deletion tool (better rm)
-    - 'ddgr' # search web from terminal
-    - 'httpie'
-    - 'atuin' # better history
-    - 'btop' # better top and htop
-    - 'slides' # presentations in the terminal
-    - 'tokei'
-    - 'tree'
-    - 'w3m'
-    - 'ranger'
-    - 'starship'
-    - 'opencode'
-    casks:
-    - 'font-alfa-slab-one'
-    - 'font-awesome-terminal-fonts'
-    - 'font-hack-nerd-font'
-    - 'font-lato'
-    - 'font-monocraft'
-    - 'font-roboto'
-    - 'bitwarden'
-    - 'docker-desktop'
-    - 'google-chrome'
-    - 'yt-music'
-    - 'logseq'
-    - 'nikitabobko/tap/aerospace'
-    - 'ghostty'
-  darwin:
-    taps:
-    - 'jesseduffield/lazygit'
-    - 'jesseduffield/lazydocker'
-    brews:
-    - 'mas'
-    - 'jesseduffield/lazygit/lazygit'
-    - 'jesseduffield/lazydocker/lazydocker'
-    - 'geckodriver'
-    casks:
-    - 'shottr'
-    - 'raycast'
-    - 'via'
-    - 'hiddenbar'
-    - 'stats'
-  linux:
-    taps:
-    brews:
-    - 'curl'
-    - 'xclip'
-    casks:
-  personal:
-    taps:
-    brews:
-    casks:
-    darwin:
-      taps:
-      brews:
-      - 'ollama'
-      casks:
-      - 'arc'
-      - 'discord'
-      - 'microsoft-office'
-      - 'utm'
-      - 'mullvadvpn' # moved from personal.casks (Phase 0.5 AUD-02 LIGHT)
-      - 'kindle' # moved from personal.casks (Phase 0.5 AUD-02 LIGHT)
-      - 'handbrake' # moved from personal.casks (Phase 0.5 AUD-02 LIGHT)
-      - 'rode-central' # moved from personal.casks (Phase 0.5 AUD-02 LIGHT)
-      mas:
-        BrotherIPrint:
-          name: 'Brother iPrint&Scan'
-          id: 1193539993
-    linux:
-      taps:
-      brews:
-      casks:
-  work:
-    darwin:
-      taps:
-      - 'snyk/tap' # moved from work.core.taps (Phase 0.5 AUD-02 LIGHT)
-      - 'localstack/tap' # moved from work.core.taps (Phase 0.5 AUD-02 LIGHT)
-      brews:
-      - 'awscli' # moved from work.core.brews (Phase 0.5 AUD-02 LIGHT)
-      - 'localstack-cli' # moved from work.core.brews (Phase 0.5 AUD-02 LIGHT); Plan 05 candidate review's "rename to localstack" was a reality-correction miss (localstack formula is deprecated upstream, sunset 2027-04-12; localstack-cli is the maintained one) — reverted Phase 0.5 Plan 06 Task 5
-      - 'stern' # moved from work.core.brews (Phase 0.5 AUD-02 LIGHT)
-      - 'sqlc' # moved from work.core.brews (Phase 0.5 AUD-02 LIGHT)
-      - 'git-lfs' # moved from work.core.brews (Phase 0.5 AUD-02 LIGHT)
-      - 'dotnet@8' # moved from work.core.brews (Phase 0.5 AUD-02 LIGHT)
-      casks:
-      - 'microsoft-teams' # moved from work.core.casks (Phase 0.5 AUD-02 LIGHT)
-      mas:
-    linux:
-      taps:
-      brews:
-      casks:
+  roles:
+    dev:
+      core:
+        taps:
+        - 'anomalyco/tap'
+        brews:
+        - 'bash'
+        - 'bash-completion@2'
+        - 'wget'
+        - 'chezmoi'
+        - 'jq'
+        - 'git'
+        - 'grep'
+        - 'lua'
+        - 'neovim'
+        - 'rust-analyzer'
+        - 'ripgrep'
+        - 'zsh' # macOS ships with an old version
+        - 'zsh-autosuggestions'
+        - 'zsh-completions'
+        - 'zsh-syntax-highlighting'
+        - 'zsh-vi-mode'
+        - 'go'
+        - 'delve'
+        - 'python@3.14' # renamed from 'python3' (Phase 0.5 AUD-01)
+        - 'jupyterlab'
+        - 'node' # renamed from 'npm' (npm ships with node) — required by lsp tsserver (Phase 0.5 AUD-01)
+        - 'make' # required by powerlevel10k on linux
+        - 'gcc' # required by powerlevel10k, zsh on linux
+        - 'libpq'
+        - 'bat' # reading files (better cat)
+        - 'gnupg' # renamed from 'gpg' (gpg is alias only) — for signing git commits (Phase 0.5 AUD-01)
+        - 'tmux'
+        - 'zoxide' # easy navigation (better cd)
+        - 'tlrc' # community-maintained docs (better man)
+        - 'scc' # count lines of code
+        - 'eza' # listing files (better ls)
+        - 'diff-so-fancy' # file comparisons (better diff)
+        - 'fdupes' # duplicate file finder
+        - 'fzf' # fuzzy file finder (better find)
+        - 'hyperfine' # command benchmarking
+        - 'rm-improved' # deletion tool (better rm)
+        - 'ddgr' # search web from terminal
+        - 'httpie'
+        - 'atuin' # better history
+        - 'btop' # better top and htop
+        - 'slides' # presentations in the terminal
+        - 'tokei'
+        - 'tree'
+        - 'w3m'
+        - 'ranger'
+        - 'starship'
+        - 'opencode'
+      darwin:
+        taps:
+        - 'jesseduffield/lazygit'
+        - 'jesseduffield/lazydocker'
+        brews:
+        - 'mas'
+        - 'jesseduffield/lazygit/lazygit'
+        - 'jesseduffield/lazydocker/lazydocker'
+        - 'geckodriver'
+        casks:
+        - 'font-alfa-slab-one'
+        - 'font-awesome-terminal-fonts'
+        - 'font-hack-nerd-font'
+        - 'font-lato'
+        - 'font-monocraft'
+        - 'font-roboto'
+        - 'bitwarden'
+        - 'docker-desktop'
+        - 'google-chrome'
+        - 'yt-music'
+        - 'logseq'
+        - 'nikitabobko/tap/aerospace'
+        - 'ghostty'
+        - 'shottr'
+        - 'raycast'
+        - 'via'
+        - 'hiddenbar'
+        - 'stats'
+      linux:
+        brews:
+        - 'curl'
+        - 'xclip'
+  overlays:
+    personal:
+      darwin:
+        taps:
+        brews:
+        - 'ollama'
+        casks:
+        - 'arc'
+        - 'discord'
+        - 'microsoft-office'
+        - 'utm'
+        - 'mullvadvpn'
+        - 'kindle'
+        - 'handbrake'
+        - 'rode-central'
+        mas:
+          BrotherIPrint:
+            name: 'Brother iPrint&Scan'
+            id: 1193539993
+    work:
+      darwin:
+        taps:
+        - 'snyk/tap'
+        - 'localstack/tap'
+        brews:
+        - 'awscli'
+        - 'localstack-cli' # localstack formula is deprecated upstream (sunset 2027-04-12); localstack-cli is the maintained one — reverted Phase 0.5 Plan 06 Task 5
+        - 'stern'
+        - 'sqlc'
+        - 'git-lfs'
+        - 'dotnet@8'
+        casks:
+        - 'microsoft-teams'
