@@ -107,6 +107,5 @@ cask {{ . | quote }}
       {{ end -}}
     {{ end -}}
   {{ end -}}
-{{ end -}}
-
+{{- end }}
 EOF
