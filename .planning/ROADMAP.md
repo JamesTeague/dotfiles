@@ -13,7 +13,7 @@ A new machine — any OS in the fleet — can be set up day-1 via a single `chez
 ## Phases
 
 - [x] **Phase 0.5: Audit & Documentation** — Defensible baseline of conventions + dead-config removal before any structural change (zero apply risk) — **CLOSED 2026-05-29** (6/6 plans, 6 requirements, both-Mac gate PASS via 1 justified escalation)
-- [ ] **Phase 0: Structural Refactor** — Land the `role × personal × os × wsl` taxonomy on a branch with `chezmoi diff` empty on both Macs as merge gate
+- [x] **Phase 0: Structural Refactor** — Land the `role × personal × os × wsl` taxonomy on a branch with `chezmoi diff` empty on both Macs as merge gate — **CLOSED 2026-06-03** (3/3 plans + cutover green on both Macs; 3 follow-up commits during cutover: heredoc, cask renames, Step 7 stderr capture)
 - [ ] **Phase 1: VaultWarden + Secret Plane + Bootstrap Kit** — Credential plane (GPG canonical + per-purpose SSH) AND disaster-recovery fallback land together
 - [ ] **Phase 2: Windows-Native Support** — pwsh + winget + Stream Deck + role=gaming + role=lite all share Windows infrastructure
 - [ ] **Phase 3: WSL Greenfield** — Two-application boundary (`.wslconfig` on host + `wsl.conf` inside WSL) + Linux apt/mise
@@ -192,7 +192,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 0.5. Audit & Documentation | 5/6 | In progress | - |
-| 0. Structural Refactor | 3/3 | In progress (awaiting cutover verification) | - |
+| 0. Structural Refactor | 3/3 | Complete (cutover green both Macs) | 2026-06-03 |
 | 1. VaultWarden + Secret Plane + Bootstrap Kit | 0/? | Not started | - |
 | 2. Windows-Native Support | 0/? | Not started | - |
 | 3. WSL Greenfield | 0/? | Not started | - |

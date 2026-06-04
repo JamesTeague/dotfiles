@@ -121,17 +121,28 @@ done
 
 # ---------------------------------------------------------------------------
 # Step 7: Verify SC #4 — chezmoi diff -x externals empty
+# Note: capture stdout (the actual diff) separately from stderr. Templates
+# like modify_dot_gitconfig.local invoke gpg, which can emit version-mismatch
+# warnings to stderr during render. Those warnings are not drift; only stdout
+# carries diff content. (Mac work false-positive observed 2026-06-03.)
 # ---------------------------------------------------------------------------
 echo ""
 echo "[Step 7] Verifying chezmoi diff -x externals is empty..."
-diff_out=$(chezmoi diff -x externals 2>&1 || true)
+diff_err_log="$(mktemp -t cutover-diff-stderr.XXXXXX)"
+diff_out=$(chezmoi diff -x externals 2>"${diff_err_log}" || true)
 if [[ -n "${diff_out}" ]]; then
   echo "FAIL: chezmoi diff -x externals is NOT empty." >&2
   echo "      Restore from: ${SNAP_DIR}" >&2
   echo "      Diff output:" >&2
   echo "${diff_out}" | sed 's/^/  | /' >&2
+  if [[ -s "${diff_err_log}" ]]; then
+    echo "      stderr (non-fatal noise — preserved for context):" >&2
+    sed 's/^/  ! /' "${diff_err_log}" >&2
+  fi
+  rm -f "${diff_err_log}"
   exit 2
 fi
+rm -f "${diff_err_log}"
 echo "  chezmoi diff -x externals: EMPTY (clean)"
 
 # ---------------------------------------------------------------------------

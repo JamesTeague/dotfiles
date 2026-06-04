@@ -3,11 +3,11 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: "Phase 0 plans 3/3 COMPLETE 2026-06-03 — Plan 0-03 (docs) committed at 6405eed. docs/conventions.md § 10 expanded (173→301 lines): goal amendments, employer-local pattern, LNX-05, 5 follow-up pitfall notes, 6 AUD-02 LIGHT dispositions. TAX-08 verified. Wave 0 harness 23/23 PASS. Awaiting operator-driven cutover ritual (Mac personal first, then Mac work). NOT marked Phase 0 complete — verification step (chezmoi diff -x externals EMPTY on both Macs) runs after cutover."
-last_updated: "2026-06-03T07:00Z"
+stopped_at: "Phase 0 COMPLETE 2026-06-03 — both Macs cutover GREEN. Mac personal: cutover succeeded on second attempt after 90e9826 (brew template heredoc EOF-at-col-0 fix); chezmoi diff -x externals empty, dry-run no <no value>, ~/bin gone, 5 utils in ~/.local/bin, mas guard skipped Brother iPrint&Scan. Mac work: cutover Step 7 false-failed on gpg stderr noise (keyboxd version warning) — actual stdout diff was empty, Step 8 verified clean manually, NODE_EXTRA_CA_CERTS migration confirmed. Three Phase 0 follow-up fixes landed during cutover: 90e9826 (heredoc), c8a3c30 (cask renames mullvadvpn→mullvad-vpn, handbrake→handbrake-app + § 10.4.6 convention), and the Step 7 stderr-capture fix + § 10.4.7 convention in this commit. Phase 1 (VaultWarden + Secret Plane + Bootstrap Kit) is next."
+last_updated: "2026-06-03T23:30Z"
 progress:
   total_phases: 6
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 9
   completed_plans: 9
 ---
@@ -20,14 +20,14 @@ progress:
 
 **Core Value:** A new machine — any OS in the fleet — can be set up day-1 via a single `chezmoi init --apply` flow (plus VaultWarden login + GitHub PAT for HTTPS clone bootstrap) and arrive at a fully-configured, identity-signed, role-appropriate state without artisanal touch-up.
 
-**Current Focus:** **Phase 0 IN PROGRESS** — Plan 0-01 (structural taxonomy cut) closed 2026-06-03. Next: Plan 0-02 (mas guard) → Plan 0-03 (docs). After merge: operator runs `cutover-phase-0.sh` on Mac personal first, then Mac work.
+**Current Focus:** **Phase 0 COMPLETE** — both Macs cutover GREEN 2026-06-03. Next: `/gsd:plan-phase 1` (VaultWarden + Secret Plane + Bootstrap Kit).
 
 ## Current Position
 
-**Phase:** 0-structural-refactor — 3/3 plans landed; awaiting verification
-**Plan:** 0-03 complete (3/3) — all Phase 0 plans done
-**Status:** Plans 0-01 (structural) + 0-02 (mas guard) + 0-03 (docs) landed; Wave 0 harness 23/23 PASS; awaiting operator cutover ritual + chezmoi diff -x externals EMPTY on both Macs before Phase 0 can be marked complete
-**Progress:** Phase 1/6 phases done · Phase 0 sub-progress 3/3 plans `██████████`
+**Phase:** 0-structural-refactor — COMPLETE (3/3 plans + cutover both Macs)
+**Plan:** Phase 0 closed; Phase 1 not yet planned
+**Status:** Both Macs cutover GREEN. chezmoi diff -x externals empty + dry-run clean on both. NODE_EXTRA_CA_CERTS migrated on Mac work. ~/bin teardown verified on both. Three follow-up commits landed (heredoc fix, cask renames, Step 7 stderr capture) — convention notes added in § 10.4.6 and § 10.4.7.
+**Progress:** Phase 2/6 phases done · Phase 0 sub-progress 3/3 plans `██████████`
 
 ## Performance Metrics
 

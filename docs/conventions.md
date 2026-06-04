@@ -289,6 +289,36 @@ Validate by rendering with `chezmoi execute-template < script.sh.tmpl | sed -n '
 
 Do not use `<<- EOF` as a workaround unless you also convert template indentation to tabs — `<<-` strips leading **tabs only**, not spaces.
 
+#### 10.4.7 Cutover-script chezmoi-diff gate must separate stdout from stderr (Mac work false-positive)
+
+**Symptom:** Mac work Phase 0 cutover failed Step 7 with:
+
+```
+gpg: WARNING: server 'keyboxd' is older than us (2.4.9 < 2.5.20)
+gpg: Note: Outdated servers may lack important security fixes.
+```
+
+`chezmoi diff -x externals 2>/dev/null` returned empty (zero drift), but the script captured `2>&1` and treated any output as drift.
+
+**Cause:** `modify_dot_gitconfig.local` is a modify-script template that invokes `gpg`. During `chezmoi diff` rendering, gpg may emit version-mismatch warnings to stderr (machine-local — depends on installed keyboxd vs gpg versions). Those warnings are not template render failures and not file drift.
+
+**Convention:** Any cutover/verify script that gates on `chezmoi diff` (or `chezmoi apply --dry-run`) emptiness MUST capture stdout separately. Pattern:
+
+```bash
+diff_err_log="$(mktemp)"
+diff_out=$(chezmoi diff -x externals 2>"${diff_err_log}" || true)
+if [[ -n "${diff_out}" ]]; then
+  # real drift — fail
+  echo "${diff_out}"
+  # optional: surface stderr for diagnostic context
+  [[ -s "${diff_err_log}" ]] && sed 's/^/  ! /' "${diff_err_log}" >&2
+  exit 2
+fi
+rm -f "${diff_err_log}"
+```
+
+Step 8's `grep "no value"` check is naturally robust (greps for a specific string), but the diff-empty check is the high-risk gate.
+
 ---
 
 ### 10.5 AUD-02 LIGHT Remainder (6 inherited Phase 0.5 inconsistencies)
