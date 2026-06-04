@@ -269,6 +269,26 @@ The `cutover-phase-0.sh` script uses the filtered-grep approach (step 8 of the c
 
 **CLI form note (from follow-up #7):** On Mac work with chezmoi 2.69.4 + zsh, `chezmoi state delete --bucket=entryState --key=/path` (equals sign) triggers a zsh EQUALS option parse error. Use space-separated form: `chezmoi state delete --bucket=entryState --key /path`.
 
+#### 10.4.6 Shell heredoc terminator must render at column 0 (Phase 0 cutover regression)
+
+**Symptom:** During Mac personal cutover, `chezmoi init --apply` failed at `before_02-install-packages.sh` with:
+
+```
+Error: Invalid Brewfile: uninitialized constant Homebrew::Bundle::Dsl::EOF
+```
+
+**Cause:** The `brew` chezmoitemplate uses `brew bundle --file=/dev/stdin << EOF ... EOF`. Accumulated trailing whitespace from nested `{{ end -}}` blocks rendered the closing terminator as `      EOF` (six leading spaces). Bash heredocs opened with `<< EOF` (no dash) require the terminator at column 0 — with any leading whitespace the heredoc never closes, and the literal text `EOF` gets piped to `brew bundle` as Brewfile content, where Ruby interprets it as an undefined constant.
+
+**Fix (committed `90e9826`):** Change the final `{{ end -}}` in the brew template to `{{- end }}` so the leading-strip eats accumulated whitespace from inner end-blocks, leaving `EOF` on its own line at column 0.
+
+**Convention:** Any template that emits a shell heredoc with `<< MARKER` (no dash) must guarantee the closing `MARKER` renders at column 0. Patterns that work:
+- Use `{{- end }}` (left-strip) on the end-block immediately preceding the terminator line, OR
+- Put `{{- "" }}` on the terminator line itself to strip preceding whitespace.
+
+Validate by rendering with `chezmoi execute-template < script.sh.tmpl | sed -n 'l'` and confirming the terminator line begins with `$` (no spaces before it).
+
+Do not use `<<- EOF` as a workaround unless you also convert template indentation to tabs — `<<-` strips leading **tabs only**, not spaces.
+
 ---
 
 ### 10.5 AUD-02 LIGHT Remainder (6 inherited Phase 0.5 inconsistencies)

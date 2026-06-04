@@ -95,9 +95,9 @@ packages:
         - 'discord'
         - 'microsoft-office'
         - 'utm'
-        - 'mullvadvpn'
+        - 'mullvad-vpn'
         - 'kindle'
-        - 'handbrake'
+        - 'handbrake-app'
         - 'rode-central'
         mas:
           BrotherIPrint:
