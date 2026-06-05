@@ -4,17 +4,17 @@
 **Granularity:** coarse
 **Parallelization:** true
 **Phase count:** 6 (non-standard numbering: 0.5, 0, 1, 2, 3, 4)
-**Coverage:** 69/69 v1 requirements mapped
+**Coverage:** 69/69 v1 requirements mapped (Phase 1 requirements reshaped 2026-06-04 by architecture pivot — see Phase 1 detail)
 
 ## Core Value
 
-A new machine — any OS in the fleet — can be set up day-1 via a single `chezmoi init --apply` flow (plus VaultWarden login + GitHub PAT for HTTPS clone bootstrap) and arrive at a fully-configured, identity-signed, role-appropriate state without artisanal touch-up.
+A new machine — any OS in the fleet — can be set up day-1 via a single `chezmoi init --apply` flow plus one explicit credential-bootstrap script, and arrive at a fully-configured, identity-signed, role-appropriate state without artisanal touch-up. Stage 1 (`chezmoi init --apply`) is auth-free against a public repo; Stage 2 (`setup-credentials.sh`) generates per-machine keys locally and registers them with the relevant services.
 
 ## Phases
 
 - [x] **Phase 0.5: Audit & Documentation** — Defensible baseline of conventions + dead-config removal before any structural change (zero apply risk) — **CLOSED 2026-05-29** (6/6 plans, 6 requirements, both-Mac gate PASS via 1 justified escalation)
 - [x] **Phase 0: Structural Refactor** — Land the `role × personal × os × wsl` taxonomy on a branch with `chezmoi diff` empty on both Macs as merge gate — **CLOSED 2026-06-03** (3/3 plans + cutover green on both Macs; 3 follow-up commits during cutover: heredoc, cask renames, Step 7 stderr capture)
-- [ ] **Phase 1: VaultWarden + Secret Plane + Bootstrap Kit** — Credential plane (GPG canonical + per-purpose SSH) AND disaster-recovery fallback land together
+- [ ] **Phase 1: Credential Plane (per-machine keys)** — `setup-credentials.sh` generates per-machine SSH + GPG locally and registers with GitHub; VaultWarden moves off the apply-time critical path; no central credential store, no bootstrap kit (architecture pivoted 2026-06-04 from "VaultWarden + Secret Plane + Bootstrap Kit")
 - [ ] **Phase 2: Windows-Native Support** — pwsh + winget + Stream Deck + role=gaming + role=lite all share Windows infrastructure
 - [ ] **Phase 3: WSL Greenfield** — Two-application boundary (`.wslconfig` on host + `wsl.conf` inside WSL) + Linux apt/mise
 - [ ] **Phase 4: Lonestar Onboarding + Polish** — Hardening, docs, first end-to-end onboarding as the real acceptance test
@@ -87,29 +87,49 @@ Plans:
 
 ---
 
-### Phase 1: VaultWarden + Secret Plane + Bootstrap Kit
+### Phase 1: Credential Plane (per-machine keys)
 
-**Goal**: User can `git commit -S` and `ssh -T git@github-personal` on first machine setup. VaultWarden is the credential plane; the age-encrypted bootstrap kit is the documented fallback for when the Cloudflare tunnel is down. Vault-offline drill is executed before phase close — not deferred.
+**Goal**: User can `git commit -S` and `ssh -T git@github-personal` after running `setup-credentials.sh` once on a fresh machine. SSH and GPG keypairs are generated locally per-machine and registered with GitHub via the `gh` CLI; no central credential store sits on the apply-time critical path. VaultWarden becomes a runtime password vault only — `chezmoi apply` does not call it.
 
-**Depends on**: Phase 0 (taxonomy must resolve before `bitwarden*` template gating fires)
+**Depends on**: Phase 0 (taxonomy + `.chezmoiignore` gating must be in place before per-machine credential templates can reference identity)
 
-**Requirements**: SEC-01, SEC-02, SEC-03, SEC-04, SEC-06, SEC-07, SEC-08, SEC-09, SEC-10, BOOT-01, BOOT-02, BOOT-03, BOOT-04, BOOT-05
+**Requirements**: SEC-02, SEC-05 (carryover from Phase 0), SEC-07, SEC-08, SEC-09, SEC-10. Plus new per-machine-keygen requirements introduced by the 2026-06-04 pivot (to be enumerated by planner against `1-CONTEXT.md`).
+
+**Requirements REMOVED by pivot (no longer Phase 1 scope):**
+- SEC-01 (`bitwarden.unlock = "auto"`) — no inline VW unlock in apply path
+- SEC-03 (canonical GPG via `bitwardenAttachment`) — no canonical, no VW retrieval; keys generated locally
+- SEC-04 (`run_once_after_*` ownertrust import) — locally-generated keys are trusted by their own gpg-agent by default
+- SEC-06 (per-purpose SSH via VW) — keys generated locally
+- BOOT-01 through BOOT-05 — bootstrap kit deleted from scope; regenerable keys make the kit unnecessary
 
 **Success Criteria** (what must be TRUE):
-  1. User unlocks the machine, runs `chezmoi apply`, and chezmoi auto-unlocks VaultWarden via `bitwarden.unlock = "auto"` — no manual `BW_SESSION` ritual
-  2. Canonical GPG signing key is retrieved from VaultWarden via `bitwardenAttachment`, ownertrust is imported via `run_once_after_*` hook, and `git commit -S` actually produces a signed commit (verified via `git log --show-signature`) on first setup
-  3. Per-purpose SSH keys (`personal-github` + `work-github` minimum) are retrieved from VaultWarden; `~/.ssh/config` uses `Host github-personal` / `Host github-work` aliases; chezmoi's own git remote is rewritten to `git@github-personal:JamesTeague/dotfiles.git`; `ssh -vT git@github-personal` shows the correct fingerprint
-  4. `bw` CLI version is PINNED in `packages.yaml` against the live VaultWarden 1.36.0; the working CLI/server pair is documented (anti-Pitfall-3)
-  5. `bootstrap/encrypted_essentials.age` exists in the repo containing canonical GPG key + primary SSH key + GitHub PAT; age identity is stored OFF-repo (paper backup + hardware token strategy documented in `bootstrap/README.md`); an offline known-good `bw` binary is embedded in the bootstrap kit
-  6. **Vault-offline drill executed**: with cloudflared deliberately stopped, `chezmoi apply` either falls back via the bootstrap-kit recovery path OR fails loud with an actionable message (NO silent failure). Drill outcome documented before phase close.
+  1. Public dotfiles repo + `chezmoi init --apply` runs end-to-end on a fresh Mac without any auth prompt during apply (Stage 1 — offline-safe, no VW calls in templates)
+  2. `setup-credentials.sh` runs idempotently and: (a) `gh auth login` succeeds via device flow, (b) generates per-machine SSH keypair, registers pubkey via `gh ssh-key add`, (c) generates per-machine GPG key, registers pubkey via `gh gpg-key add`, (d) writes git `user.signingkey` to point at the new GPG key, (e) rewrites chezmoi's own remote to `git@github-personal:JamesTeague/dotfiles.git`
+  3. After Stage 2, `git commit -S --allow-empty -m verify` produces a signed commit verified via `git log --show-signature`
+  4. After Stage 2, `ssh -T git@github-personal` returns the expected GitHub welcome; `ssh -vT git@github-personal` shows the locally-generated key's fingerprint
+  5. `home/scripts/generate-gpg-key.sh` is DELETED; `home/modify_dot_gitconfig.local` is rewritten to use chezmoi data (`.signingkey` set by `setup-credentials.sh`) instead of the deleted script (SEC-05 carryover from Phase 0)
+  6. `bw` CLI version pinned against live VaultWarden 1.36.0 in `packages.yaml`; pin rationale documented (Pitfall 3 mitigation — survives the pivot because `bw` is still used for runtime password lookup)
+  7. `~/.ssh/config` uses purpose-based Host aliases (`github-personal`; on work Mac, `gitlab-bluebeam` references a hand-generated work key path; work key generation itself is out of script scope)
+  8. **Structural VW-independence check**: grep of templates + `.chezmoiscripts/` finds zero `bitwarden`, `bitwardenAttachment`, or `bw` references in apply-time code paths (replaces original "vault-offline drill" — same property verified structurally instead of by runtime simulation)
+  9. Idempotency: `setup-credentials.sh` re-runs on the same machine are no-ops; explicit `--rotate-*` flag (planner-defined) regenerates and re-registers cleanly
+  10. Verified end-to-end on a fresh Parallels macOS VM (snapshot `vanilla-fresh-boot-pre-chezmoi` at `jteague@10.211.55.4`) — first phase to use a VM target for verification
 
 **Pitfall mitigations baked in**:
-- Pitfall 3 (VaultWarden ↔ bw CLI drift) → version pin + documented compat pair + offline known-good binary in bootstrap kit
-- Pitfall 10 (VaultWarden unreachable bricks routine apply) → bootstrap kit lands in THIS phase, not deferred to Phase 4; vault-offline drill is a phase-exit requirement
-- Pitfall 14 (GPG key imported without trust) → `run_once_after_*` ownertrust import is part of the GPG ceremony
-- Pitfall 15 (per-purpose keys + remote URL mismatch) → chezmoi repo's git remote is rewritten as part of phase close
+- Pitfall 3 (VaultWarden ↔ bw CLI drift) → version pin + documented compat pair. Offline known-good binary in bootstrap kit no longer applies (no kit).
+- Pitfall 10 (VaultWarden unreachable bricks routine apply) → **structurally eliminated** by removing VW from the apply path entirely. Apply works fine with VW down; only password lookups via `bw` at runtime are affected.
+- Pitfall 14 (GPG key imported without trust) → not applicable (per-machine locally-generated keys are trusted by their own gpg-agent without ownertrust ceremony)
+- Pitfall 15 (per-purpose keys + remote URL mismatch) → `setup-credentials.sh` rewrites chezmoi's remote after key generation, before any subsequent push
 
-**Plans**: TBD
+**Pivot context**: Roadmap originally specified VaultWarden as the credential plane (canonical GPG + per-purpose SSH retrieved from VW on every apply) plus an age-encrypted bootstrap kit for VW-down recovery. 2026-06-04 discussion-first session reframed: regenerable keypairs (SSH, GPG) don't benefit from a central store, and a script-based per-machine bootstrap eliminates Pitfall 10 structurally rather than mitigating it. See `phases/1-credential-plane/1-CONTEXT.md` for full architecture and tradeoff documentation.
+
+**Plans:** 5 plans
+
+Plans:
+- [ ] 1-01-wave0-harness-PLAN.md — Wave 0 checks/ harness (lib/quick/full/vm-e2e/parallels-helpers) + formalize SEC-11..16 in REQUIREMENTS.md
+- [ ] 1-02-gitconfig-rewrite-PLAN.md — SEC-05: rewrite modify_dot_gitconfig.local to pure chezmoi-data form + DELETE generate-gpg-key.sh
+- [ ] 1-03-ssh-config-bw-pin-PLAN.md — SEC-02 + SEC-07: SSH config template with purpose-based aliases + bitwarden-cli formula pin + docs/credential-plane.md
+- [ ] 1-04-setup-credentials-PLAN.md — SEC-08/11/12/13/14: author home/scripts/setup-credentials.sh (idempotent + rotation flags + chezmoi remote rewrite)
+- [ ] 1-05-vm-verification-PLAN.md — SEC-09/10/15/16 phase exit gate: VM end-to-end drill (Scenarios 1 fresh / 2 idempotency / 3 rotation) on jteague@10.211.55.4
 
 ---
 
