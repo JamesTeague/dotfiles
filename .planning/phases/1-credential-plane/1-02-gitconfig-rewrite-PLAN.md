@@ -40,7 +40,7 @@ Carry over SEC-05 from Phase 0 by (a) DELETING `home/scripts/generate-gpg-key.sh
 
 Purpose: Phase 0 deferred SC #5 because `modify_dot_gitconfig.local` was load-bearing on the to-be-deleted script. Phase 1's per-machine-key architecture replaces the shell-out with a `.signingkey` chezmoi data field set by `setup-credentials.sh`. Until the script runs on a machine, `.signingkey` is unset and the template gracefully omits the signing-config lines (no broken commits, no silent failure). After the script runs, `chezmoi apply` re-renders gitconfig with signingkey + commit.gpgsign present.
 
-Output: One template rewrite (`modify_dot_gitconfig.local`) + one source-tree deletion (`home/scripts/generate-gpg-key.sh`). Both commits are structural — no behavioral change on machines until Plan 1-04's `setup-credentials.sh` runs there.
+Output: One template rewrite (`modify_dot_gitconfig.local`) + one source-tree deletion (`home/scripts/generate-gpg-key.sh`). Both commits are structural — no behavioral change on machines until Plan 1-04a/1-04b's `setup-credentials.sh` runs there.
 </objective>
 
 <execution_context>
@@ -79,7 +79,7 @@ Output: One template rewrite (`modify_dot_gitconfig.local`) + one source-tree de
   wsl = {{ $wsl }}
 ```
 
-<!-- .signingkey is NOT yet in [data] — Plan 1-04's setup-credentials.sh writes it idempotently after key generation. -->
+<!-- .signingkey is NOT yet in [data] — Plan 1-04b's setup-credentials.sh write_signingkey() writes it idempotently after key generation. -->
 <!-- Until then, .signingkey is unset and template MUST handle that path. -->
 
 <!-- TARGET shape (recommended in 1-RESEARCH.md Pattern 1, slightly hardened): -->
@@ -102,6 +102,9 @@ Output: One template rewrite (`modify_dot_gitconfig.local`) + one source-tree de
   gpgsign = true
 {{- end }}
 ```
+
+<!-- SEC-15 contract (canonical from Plan 1-01 interfaces block): -->
+<!-- Verify commands in this plan use the THREE-clause regex: \bbw \b|bitwardenAttachment|\{\{ *bitwarden -->
 </interfaces>
 </context>
 
@@ -146,7 +149,7 @@ cat /tmp/test-with-sign.tmpl home/modify_dot_gitconfig.local | chezmoi execute-t
 
 Both renders are part of the verify automated command — they must produce the expected presence/absence of `signingkey` and `[commit]`.
 
-Do NOT modify `home/.chezmoi.toml.tmpl` — `.signingkey` is added at runtime by `setup-credentials.sh` (Plan 1-04), not at init time.
+Do NOT modify `home/.chezmoi.toml.tmpl` — `.signingkey` is added at runtime by `setup-credentials.sh` (Plan 1-04b), not at init time.
   </action>
   <verify>
     <automated>cd /Users/jteague/.local/share/chezmoi && grep -q "chezmoi:modify-template" home/modify_dot_gitconfig.local && grep -c "\.signingkey" home/modify_dot_gitconfig.local | grep -qE "^[2-9]$|^[1-9][0-9]+$" && ! grep -q "output.*generate-gpg-key" home/modify_dot_gitconfig.local && ! grep -q "data-name\|data-email\|data-helper" home/modify_dot_gitconfig.local && chezmoi execute-template --init --promptString name=Test --promptString email=t@e.com --promptBool personal=false --promptChoice role=dev < home/modify_dot_gitconfig.local > /tmp/render-nosign.txt 2>&1 && grep -q "name = Test" /tmp/render-nosign.txt && grep -q "email = t@e.com" /tmp/render-nosign.txt && ! grep -q "signingkey" /tmp/render-nosign.txt && ! grep -q "\[commit\]" /tmp/render-nosign.txt</automated>
@@ -155,7 +158,7 @@ Do NOT modify `home/.chezmoi.toml.tmpl` — `.signingkey` is added at runtime by
 </task>
 
 <task type="auto">
-  <name>Task 2: Delete home/scripts/generate-gpg-key.sh and verify quick.sh SEC-05 gates green</name>
+  <name>Task 2: Delete home/scripts/generate-gpg-key.sh and verify file-state directly</name>
   <files>home/scripts/generate-gpg-key.sh</files>
   <action>
 Delete `home/scripts/generate-gpg-key.sh` from the source tree. Use `git rm home/scripts/generate-gpg-key.sh` so the deletion is tracked.
@@ -174,17 +177,20 @@ rm -f ~/scripts/generate-gpg-key.sh  # destination cleanup if file present
 
 This is NOT something Plan 1-02 executes — it's a documented operator handoff in the commit message. Plan 1-02 is autonomous and edits only the source tree.
 
-After deletion, run the Phase 1 quick.sh harness and confirm both SEC-05 gates pass:
-- `assert_dir_missing_strict` on `home/scripts/generate-gpg-key.sh` → GREEN
-- `assert_no_grep "output.*generate-gpg-key"` on `home/modify_dot_gitconfig.local` → GREEN
-- `assert_grep "\.signingkey"` on `home/modify_dot_gitconfig.local` → GREEN
+After deletion, the verify command uses DIRECT FILE-STATE ASSERTIONS (not harness-stdout parsing). The three SEC-05 truths this plan owns are observable on the source tree itself, without invoking `quick.sh`:
 
-The other gates (SEC-02, SEC-07, SEC-11, SEC-13, SEC-15) remain RED/PENDING — those are owned by Plans 1-03 and 1-04.
+- `! test -e home/scripts/generate-gpg-key.sh` — the script is gone
+- `grep -q "\.signingkey" home/modify_dot_gitconfig.local` — the template references the chezmoi data field
+- `! grep -q "output" home/modify_dot_gitconfig.local` — no `output` shell-out remains
+
+Additionally, `quick.sh` is invoked as a sanity check (no parsing of its stdout — only its exit-or-continue), and `lib.sh` interfaces guarantee these three assertions land on dedicated PASS rows in its output. The plan's contract with downstream waves is the file state, not the harness phrasing.
+
+The other gates (SEC-02, SEC-07, SEC-08, SEC-11, SEC-13, SEC-15) remain RED/PENDING after this plan — those are owned by Plans 1-03, 1-04a, and 1-04b.
   </action>
   <verify>
-    <automated>cd /Users/jteague/.local/share/chezmoi && ! test -e home/scripts/generate-gpg-key.sh && bash .planning/phases/1-credential-plane/checks/quick.sh 2>&1 | grep -E "✓|pass" | grep -qE "signingkey|generate-gpg|gitconfig" && bash .planning/phases/1-credential-plane/checks/quick.sh 2>&1 | grep -q "directory absent.*generate-gpg-key.sh"</automated>
+    <automated>cd /Users/jteague/.local/share/chezmoi && ! test -e home/scripts/generate-gpg-key.sh && grep -q "\.signingkey" home/modify_dot_gitconfig.local && ! grep -q "output" home/modify_dot_gitconfig.local && ! grep -q "data-name\|data-email\|data-helper" home/modify_dot_gitconfig.local && bash .planning/phases/1-credential-plane/checks/quick.sh >/dev/null 2>&1; true</automated>
   </verify>
-  <done>generate-gpg-key.sh removed from source tree via git rm; SEC-05 (a) and (b) gates in quick.sh both report PASS; commit message documents per-machine entryState cleanup procedure for operator post-merge handoff.</done>
+  <done>generate-gpg-key.sh removed from source tree via git rm; file-state assertions confirm SEC-05(a) (script absent) and SEC-05(b) (template references .signingkey, no `output` call); quick.sh sanity-invocation completes (exit code not asserted — file-state is the contract); commit message documents per-machine entryState cleanup procedure for operator post-merge handoff.</done>
 </task>
 
 </tasks>
@@ -195,11 +201,11 @@ After both tasks:
 - `grep -q "\.signingkey" home/modify_dot_gitconfig.local` (data-driven)
 - `! grep -q "output" home/modify_dot_gitconfig.local` (no script shell-out)
 - `! grep -q "data-name\|data-email\|data-helper" home/modify_dot_gitconfig.local` (no leftover placeholders)
-- `bash .planning/phases/1-credential-plane/checks/quick.sh 2>&1 | grep -A1 "SEC-05\|gitconfig"` shows PASS rows for the SEC-05 gates
+- `STRICT=1 bash .planning/phases/1-credential-plane/checks/quick.sh` still exits non-zero (other waves' gates still RED — this plan only owns SEC-05)
 </verification>
 
 <success_criteria>
-- SEC-05 (a) and (b) gates in `checks/quick.sh` turn GREEN
+- SEC-05 (a) and (b) file-state contracts MET on source tree (direct file assertions, not harness-stdout phrasing)
 - `home/modify_dot_gitconfig.local` renders cleanly via `chezmoi execute-template` without signingkey present (graceful Stage-1 path)
 - Commit body documents the per-machine entryState cleanup ritual (Mac personal + Mac work post-merge)
 - Zero modifications to `home/.chezmoi.toml.tmpl` (signingkey is runtime-added, not init-time)
@@ -207,5 +213,5 @@ After both tasks:
 </success_criteria>
 
 <output>
-After completion, create `.planning/phases/1-credential-plane/1-02-SUMMARY.md` covering: before/after diff of modify_dot_gitconfig.local, deletion record + git SHA for generate-gpg-key.sh, the entryState cleanup ritual handoff for operator (Mac personal + Mac work paths), and an explicit "until Plan 1-04 lands on a machine, .signingkey is unset and signed-commit is OFF by design" note.
+After completion, create `.planning/phases/1-credential-plane/1-02-SUMMARY.md` covering: before/after diff of modify_dot_gitconfig.local, deletion record + git SHA for generate-gpg-key.sh, the entryState cleanup ritual handoff for operator (Mac personal + Mac work paths), and an explicit "until Plan 1-04b lands on a machine, .signingkey is unset and signed-commit is OFF by design" note.
 </output>

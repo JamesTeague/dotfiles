@@ -3,24 +3,24 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: "Phase 0 COMPLETE 2026-06-03 — both Macs cutover GREEN. Mac personal: cutover succeeded on second attempt after 90e9826 (brew template heredoc EOF-at-col-0 fix); chezmoi diff -x externals empty, dry-run no <no value>, ~/bin gone, 5 utils in ~/.local/bin, mas guard skipped Brother iPrint&Scan. Mac work: cutover Step 7 false-failed on gpg stderr noise (keyboxd version warning) — actual stdout diff was empty, Step 8 verified clean manually, NODE_EXTRA_CA_CERTS migration confirmed. Three Phase 0 follow-up fixes landed during cutover: 90e9826 (heredoc), c8a3c30 (cask renames mullvadvpn→mullvad-vpn, handbrake→handbrake-app + § 10.4.6 convention), and the Step 7 stderr-capture fix + § 10.4.7 convention in this commit. Phase 1 (VaultWarden + Secret Plane + Bootstrap Kit) is next."
-last_updated: "2026-06-03T23:30Z"
+stopped_at: "Phase 1 CONTEXT captured 2026-06-04 with architecture pivot (`phases/1-credential-plane/1-CONTEXT.md`). Per-machine SSH+GPG keypair model adopted; VaultWarden moves off the apply-time critical path; bootstrap kit deleted from scope; repo stays public. ROADMAP.md Phase 1 entry rewritten to match. SEC-01, SEC-03, SEC-04, SEC-06 + BOOT-01..05 removed from Phase 1 requirements by pivot. STATE.md Locked Decisions updated for the reversals (canonical→per-machine GPG, private→public repo, bootstrap-kit deletion). Next: `/gsd:plan-phase 1`. Discussion-first session also set up a Parallels macOS VM (10.211.55.4, snapshot `vanilla-fresh-boot-pre-chezmoi`) as the Phase 1 verification target."
+last_updated: "2026-06-28T14:46Z"
 progress:
   total_phases: 6
   completed_phases: 2
-  total_plans: 9
+  total_plans: 15
   completed_plans: 9
 ---
 
 # Project State: chezmoi Modernization
 
-**Last updated:** 2026-06-03
+**Last updated:** 2026-06-28
 
 ## Project Reference
 
-**Core Value:** A new machine — any OS in the fleet — can be set up day-1 via a single `chezmoi init --apply` flow (plus VaultWarden login + GitHub PAT for HTTPS clone bootstrap) and arrive at a fully-configured, identity-signed, role-appropriate state without artisanal touch-up.
+**Core Value:** A new machine — any OS in the fleet — can be set up day-1 via a single `chezmoi init --apply` flow plus one explicit credential-bootstrap script, and arrive at a fully-configured, identity-signed, role-appropriate state without artisanal touch-up. Stage 1 (`chezmoi init --apply`) is auth-free against a public repo; Stage 2 (`setup-credentials.sh`) generates per-machine keys locally and registers them with the relevant services.
 
-**Current Focus:** **Phase 0 COMPLETE** — both Macs cutover GREEN 2026-06-03. Next: `/gsd:plan-phase 1` (VaultWarden + Secret Plane + Bootstrap Kit).
+**Current Focus:** **Phase 1 CONTEXT captured 2026-06-04** (architecture pivoted). Next: `/gsd:plan-phase 1` against `phases/1-credential-plane/1-CONTEXT.md`.
 
 ## Current Position
 
@@ -55,19 +55,19 @@ progress:
 ### Locked Decisions (from PROJECT.md + research)
 - Stay on chezmoi (Nix rejected — no native Windows)
 - 3-role taxonomy: `dev` / `gaming` / `lite`; `personal` is orthogonal flag (not absorbed into role)
-- VaultWarden via Cloudflare tunnel + chezmoi `bitwarden*` template functions (NOT `bitwardenSecrets` — doesn't work against VaultWarden)
-- Per-purpose SSH keys (personal-github + work-github minimum)
-- Canonical GPG (vs per-machine generation); `generate-gpg-key.sh` to be DELETED in Phase 0
+- VaultWarden via Cloudflare tunnel — self-hosted, runtime password vault accessed via `bw` CLI. NOT used in chezmoi templates at apply time (pivoted 2026-06-04). `bitwardenSecrets` was already known not to work against VaultWarden; `bitwarden*` template functions are no longer used at all in the new architecture.
+- Per-purpose SSH keys (purpose-named: `personal`, `work`; host aliases like `github-personal`, `gitlab-bluebeam`)
+- **Per-machine GPG and SSH keypairs** (pivoted 2026-06-04 from canonical-GPG-in-VW). Generated locally on each machine by `setup-credentials.sh`, registered with services via `gh ssh-key add` / `gh gpg-key add`. `generate-gpg-key.sh` DELETED in Phase 1 (SC #5 carryover from Phase 0).
 - Linux package management: apt + mise (NOT Linux Homebrew)
 - Hybrid migration: Phase 0 refactor branch (atomic) → additive phases 1-4
-- Repo is private (was public) — unlocks BW flexibility + encrypted bootstrap kit
+- **Repo is PUBLIC** (pivoted 2026-06-04 from "going private"). With per-machine keypair architecture and no encrypted bootstrap kit, there's no longer a privacy gain from going private; public enables auth-free Stage 1 bootstrap.
 - Non-standard phase numbering retained: 0.5, 0, 1, 2, 3, 4
-- Bootstrap kit lives in Phase 1, NOT Phase 4
+- **No bootstrap kit** (pivoted 2026-06-04). Regenerable credentials don't need disaster-recovery encryption; kit complexity deleted from Phase 1 scope.
 - PowerShell 7+ only (5.1 explicitly out of scope)
 
 ### Critical Pitfalls Baked Into Phases
-- Phase 0: `promptStringOnce` everywhere + per-machine cutover ritual + `generate-gpg-key.sh` DELETED (not renamed)
-- Phase 1: `bw` CLI version pinned against VaultWarden 1.36.0 + offline known-good binary in bootstrap kit + vault-offline drill executed before phase close
+- Phase 0: `promptStringOnce` everywhere + per-machine cutover ritual + `generate-gpg-key.sh` DELETED (not renamed) — DEFERRED to Phase 1 per Phase 0 CONTEXT amendments
+- Phase 1: `bw` CLI version pinned against VaultWarden 1.36.0 (Pitfall 3 mitigation survives the pivot — `bw` still used for runtime password lookup); Pitfall 10 (VW unreachable bricks apply) **structurally eliminated** by removing VW from apply path; structural VW-independence check replaces runtime vault-offline drill
 - Phase 2: pwsh 7+ prerequisite + `[interpreters.ps1]` with `-ExecutionPolicy Bypass` + elevated first-run + singular `chezmoi:template:line-ending=native` directive on every `.ps1.tmpl`
 - Phase 3: explicit `appendWindowsPath` decision + SSH keys in WSL native fs (not `/mnt/c`) + canonical Gpg4win agent rule + `wsl --version` gate as first bootstrap step
 

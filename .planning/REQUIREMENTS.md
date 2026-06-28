@@ -1,7 +1,8 @@
 # Requirements: chezmoi Modernization
 
 **Defined:** 2026-05-27
-**Core Value:** A new machine — any OS in the fleet — can be set up day-1 via a single `chezmoi init --apply` flow (plus VaultWarden login + GitHub PAT for HTTPS clone bootstrap) and arrive at a fully-configured, identity-signed, role-appropriate state without artisanal touch-up.
+**Last amended:** 2026-06-04 (Phase 1 architecture pivot — see SUPERSEDED annotations in Secrets & Identity and Bootstrap Kit sections)
+**Core Value:** A new machine — any OS in the fleet — can be set up day-1 via a single `chezmoi init --apply` flow plus one explicit credential-bootstrap script, and arrive at a fully-configured, identity-signed, role-appropriate state without artisanal touch-up. Stage 1 (`chezmoi init --apply`) is auth-free against a public repo; Stage 2 (`setup-credentials.sh`) generates per-machine keys locally and registers them with the relevant services.
 
 ## v1 Requirements
 
@@ -26,24 +27,26 @@
 
 ### Secrets & Identity
 
-- [ ] **SEC-01**: chezmoi config sets `bitwarden.unlock = "auto"` (eliminates manual `BW_SESSION` ritual)
+- [ ] ~~**SEC-01**: chezmoi config sets `bitwarden.unlock = "auto"` (eliminates manual `BW_SESSION` ritual)~~ **[SUPERSEDED 2026-06-04 — see ROADMAP Phase 1 pivot]** No inline VW unlock in apply path; VW is off the credential-plane critical path.
 - [ ] **SEC-02**: `bw` CLI version pinned in `packages.yaml` against VaultWarden 1.36.0 (prevents CLI/server drift breakage)
-- [ ] **SEC-03**: Canonical GPG signing key retrieved from VaultWarden via `bitwardenAttachment` template function
-- [ ] **SEC-04**: GPG ownertrust imported via `run_once_after_*.sh.tmpl` so signing works post-import
-- [ ] **SEC-05**: `home/scripts/generate-gpg-key.sh` DELETED (not renamed — avoids re-fire of `run_once_` on existing machines generating new canonical key)
-- [ ] **SEC-06**: Per-purpose SSH keys retrieved from VaultWarden (`personal-github` + `work-github` minimum)
-- [ ] **SEC-07**: SSH `~/.ssh/config` uses Host aliases (`github-personal`, `github-work`) to disambiguate per-purpose keys
+- [ ] ~~**SEC-03**: Canonical GPG signing key retrieved from VaultWarden via `bitwardenAttachment` template function~~ **[SUPERSEDED 2026-06-04 — see ROADMAP Phase 1 pivot]** Per-machine GPG generated locally by `setup-credentials.sh`; no canonical key, no VW retrieval.
+- [ ] ~~**SEC-04**: GPG ownertrust imported via `run_once_after_*.sh.tmpl` so signing works post-import~~ **[SUPERSEDED 2026-06-04 — see ROADMAP Phase 1 pivot]** Locally-generated GPG keys are trusted by their own gpg-agent without ownertrust ceremony.
+- [ ] **SEC-05**: `home/scripts/generate-gpg-key.sh` DELETED (not renamed — avoids re-fire of `run_once_` on existing machines generating new canonical key) — *carryover from Phase 0 to Phase 1; deletion lands together with `modify_dot_gitconfig.local` rewrite*
+- [ ] ~~**SEC-06**: Per-purpose SSH keys retrieved from VaultWarden (`personal-github` + `work-github` minimum)~~ **[SUPERSEDED 2026-06-04 — see ROADMAP Phase 1 pivot]** Per-machine SSH keys generated locally by `setup-credentials.sh`; registered via `gh ssh-key add`.
+- [ ] **SEC-07**: SSH `~/.ssh/config` uses Host aliases (`github-personal` on every dev-role machine; `gitlab-bluebeam` on work Mac) to disambiguate per-purpose keys — *example aliases amended 2026-06-04 (was `github-work`); Bluebeam uses GitLab not GitHub for work git, and work key generation itself is out of script scope*
 - [ ] **SEC-08**: chezmoi repo's git remote rewritten to use `git@github-personal:JamesTeague/dotfiles.git`
-- [ ] **SEC-09**: User can `git commit -S` and the commit is signed with the canonical GPG identity on first machine setup
+- [ ] **SEC-09**: User can `git commit -S` and the commit is signed on first machine setup — *2026-06-04 amendment: "canonical GPG identity" dropped; signed commit is now under a per-machine GPG identity registered to the user's GitHub account*
 - [ ] **SEC-10**: User can `ssh -T git@github-personal` and authenticate as the personal identity on first setup
 
-### Bootstrap Kit (Disaster Recovery)
+### Bootstrap Kit (Disaster Recovery) — SUPERSEDED 2026-06-04
 
-- [ ] **BOOT-01**: `bootstrap/encrypted_essentials.age` exists containing recovery essentials (canonical GPG key, primary SSH key, GitHub PAT)
-- [ ] **BOOT-02**: age identity stored OFF-repo (paper backup + hardware token strategy documented)
-- [ ] **BOOT-03**: Offline known-good `bw` binary embedded in bootstrap kit for VaultWarden-API-compat failure scenarios
-- [ ] **BOOT-04**: Bootstrap recovery procedure documented and exercised (vault-offline drill executed once before phase close)
-- [ ] **BOOT-05**: `chezmoi apply` with VaultWarden unreachable either falls back to bootstrap kit or fails loud with actionable message (no silent failure)
+**Entire section superseded** by the 2026-06-04 architecture pivot. Per-machine regenerable keypairs (SSH + GPG) eliminate the disaster-recovery scenario the kit was designed for: if VW is unreachable AND a new machine needs to bootstrap, the script simply generates new keys locally and re-registers them. There is no centrally-stored regenerable material to recover. See ROADMAP.md Phase 1 detail and `phases/1-credential-plane/1-CONTEXT.md` for the architecture and tradeoffs.
+
+- [ ] ~~**BOOT-01**: `bootstrap/encrypted_essentials.age` exists containing recovery essentials (canonical GPG key, primary SSH key, GitHub PAT)~~ **[SUPERSEDED 2026-06-04]**
+- [ ] ~~**BOOT-02**: age identity stored OFF-repo (paper backup + hardware token strategy documented)~~ **[SUPERSEDED 2026-06-04]**
+- [ ] ~~**BOOT-03**: Offline known-good `bw` binary embedded in bootstrap kit for VaultWarden-API-compat failure scenarios~~ **[SUPERSEDED 2026-06-04]** Pitfall 3 mitigation survives via `bw` formula version pin in `packages.yaml` (SEC-02) — does not require a kit-embedded binary.
+- [ ] ~~**BOOT-04**: Bootstrap recovery procedure documented and exercised (vault-offline drill executed once before phase close)~~ **[SUPERSEDED 2026-06-04]** Replaced by structural VW-independence check (grep templates for `bitwarden*` / `bw` invocations → assert zero matches in apply-time paths).
+- [ ] ~~**BOOT-05**: `chezmoi apply` with VaultWarden unreachable either falls back to bootstrap kit or fails loud with actionable message (no silent failure)~~ **[SUPERSEDED 2026-06-04]** `chezmoi apply` is now structurally independent of VW reachability.
 
 ### Linux Package Management
 
@@ -160,21 +163,21 @@
 | TAX-06 | Phase 0 | Pending |
 | TAX-07 | Phase 0 | Pending |
 | TAX-08 | Phase 0 | Pending |
-| SEC-01 | Phase 1 | Pending |
+| SEC-01 | Phase 1 | Superseded 2026-06-04 |
 | SEC-02 | Phase 1 | Pending |
-| SEC-03 | Phase 1 | Pending |
-| SEC-04 | Phase 1 | Pending |
-| SEC-05 | Phase 0 | Pending |
-| SEC-06 | Phase 1 | Pending |
-| SEC-07 | Phase 1 | Pending |
+| SEC-03 | Phase 1 | Superseded 2026-06-04 |
+| SEC-04 | Phase 1 | Superseded 2026-06-04 |
+| SEC-05 | Phase 1 (carryover from Phase 0) | Pending |
+| SEC-06 | Phase 1 | Superseded 2026-06-04 |
+| SEC-07 | Phase 1 | Pending (amended 2026-06-04) |
 | SEC-08 | Phase 1 | Pending |
-| SEC-09 | Phase 1 | Pending |
+| SEC-09 | Phase 1 | Pending (amended 2026-06-04) |
 | SEC-10 | Phase 1 | Pending |
-| BOOT-01 | Phase 1 | Pending |
-| BOOT-02 | Phase 1 | Pending |
-| BOOT-03 | Phase 1 | Pending |
-| BOOT-04 | Phase 1 | Pending |
-| BOOT-05 | Phase 1 | Pending |
+| BOOT-01 | Phase 1 | Superseded 2026-06-04 |
+| BOOT-02 | Phase 1 | Superseded 2026-06-04 |
+| BOOT-03 | Phase 1 | Superseded 2026-06-04 |
+| BOOT-04 | Phase 1 | Superseded 2026-06-04 |
+| BOOT-05 | Phase 1 | Superseded 2026-06-04 |
 | LNX-01 | Phase 3 | Pending |
 | LNX-02 | Phase 3 | Pending |
 | LNX-03 | Phase 3 | Pending |

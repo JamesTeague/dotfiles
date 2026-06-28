@@ -49,10 +49,12 @@ must_haves:
 <objective>
 Land two structural artifacts:
 
-1. `home/private_dot_ssh/config.tmpl` — chezmoi template for the SSH config with purpose-based Host aliases (`github-personal` always present; `gitlab-bluebeam` gated on file-presence of `~/.ssh/work_ed25519` since Phase 0 did NOT introduce an `employer` chezmoi data field — verified open-question from planning context).
+1. `home/private_dot_ssh/config.tmpl` — chezmoi template for the SSH config with purpose-based Host aliases (`github-personal` always present; `gitlab-bluebeam` gated on file-presence of `~/.ssh/work_ed25519`).
 2. `home/.chezmoidata/packages.yaml` amendment + new `docs/credential-plane.md` — adds the `bitwarden-cli` brew formula with a version-pin comment referencing VaultWarden 1.36.0 + Pitfall 3 mitigation, and creates the operator-facing doc that explains the two-stage bootstrap, the brew-extract pin procedure, the rotation playbook, and the stale-key cleanup procedure.
 
-Purpose: Plan 1-04's setup-credentials.sh writes keys to `~/.ssh/personal_ed25519` and writes `signingkey` to chezmoi data — the SSH config template makes those keys USABLE for git ops (SEC-07). Plan 1-04 also runs `bw` at runtime for password lookups (NOT in apply path) — the formula pin (SEC-02) prevents drift from breaking Teague's password workflow. The two artifacts are independent of each other; both depend only on Plan 1-01's harness.
+**Divergence flag (operator-review during execution):** CONTEXT.md's SSH-config example sketched `gitlab-bluebeam` gated on `.employer == "bluebeam"` chezmoi data. Phase 0 did NOT introduce an `employer` data field (verified by reading `home/.chezmoi.toml.tmpl` during planning — the `[data]` section contains `personal`, `name`, `email`, `role`, `wsl` only). Per 1-RESEARCH Open Question 8 resolution, this plan uses **file-presence gating on `~/.ssh/work_ed25519`** as the fallback mechanism. Operator confirms this divergence during execution checkpoint or escalates back to discussion if an `employer` data field is preferred (in which case Phase 0 would need amendment first).
+
+Purpose: Plan 1-04b's setup-credentials.sh writes keys to `~/.ssh/personal_ed25519` and writes `signingkey` to chezmoi data — the SSH config template makes those keys USABLE for git ops (SEC-07). Plan 1-04b also runs `bw` at runtime for password lookups (NOT in apply path) — the formula pin (SEC-02) prevents drift from breaking Teague's password workflow. The two artifacts are independent of each other; both depend only on Plan 1-01's harness.
 
 Output: One new template, one packages.yaml edit (one line added + one comment), one new documentation file. SEC-02 and SEC-07 gates in checks/quick.sh turn GREEN.
 </objective>
@@ -91,6 +93,11 @@ Recommended SSH config template body (adapted from 1-RESEARCH.md Pattern 5 with 
 The template emits an always-on `Host github-personal` block and a file-presence-gated `Host gitlab-bluebeam` block. Identity file paths are literal in the rendered output. `IdentitiesOnly yes` is set on both blocks (Pitfall 6 mitigation).
 
 packages.yaml current relevant section (excerpt for placement reference) — `roles.dev.core.brews` contains an alphabetized list including `gh`, `gnupg`, `jq`. The new `bitwarden-cli` entry goes into the same list with an inline PIN comment.
+
+<!-- SEC-15 contract (canonical from Plan 1-01 interfaces block): -->
+<!-- All SEC-15 verify commands use the THREE-clause regex: -->
+<!--   \bbw \b|bitwardenAttachment|\{\{ *bitwarden  -->
+<!-- Dropping any clause violates the SEC-15 contract. -->
 </interfaces>
 </context>
 
@@ -110,7 +117,7 @@ Write `home/private_dot_ssh/config.tmpl` with this exact structure:
 
 Specific requirements:
 1. The `Host github-personal` block is ALWAYS rendered (every dev-role machine — see SEC-07 spec).
-2. The `Host gitlab-bluebeam` block is gated on file-presence of `~/.ssh/work_ed25519`. Rationale: Phase 0 did NOT add an `employer` chezmoi data field (verified by reading `home/.chezmoi.toml.tmpl` during planning); file-presence is the fallback per the planning-context open-question resolution.
+2. The `Host gitlab-bluebeam` block is gated on file-presence of `~/.ssh/work_ed25519`. **Divergence note (carry into commit body):** CONTEXT.md sketched `.employer == "bluebeam"` data-field gating. Phase 0 did not introduce that field, so file-presence is the fallback per 1-RESEARCH Open Question 8. If the operator prefers a data-field gate, escalate before merging — Phase 0 amendment is required first.
 3. `IdentitiesOnly yes` MUST appear in both blocks (Pitfall 6 mitigation per 1-RESEARCH.md — prevents ssh-agent from offering every loaded key and hitting MaxAuthTries).
 4. NO `bw` / `bitwarden` references anywhere in this template (SEC-15 gate).
 5. NO interactive prompts or `output` shell-outs (this is a pure data-driven template).
@@ -118,9 +125,9 @@ Specific requirements:
 Confirm the template renders cleanly via `chezmoi execute-template --init` against synthetic prompt data. Expected output: a config containing the `Host github-personal` block. Whether `gitlab-bluebeam` appears depends on whether `~/.ssh/work_ed25519` exists on the planner machine (Mac personal: no; Mac work: yes). The verify command below tests only the always-present block.
   </action>
   <verify>
-    <automated>cd /Users/jteague/.local/share/chezmoi && test -f home/private_dot_ssh/config.tmpl && chezmoi execute-template --init --promptString name=Test --promptString email=t@e.com --promptBool personal=true --promptChoice role=dev < home/private_dot_ssh/config.tmpl > /tmp/ssh-render.txt 2>&1 && grep -q "Host github-personal" /tmp/ssh-render.txt && grep -q "IdentityFile ~/.ssh/personal_ed25519" /tmp/ssh-render.txt && grep -q "IdentitiesOnly yes" /tmp/ssh-render.txt && ! grep -E "\\bbw \\b|bitwardenAttachment" home/private_dot_ssh/config.tmpl</automated>
+    <automated>cd /Users/jteague/.local/share/chezmoi && test -f home/private_dot_ssh/config.tmpl && chezmoi execute-template --init --promptString name=Test --promptString email=t@e.com --promptBool personal=true --promptChoice role=dev < home/private_dot_ssh/config.tmpl > /tmp/ssh-render.txt 2>&1 && grep -q "Host github-personal" /tmp/ssh-render.txt && grep -q "IdentityFile ~/.ssh/personal_ed25519" /tmp/ssh-render.txt && grep -q "IdentitiesOnly yes" /tmp/ssh-render.txt && ! grep -E "\\bbw \\b|bitwardenAttachment|\\{\\{ *bitwarden" home/private_dot_ssh/config.tmpl</automated>
   </verify>
-  <done>Template renders cleanly with github-personal block always present; gitlab-bluebeam block conditionally emitted based on `~/.ssh/work_ed25519` presence; IdentitiesOnly yes set on both blocks; no VW references introduced; SEC-07 gate in quick.sh turns GREEN.</done>
+  <done>Template renders cleanly with github-personal block always present; gitlab-bluebeam block conditionally emitted based on `~/.ssh/work_ed25519` presence; IdentitiesOnly yes set on both blocks; SEC-15 three-clause regex returns zero matches on the template; SEC-07 gate in quick.sh turns GREEN; divergence note (CONTEXT employer-data-field vs file-presence) carried into commit body for operator review.</done>
 </task>
 
 <task type="auto">
@@ -158,12 +165,12 @@ Document that this is one-time-per-machine setup; pin bumps in lockstep with VW 
 
 Length target: 80-150 lines. Operator-facing tone (procedures + commands first; rationale second). The file is the single authoritative reference for credential plane operations; commits to bw pin / rotation flag behavior MUST be reflected here in the same change.
 
-Confirm the SEC-15 grep still passes — neither file change introduces any apply-time `bw` template call.
+Confirm the SEC-15 three-clause regex still passes — neither file change introduces any apply-time `bw` template call.
   </action>
   <verify>
     <automated>cd /Users/jteague/.local/share/chezmoi && grep -q "bitwarden-cli" home/.chezmoidata/packages.yaml && grep -q "PIN" home/.chezmoidata/packages.yaml && grep -q "credential-plane.md" home/.chezmoidata/packages.yaml && test -f docs/credential-plane.md && wc -l docs/credential-plane.md | awk '{exit ($1 >= 80) ? 0 : 1}' && grep -q "VaultWarden 1.36.0" docs/credential-plane.md && grep -q "brew extract" docs/credential-plane.md && grep -q "rotate-ssh\|rotate-gpg\|rotate-all" docs/credential-plane.md && grep -q "gh ssh-key list" docs/credential-plane.md && grep -q "vanilla-fresh-boot-pre-chezmoi" docs/credential-plane.md && ! grep -rEn "\\bbw \\b|bitwardenAttachment|\\{\\{ *bitwarden" home/ --include='*.tmpl'</automated>
   </verify>
-  <done>packages.yaml has bitwarden-cli formula with PIN comment referencing VaultWarden 1.36.0 and docs/credential-plane.md; docs/credential-plane.md exists with all seven required sections and at least 80 lines; SEC-02 gate in quick.sh turns GREEN; SEC-15 structural grep unchanged (no new apply-time VW calls introduced).</done>
+  <done>packages.yaml has bitwarden-cli formula with PIN comment referencing VaultWarden 1.36.0 and docs/credential-plane.md; docs/credential-plane.md exists with all seven required sections and at least 80 lines; SEC-02 gate in quick.sh turns GREEN; SEC-15 three-clause structural grep returns zero matches in `*.tmpl` files (no new apply-time VW calls introduced).</done>
 </task>
 
 </tasks>
@@ -174,18 +181,19 @@ After both tasks:
 - `grep -q "bitwarden-cli" home/.chezmoidata/packages.yaml` and the line includes the PIN comment with VW 1.36.0 reference
 - `test -f docs/credential-plane.md` with 80+ lines and all seven sections
 - `bash .planning/phases/1-credential-plane/checks/quick.sh` shows SEC-02 and SEC-07 gates as PASS
-- SEC-15 structural VW-independence grep remains zero matches in `*.tmpl` files
+- SEC-15 three-clause structural grep (`\bbw \b|bitwardenAttachment|\{\{ *bitwarden`) returns zero matches in `*.tmpl` files
 </verification>
 
 <success_criteria>
 - SEC-02 and SEC-07 gates in checks/quick.sh turn GREEN
 - SSH config template renders Host github-personal unconditionally with IdentitiesOnly yes
 - SSH config template renders Host gitlab-bluebeam ONLY when ~/.ssh/work_ed25519 exists on the target machine
+- Divergence from CONTEXT example (file-presence vs `.employer` field) explicitly flagged for operator review in objective + commit body
 - docs/credential-plane.md is the single authoritative ops reference for the credential plane
 - bitwarden-cli entry in packages.yaml carries the PIN comment but uses the unversioned formula name (brew-extract ritual is documented, not scripted)
-- No new bw/bitwardenAttachment template calls introduced
+- No new bw/bitwardenAttachment template calls introduced (canonical three-clause regex green)
 </success_criteria>
 
 <output>
-After completion, create `.planning/phases/1-credential-plane/1-03-SUMMARY.md` covering: the rendered SSH config shape (both blocks shown), the chosen file-presence gating mechanism + why (Phase 0 lacks employer field), the bitwarden-cli PIN comment as committed, the seven docs/credential-plane.md sections with line counts, and a confirmation that the SEC-15 structural grep gate remains GREEN.
+After completion, create `.planning/phases/1-credential-plane/1-03-SUMMARY.md` covering: the rendered SSH config shape (both blocks shown), the chosen file-presence gating mechanism + why (Phase 0 lacks employer field) + the divergence-flag operator-review outcome, the bitwarden-cli PIN comment as committed, the seven docs/credential-plane.md sections with line counts, and a confirmation that the SEC-15 three-clause structural grep gate remains GREEN.
 </output>

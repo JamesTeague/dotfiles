@@ -31,10 +31,10 @@ must_haves:
       provides: "Shared assertion helpers (pass/fail/pending/assert_file/assert_grep/summary)"
       contains: "LIB_SH_LOADED"
     - path: ".planning/phases/1-credential-plane/checks/quick.sh"
-      provides: "Fast structural gates for SEC-02/05/07/11/13(presence)/15"
+      provides: "Fast structural gates for SEC-02/05/07/08/11/13(presence)/15"
       min_lines: 60
     - path: ".planning/phases/1-credential-plane/checks/full.sh"
-      provides: "Quick + VM-driven smokes (SEC-08/09/10/12/13/14/16) with --no-vm fallback"
+      provides: "Quick + VM-driven smokes (SEC-09/10/12/13/14/16) with --no-vm fallback"
       min_lines: 40
     - path: ".planning/phases/1-credential-plane/checks/vm-e2e.sh"
       provides: "Composite VM orchestration: snapshot restore + Stage 1 + Stage 2 + verify + idempotency"
@@ -43,7 +43,7 @@ must_haves:
       provides: "prlctl wrappers: availability check, snapshot UUID resolution, restore + wait-for-boot"
     - path: ".planning/REQUIREMENTS.md"
       provides: "SEC-11..16 enumerated with descriptions and traceability rows"
-      contains: "SEC-16"
+      contains: "SEC-11.*SEC-12.*SEC-13.*SEC-14.*SEC-15.*SEC-16"
   key_links:
     - from: ".planning/phases/1-credential-plane/checks/quick.sh"
       to: ".planning/phases/1-credential-plane/checks/lib.sh"
@@ -115,6 +115,28 @@ And in Traceability table:
 ```markdown
 | SEC-NN | Phase 1 | Pending |
 ```
+
+<!-- CANONICAL CONTRACT: SEC-15 structural VW-independence regex -->
+<!-- This is load-bearing for all SEC-15 verify commands across Plans 1-01..1-05. -->
+<!-- Use these THREE clauses verbatim in every SEC-15 grep assertion: -->
+
+```
+\bbw \b|bitwardenAttachment|\{\{ *bitwarden
+```
+
+In bash single-quoted strings: `'\bbw \b|bitwardenAttachment|\{\{ *bitwarden'`
+In bash double-quoted strings (escape braces): `"\\bbw \\b|bitwardenAttachment|\\{\\{ *bitwarden"`
+
+Clause 1 (`\bbw \b`): catches the `bw` CLI being invoked (word-boundary disambiguates from "bwrap" etc.; trailing space ensures it's used as a command).
+Clause 2 (`bitwardenAttachment`): catches chezmoi's bitwardenAttachment template function.
+Clause 3 (`\{\{ *bitwarden`): catches chezmoi's `{{ bitwarden ... }}` template-function family.
+
+All three clauses MUST appear in every SEC-15 grep assertion. Dropping any clause violates the SEC-15 contract.
+
+<!-- CANONICAL CONTRACT: quick.sh STRICT mode -->
+<!-- quick.sh respects STRICT=1 env: PENDING rows are promoted to FAIL, exit code becomes non-zero. -->
+<!-- This is the mechanism for "expect non-zero on pre-Wave-1 source tree" verifies. -->
+<!-- Without STRICT=1, PENDING gates do NOT produce non-zero exit (only FAIL gates do). -->
 </interfaces>
 </context>
 
@@ -185,27 +207,35 @@ Implement these structural gates (each in a header-banner section). All paths ar
    `assert_grep "PIN" "${REPO_ROOT}/home/.chezmoidata/packages.yaml"` (the comment marker)
    `assert_file "${REPO_ROOT}/docs/credential-plane.md"`
 
-5. **SEC-11 — setup-credentials.sh exists, executable, NOT a chezmoi script**:
+5. **SEC-08 — setup-credentials.sh rewrites chezmoi remote**:
+   `assert_grep "chezmoi git -- remote set-url origin" "${REPO_ROOT}/home/scripts/setup-credentials.sh"`
+   (Structural assertion: the script contains the canonical remote-rewrite invocation. End-to-end behavior is verified on VM in Plan 1-05.)
+
+6. **SEC-11 — setup-credentials.sh exists, executable, NOT a chezmoi script**:
    `assert_file "${REPO_ROOT}/home/scripts/setup-credentials.sh"`
    Then a custom check: `if [[ -x "${REPO_ROOT}/home/scripts/setup-credentials.sh" ]]; then pass "executable: setup-credentials.sh"; else fail "not executable: setup-credentials.sh"; fi`
    And: `assert_cmd_zero_output bash -c "ls ${REPO_ROOT}/home/.chezmoiscripts/*setup-credentials* 2>/dev/null || true"` (must produce zero output — script is NOT in .chezmoiscripts/)
 
-6. **SEC-13 (presence only) — ed25519 key path referenced**:
+7. **SEC-13 (presence only) — ed25519 key path referenced**:
    `assert_grep "personal_ed25519" "${REPO_ROOT}/home/scripts/setup-credentials.sh"`
 
-7. **SEC-15 — Structural VW-independence**:
-   For each `.tmpl` file under `${REPO_ROOT}/home/` (use `find ... -name '*.tmpl'`), run `assert_no_grep '\bbw \b|bitwardenAttachment|\{\{ *bitwarden' "$f"`. For each script under `${REPO_ROOT}/home/.chezmoiscripts/` (find -name '*.sh.tmpl'), same. Permitted exceptions: this check explicitly does NOT scan `packages.yaml` (install names) or `home/scripts/setup-credentials.sh` (design comments).
+8. **SEC-15 — Structural VW-independence**:
+   For each `.tmpl` file under `${REPO_ROOT}/home/` (use `find ... -name '*.tmpl'`), run `assert_no_grep '\bbw \b|bitwardenAttachment|\{\{ *bitwarden' "$f"`. For each script under `${REPO_ROOT}/home/.chezmoiscripts/` (find -name '*.sh.tmpl'), same THREE-clause regex. Permitted exceptions: this check explicitly does NOT scan `packages.yaml` (install names) or `home/scripts/setup-credentials.sh` (design comments).
+
+   The canonical SEC-15 regex (defined in interfaces block) is `\bbw \b|bitwardenAttachment|\{\{ *bitwarden` — all three clauses MUST be present. Plans 1-02..1-05 reference this same contract.
 
 End with `summary; exit $?`.
 
 `chmod +x checks/lib.sh checks/quick.sh`.
 
-The expected runtime on the current source tree (before Wave 1 lands): mostly PENDING / FAIL rows because none of the artifacts exist yet. That's correct — quick.sh is the gate that turns GREEN as Wave 1 implementers land their work.
+STRICT mode contract: `STRICT=1 bash quick.sh` promotes PENDING rows to FAIL and produces non-zero exit. This is the mechanism downstream plans use to assert "expected RED" pre-implementation. Without STRICT=1, PENDING gates do NOT exit non-zero — only hard FAIL gates do (currently only `assert_dir_missing_strict` on generate-gpg-key.sh once Plan 1-02 lands, which is N/A pre-Wave-1).
+
+The expected runtime on the current source tree (before Wave 1 lands): mostly PENDING rows because none of the artifacts exist yet. Under `STRICT=1`, those PENDINGs become FAILs and exit is non-zero. That's correct — quick.sh is the gate that turns GREEN as Wave 1 implementers land their work.
   </action>
   <verify>
-    <automated>cd /Users/jteague/.local/share/chezmoi && bash -n .planning/phases/1-credential-plane/checks/lib.sh && bash -n .planning/phases/1-credential-plane/checks/quick.sh && test -x .planning/phases/1-credential-plane/checks/quick.sh && bash .planning/phases/1-credential-plane/checks/quick.sh; rc=$?; test "$rc" -ne 0 || (echo "quick.sh unexpectedly GREEN before wave 1" && exit 1)</automated>
+    <automated>cd /Users/jteague/.local/share/chezmoi && bash -n .planning/phases/1-credential-plane/checks/lib.sh && bash -n .planning/phases/1-credential-plane/checks/quick.sh && test -x .planning/phases/1-credential-plane/checks/quick.sh && STRICT=1 bash .planning/phases/1-credential-plane/checks/quick.sh; rc=$?; test "$rc" -ne 0 || (echo "STRICT=1 quick.sh unexpectedly GREEN before wave 1" && exit 1)</automated>
   </verify>
-  <done>lib.sh and quick.sh syntactically valid bash; quick.sh executable; runs against current tree and exits non-zero (Wave 1 has not yet landed); all SEC-02/05/07/11/13(presence)/15 gates present with header banners.</done>
+  <done>lib.sh and quick.sh syntactically valid bash; quick.sh executable; runs against current tree under STRICT=1 and exits non-zero (Wave 1 has not yet landed; PENDING rows promoted to FAIL); all SEC-02/05/07/08/11/13(presence)/15 gates present with header banners.</done>
 </task>
 
 <task type="auto">
@@ -253,9 +283,9 @@ End with `summary; exit $?`.
 The script MUST tolerate `prlctl` absence (so quick.sh + full.sh --no-vm flow remains usable on planner workstations) and MUST NOT delete or modify any host-side state outside of the VM.
   </action>
   <verify>
-    <automated>cd /Users/jteague/.local/share/chezmoi && bash -n .planning/phases/1-credential-plane/checks/full.sh && bash -n .planning/phases/1-credential-plane/checks/vm-e2e.sh && bash -n .planning/phases/1-credential-plane/checks/parallels-helpers.sh && test -x .planning/phases/1-credential-plane/checks/full.sh && test -x .planning/phases/1-credential-plane/checks/vm-e2e.sh && bash .planning/phases/1-credential-plane/checks/full.sh --no-vm; rc=$?; test "$rc" -ne 0 || (echo "full.sh --no-vm unexpectedly GREEN before wave 1" && exit 1)</automated>
+    <automated>cd /Users/jteague/.local/share/chezmoi && bash -n .planning/phases/1-credential-plane/checks/full.sh && bash -n .planning/phases/1-credential-plane/checks/vm-e2e.sh && bash -n .planning/phases/1-credential-plane/checks/parallels-helpers.sh && test -x .planning/phases/1-credential-plane/checks/full.sh && test -x .planning/phases/1-credential-plane/checks/vm-e2e.sh && STRICT=1 bash .planning/phases/1-credential-plane/checks/full.sh --no-vm --strict; rc=$?; test "$rc" -ne 0 || (echo "STRICT=1 full.sh --no-vm unexpectedly GREEN before wave 1" && exit 1)</automated>
   </verify>
-  <done>All three scripts syntactically valid; full.sh + vm-e2e.sh executable; `full.sh --no-vm` runs quick.sh and reports non-zero (Wave 1 not yet landed); vm-e2e.sh gracefully reports pending on machines without prlctl.</done>
+  <done>All three scripts syntactically valid; full.sh + vm-e2e.sh executable; `STRICT=1 full.sh --no-vm --strict` runs quick.sh and reports non-zero (Wave 1 not yet landed); vm-e2e.sh gracefully reports pending on machines without prlctl.</done>
 </task>
 
 </tasks>
@@ -263,8 +293,8 @@ The script MUST tolerate `prlctl` absence (so quick.sh + full.sh --no-vm flow re
 <verification>
 After all three tasks:
 - `grep -c "^- \[ \] \*\*SEC-1[1-6]\*\*:" .planning/REQUIREMENTS.md` returns 6
-- `bash .planning/phases/1-credential-plane/checks/quick.sh` exits non-zero with structural FAIL/PENDING rows for SEC-02/05/07/11/13(presence)/15 (these go GREEN as Wave 1 lands)
-- `bash .planning/phases/1-credential-plane/checks/full.sh --no-vm` runs end-to-end, aggregates quick output, exits non-zero
+- `STRICT=1 bash .planning/phases/1-credential-plane/checks/quick.sh` exits non-zero with structural FAIL rows for SEC-02/05/07/08/11/13(presence)/15 (these go GREEN as Wave 1 lands)
+- `STRICT=1 bash .planning/phases/1-credential-plane/checks/full.sh --no-vm --strict` runs end-to-end, aggregates quick output, exits non-zero
 - All five scripts pass `bash -n` syntax check
 </verification>
 
@@ -273,9 +303,10 @@ After all three tasks:
 - Five harness scripts exist under `.planning/phases/1-credential-plane/checks/` (lib.sh, quick.sh, full.sh, vm-e2e.sh, parallels-helpers.sh)
 - quick.sh runs in under 5 seconds; full.sh --no-vm runs in under 10 seconds
 - vm-e2e.sh degrades gracefully (pending, exit 0) when prlctl is not installed
-- All structural gates for SEC-02/05/07/11/13(presence)/15 implemented and FAIL-or-PENDING on the current source tree (Wave 1 turns them GREEN)
+- All structural gates for SEC-02/05/07/08/11/13(presence)/15 implemented and FAIL-or-PENDING on the current source tree (Wave 1 turns them GREEN)
+- Canonical SEC-15 three-clause regex and STRICT mode contract documented in interfaces block (load-bearing for Plans 1-02..1-05)
 </success_criteria>
 
 <output>
-After completion, create `.planning/phases/1-credential-plane/1-01-SUMMARY.md` covering: harness scripts added, lib.sh delta from Phase 0.5 (new `assert_no_grep` helper), SEC-11..16 row content as committed, VM gating model (`--no-vm` fallback + prlctl-absent pending), and explicit handoff to Wave 1 plans (1-02, 1-03, 1-04) listing which `checks/quick.sh` gates each is expected to turn GREEN.
+After completion, create `.planning/phases/1-credential-plane/1-01-SUMMARY.md` covering: harness scripts added, lib.sh delta from Phase 0.5 (new `assert_no_grep` helper), SEC-11..16 row content as committed, VM gating model (`--no-vm` fallback + prlctl-absent pending), STRICT mode + canonical SEC-15 regex as contracts for downstream plans, and explicit handoff to Wave 1 plans (1-02, 1-03, 1-04a, 1-04b) listing which `checks/quick.sh` gates each is expected to turn GREEN.
 </output>

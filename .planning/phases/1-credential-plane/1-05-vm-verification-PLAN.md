@@ -6,7 +6,8 @@ wave: 3
 depends_on:
   - "1-02"
   - "1-03"
-  - "1-04"
+  - "1-04a"
+  - "1-04b"
 files_modified:
   - .planning/phases/1-credential-plane/1-05-vm-results.md
 autonomous: false
@@ -134,7 +135,7 @@ If pre-flight fails, the artifact records the failure and the plan stops — no 
   <verify><automated>cd /Users/jteague/.local/share/chezmoi && grep -q "^status: complete" .planning/phases/1-credential-plane/1-05-vm-results.md && grep -E "SEC-(08|09|10|15|16).*PASS" .planning/phases/1-credential-plane/1-05-vm-results.md | wc -l | tr -d ' ' | grep -qE "^[5-9]$|^[1-9][0-9]+$"</automated></verify>
   <done>1-05-vm-results.md frontmatter status=complete; Requirement ID -&gt; Result Map shows PASS for SEC-08, SEC-09, SEC-10, SEC-15, SEC-16; operator approval recorded in resume signal.</done>
   <what-built>
-    Plans 1-02, 1-03, 1-04 landed: modify_dot_gitconfig.local rewritten, generate-gpg-key.sh deleted, SSH config template added, bitwarden-cli pin documented, setup-credentials.sh authored. The local structural harness (Task 1 above) reports GREEN. Now we need to prove the end-to-end chain works on a fresh machine — the Parallels VM is the only viable target.
+    Plans 1-02, 1-03, 1-04a, 1-04b landed: modify_dot_gitconfig.local rewritten, generate-gpg-key.sh deleted, SSH config template added, bitwarden-cli pin documented, setup-credentials.sh authored. The local structural harness (Task 1 above) reports GREEN. Now we need to prove the end-to-end chain works on a fresh machine — the Parallels VM is the only viable target.
   </what-built>
   <how-to-verify>
 **Operator steps (execute from the planner Mac with VM running):**
@@ -196,7 +197,7 @@ If pre-flight fails, the artifact records the failure and the plan stops — no 
 
 All three scenarios complete; SEC-08/09/10/15/16 all PASS in the Requirement ID -> Result Map section; 1-05-vm-results.md status updated to `complete`.
   </how-to-verify>
-  <resume-signal>Type "approved" when 1-05-vm-results.md is fully populated and all SEC-08/09/10/15/16 gates show PASS. If any scenario fails, describe what failed and which Wave 2 plan owns the fix.</resume-signal>
+  <resume-signal>Type "approved" when 1-05-vm-results.md is fully populated and all SEC-08/09/10/15/16 gates show PASS. If any scenario fails, describe what failed and which Wave 2 plan owns the fix (1-02, 1-03, 1-04a, or 1-04b).</resume-signal>
 </task>
 
 </tasks>
