@@ -122,7 +122,7 @@ Plans:
 
 **Pivot context**: Roadmap originally specified VaultWarden as the credential plane (canonical GPG + per-purpose SSH retrieved from VW on every apply) plus an age-encrypted bootstrap kit for VW-down recovery. 2026-06-04 discussion-first session reframed: regenerable keypairs (SSH, GPG) don't benefit from a central store, and a script-based per-machine bootstrap eliminates Pitfall 10 structurally rather than mitigating it. See `phases/01-credential-plane/1-CONTEXT.md` for full architecture and tradeoff documentation.
 
-**Plans:** 6 plans
+**Plans:** 1/6 plans executed
 
 Plans:
 - [ ] 1-01-wave0-harness-PLAN.md — Wave 0 checks/ harness (lib/quick/full/vm-e2e/parallels-helpers) + formalize SEC-11..16 in REQUIREMENTS.md
@@ -214,7 +214,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 0.5. Audit & Documentation | 5/6 | In progress | - |
 | 0. Structural Refactor | 3/3 | Complete (cutover green both Macs) | 2026-06-03 |
-| 1. Credential Plane (per-machine keys) | 0/6 | Not started | - |
+| 1. Credential Plane (per-machine keys) | 1/6 | In Progress|  |
 | 2. Windows-Native Support | 0/? | Not started | - |
 | 3. WSL Greenfield | 0/? | Not started | - |
 | 4. Lonestar Onboarding + Polish | 0/? | Not started | - |

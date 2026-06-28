@@ -2,14 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: in_progress
-stopped_at: "Phase 1 CONTEXT captured 2026-06-04 with architecture pivot (`phases/01-credential-plane/1-CONTEXT.md`). Per-machine SSH+GPG keypair model adopted; VaultWarden moves off the apply-time critical path; bootstrap kit deleted from scope; repo stays public. ROADMAP.md Phase 1 entry rewritten to match. SEC-01, SEC-03, SEC-04, SEC-06 + BOOT-01..05 removed from Phase 1 requirements by pivot. STATE.md Locked Decisions updated for the reversals (canonical→per-machine GPG, private→public repo, bootstrap-kit deletion). Next: `/gsd:plan-phase 1`. Discussion-first session also set up a Parallels macOS VM (10.211.55.4, snapshot `vanilla-fresh-boot-pre-chezmoi`) as the Phase 1 verification target."
-last_updated: "2026-06-28T14:46Z"
+status: verifying
+stopped_at: Completed 01-credential-plane/1-01-wave0-harness-PLAN.md
+last_updated: "2026-06-28T17:09:30.945Z"
 progress:
   total_phases: 6
-  completed_phases: 2
-  total_plans: 15
-  completed_plans: 9
+  completed_phases: 1
+  total_plans: 9
+  completed_plans: 4
+  percent: 73
 ---
 
 # Project State: chezmoi Modernization
@@ -27,7 +28,7 @@ progress:
 **Phase:** 0-structural-refactor — COMPLETE (3/3 plans + cutover both Macs)
 **Plan:** Phase 0 closed; Phase 1 not yet planned
 **Status:** Both Macs cutover GREEN. chezmoi diff -x externals empty + dry-run clean on both. NODE_EXTRA_CA_CERTS migrated on Mac work. ~/bin teardown verified on both. Three follow-up commits landed (heredoc fix, cask renames, Step 7 stderr capture) — convention notes added in § 10.4.6 and § 10.4.7.
-**Progress:** Phase 2/6 phases done · Phase 0 sub-progress 3/3 plans `██████████`
+**Progress:** [███████░░░] 73%
 
 ## Performance Metrics
 
@@ -49,6 +50,7 @@ progress:
 | 00.5-05 packages-audit | 3 (2 auto + 1 human-verify) | 3 (packages.yaml + candidates.md + approved-brew-bundle.txt) | 45m active (spanned checkpoint pause) |
 | 00.5-06 exit-gate | 6 (3 auto + 3 human-verify) | 4 created (drift-reconciliation, exit-gate-report, state captures ×2, recovery script) + 2 modified (state-preview, packages.yaml line 120 hot-patch) | ~3h active across 2 sessions |
 | 0-03-docs | 1 | 1 modified (docs/conventions.md +128 lines) | ~15m |
+| Phase 01-credential-plane P01 | 23 | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -131,7 +133,7 @@ PRIOR action: Completed Plan 00.5-05 (packages-audit, AUD-01 + AUD-02). 3-task p
 
 **Next action:** Operator-driven cutover ritual on Mac personal first, then Mac work. See `.planning/phases/0-structural-refactor/cutover-phase-0.sh`. Run in collaborative mode (not autonomous) per CLAUDE.md §4. After cutover: `chezmoi diff -x externals` EMPTY on both Macs = Phase 0 merge gate PASS → mark Phase 0 complete.
 
-**Stopped at:** Phase 0 plans 3/3 complete 2026-06-03 (Plan 0-03 docs, commit 6405eed). Awaiting cutover verification.
+**Stopped at:** Completed 01-credential-plane/1-01-wave0-harness-PLAN.md
 
 **Open questions for next session:** None at Phase 0.5 level. Phase 0 should: (a) decide employer/site axis design (escalation owner), (b) decide `home/exact_bin/` rename vs `~/.local/bin/` standard for employer-local tooling, (c) standardize chezmoi version across both Macs (Mac work 2.69.4 → 2.70.4), (d) read all Phase 0 follow-ups #1-#9 in `00.5-drift-reconciliation.md` before scoping the structural refactor.
 
