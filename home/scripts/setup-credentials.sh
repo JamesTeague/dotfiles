@@ -284,6 +284,217 @@ setup_ssh() {
 }
 
 # ---------------------------------------------------------------------------
+# gpg_keyid_registered — returns 0 if the given long key ID is already on GitHub
+#
+# Args: $1 = long GPG key ID (16 hex chars)
+# ---------------------------------------------------------------------------
+gpg_keyid_registered() {
+  local key_id="$1"
+
+  # Fetch all registered key IDs and look for exact match
+  local registered_ids
+  registered_ids="$(gh gpg-key list --json keyId --jq '.[].keyId' 2>/dev/null || true)"
+
+  if printf '%s\n' "${registered_ids}" | grep -qFx "${key_id}"; then
+    return 0
+  fi
+  return 1
+}
+
+# ---------------------------------------------------------------------------
+# setup_gpg — generate and register the per-machine EDDSA/Ed25519 GPG key
+# ---------------------------------------------------------------------------
+setup_gpg() {
+  printf '[gpg] Setting up personal GPG key...\n'
+
+  # Resolve email and name from chezmoi data
+  local EMAIL NAME
+  EMAIL="$(chezmoi data | jq -r '.email // empty' 2>/dev/null)"
+  if [[ -z "${EMAIL}" ]]; then
+    printf '[gpg] ERROR: chezmoi data .email is empty or absent. Run chezmoi init first.\n' >&2
+    exit 4
+  fi
+  NAME="$(chezmoi data | jq -r '.name // empty' 2>/dev/null)"
+  if [[ -z "${NAME}" ]]; then
+    printf '[gpg] ERROR: chezmoi data .name is empty or absent. Run chezmoi init first.\n' >&2
+    exit 4
+  fi
+
+  # Rotation: log existing key IDs, delete local copies
+  if [[ "${ROTATE_GPG}" == "1" ]]; then
+    printf '[gpg] --rotate-gpg: logging existing key IDs for manual GitHub cleanup:\n'
+    local old_ids
+    old_ids="$(gpg --list-secret-keys --keyid-format LONG --with-colons "${EMAIL}" 2>/dev/null \
+      | awk -F: '/^sec:/ {print $5}')"
+    if [[ -n "${old_ids}" ]]; then
+      printf '%s\n' "${old_ids}" | while IFS= read -r oid; do
+        printf '  old key ID: %s\n' "${oid}"
+        # Best-effort local deletion; continue on error (agent state can lag)
+        gpg --batch --yes --delete-secret-and-public-key "${oid}" 2>/dev/null || true
+      done
+    else
+      printf '[gpg] No existing secret keys found for %s — nothing to rotate.\n' "${EMAIL}"
+    fi
+  fi
+
+  # Check for an existing local key + already-registered idempotency path
+  local EXISTING_KEYID
+  EXISTING_KEYID="$(gpg --list-secret-keys --keyid-format LONG --with-colons "${EMAIL}" 2>/dev/null \
+    | awk -F: '/^sec:/ {print $5; exit}')"
+
+  if [[ -n "${EXISTING_KEYID}" ]] && gpg_keyid_registered "${EXISTING_KEYID}"; then
+    printf '[skip] GPG key %s already exists locally and is registered with GitHub.\n' "${EXISTING_KEYID}"
+    # Expose KEY_ID to write_signingkey
+    KEY_ID="${EXISTING_KEYID}"
+    return 0
+  fi
+
+  # Generate a new key via parameter file with %no-protection (Pitfall 1 mitigation)
+  local PARAM_FILE
+  PARAM_FILE="$(mktemp /tmp/gpg-param-XXXXXX)"
+  cat > "${PARAM_FILE}" <<GPGEOF
+%echo Generating per-machine GPG key (ed25519)
+Key-Type: EDDSA
+Key-Curve: Ed25519
+Key-Usage: sign
+Subkey-Type: ECDH
+Subkey-Curve: Cv25519
+Subkey-Usage: encrypt
+Name-Real: ${NAME}
+Name-Email: ${EMAIL}
+Expire-Date: 0
+%no-protection
+%commit
+%echo Done
+GPGEOF
+
+  printf '[gpg] Generating EDDSA/Ed25519 GPG key for %s <%s>...\n' "${NAME}" "${EMAIL}"
+  if ! gpg --batch --gen-key "${PARAM_FILE}"; then
+    printf '[gpg] gpg --batch --gen-key failed.\n' >&2
+    rm -f "${PARAM_FILE}"
+    exit 4
+  fi
+  rm -f "${PARAM_FILE}"
+
+  # Re-resolve KEY_ID from colon output (machine-parseable, stable across gpg versions)
+  KEY_ID="$(gpg --list-secret-keys --keyid-format LONG --with-colons "${EMAIL}" 2>/dev/null \
+    | awk -F: '/^sec:/ {print $5; exit}')"
+
+  if [[ -z "${KEY_ID}" ]]; then
+    printf '[gpg] ERROR: key generated but could not resolve key ID from colon output.\n' >&2
+    exit 4
+  fi
+  printf '[gpg] Key generated: %s\n' "${KEY_ID}"
+
+  # Reload gpg-agent so current session sees the new key (Pitfall 8 mitigation)
+  gpg-connect-agent reloadagent /bye >/dev/null 2>&1 || true
+
+  # Idempotent register (cli/cli#5085: gh gpg-key add is NOT idempotent)
+  if gpg_keyid_registered "${KEY_ID}"; then
+    printf '[skip] GPG key %s already registered with GitHub.\n' "${KEY_ID}"
+  else
+    printf '[gpg] Registering GPG pubkey with GitHub (title: %s)...\n' "${KEY_TITLE}"
+    # Armored format required per cli/cli#6528
+    local gh_stderr
+    gh_stderr="$(mktemp /tmp/gpg-gh-stderr-XXXXXX)"
+    if ! gpg --armor --export "${KEY_ID}" | gh gpg-key add - --title "${KEY_TITLE}" 2>"${gh_stderr}"; then
+      # Defense-in-depth: treat "already in use" as success
+      if grep -qi "already in use\|key is already" "${gh_stderr}"; then
+        printf '[gpg] Key already in use on GitHub — treating as registered.\n'
+      else
+        cat "${gh_stderr}" >&2
+        printf '[gpg] gh gpg-key add failed. Register manually:\n' >&2
+        printf '  gpg --armor --export %s | gh gpg-key add - --title %s\n' "${KEY_ID}" "${KEY_TITLE}" >&2
+        rm -f "${gh_stderr}"
+        exit 4
+      fi
+    else
+      printf '[gpg] GPG key registered successfully.\n'
+    fi
+    rm -f "${gh_stderr}"
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# write_signingkey — idempotently write signingkey to chezmoi.toml [data]
+# ---------------------------------------------------------------------------
+write_signingkey() {
+  printf '[signingkey] Writing signingkey %s to chezmoi config...\n' "${KEY_ID}"
+
+  if [[ ! -f "${CHEZMOI_CFG}" ]]; then
+    printf '[signingkey] ERROR: %s does not exist. Run chezmoi init first.\n' "${CHEZMOI_CFG}" >&2
+    exit 5
+  fi
+
+  if grep -qE '^\s*signingkey\s*=' "${CHEZMOI_CFG}"; then
+    # Replace existing signingkey line (Pitfall 5 mitigation: in-place update)
+    # shellcheck disable=SC2016  # single-quote is intentional: sed script, not shell expansion
+    sed -i.bak "s|^[[:space:]]*signingkey[[:space:]]*=.*|  signingkey = \"${KEY_ID}\"|" "${CHEZMOI_CFG}"
+    rm -f "${CHEZMOI_CFG}.bak"
+    printf '[signingkey] Updated existing signingkey line.\n'
+  else
+    # Insert signingkey after [data] header (awk one-liner per 1-RESEARCH Example 6)
+    awk -v kid="${KEY_ID}" '
+      /^\[data\]/ { print; print "  signingkey = \"" kid "\""; next }
+      { print }
+    ' "${CHEZMOI_CFG}" > "${CHEZMOI_CFG}.new" && mv "${CHEZMOI_CFG}.new" "${CHEZMOI_CFG}"
+    printf '[signingkey] Inserted signingkey under [data] section.\n'
+  fi
+
+  # Verify the write landed (post-write guard)
+  local actual_key
+  actual_key="$(chezmoi data | jq -r '.signingkey // empty' 2>/dev/null)"
+  if [[ "${actual_key}" != "${KEY_ID}" ]]; then
+    printf '[signingkey] ERROR: post-write verify failed. Expected: %s  Got: %s\n' "${KEY_ID}" "${actual_key}" >&2
+    exit 5
+  fi
+  printf '[signingkey] Verified: chezmoi data .signingkey = %s\n' "${KEY_ID}"
+
+  # Trigger immediate re-render of gitconfig.local (best-effort; next apply also covers this)
+  if chezmoi apply "${HOME}/.gitconfig.local" 2>/dev/null; then
+    printf '[signingkey] gitconfig.local re-rendered.\n'
+  else
+    printf '[signingkey] Warning: chezmoi apply ~/.gitconfig.local non-zero (will fix on next apply).\n'
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# rewrite_remote — rewrite chezmoi git remote to use github-personal SSH alias
+#
+# MUST be the last step in main(), AFTER smoke-testing ssh -T github-personal.
+# ---------------------------------------------------------------------------
+rewrite_remote() {
+  printf '[remote] Smoke-testing SSH auth via github-personal alias...\n'
+
+  # ssh -T exits 1 by design; check the grep exit (PIPESTATUS[1]) not ssh exit
+  # StrictHostKeyChecking=accept-new avoids interactive prompt on first connect
+  # (Pitfall 7: remote rewrite before key registered would brick chezmoi git operations)
+  local ssh_output
+  ssh_output="$(ssh -o StrictHostKeyChecking=accept-new -T git@github-personal 2>&1 || true)"
+  if ! printf '%s\n' "${ssh_output}" | grep -q "successfully authenticated"; then
+    printf '[remote] ERROR: SSH auth via github-personal failed. Output:\n' >&2
+    printf '%s\n' "${ssh_output}" >&2
+    printf '[remote] Remote rewrite skipped. Ensure ~/.ssh/config has Host github-personal and key is registered.\n' >&2
+    exit 6
+  fi
+  printf '[remote] SSH auth confirmed.\n'
+
+  # Idempotent remote rewrite
+  local CUR
+  CUR="$(chezmoi git -- remote get-url origin 2>/dev/null || true)"
+  if [[ "${CUR}" == "${CHEZMOI_REMOTE_TARGET}" ]]; then
+    printf '[skip] chezmoi remote already set to %s\n' "${CHEZMOI_REMOTE_TARGET}"
+  else
+    printf '[remote] Rewriting chezmoi remote: %s → %s\n' "${CUR}" "${CHEZMOI_REMOTE_TARGET}"
+    if ! chezmoi git -- remote set-url origin "${CHEZMOI_REMOTE_TARGET}"; then
+      printf '[remote] ERROR: chezmoi git -- remote set-url failed.\n' >&2
+      exit 6
+    fi
+    printf '[remote] Remote rewritten successfully.\n'
+  fi
+}
+
+# ---------------------------------------------------------------------------
 # main
 # ---------------------------------------------------------------------------
 main() {
@@ -294,9 +505,9 @@ main() {
 
   ensure_gh_auth
   setup_ssh
-  # TODO(1-04b): setup_gpg
-  # TODO(1-04b): write_signingkey
-  # TODO(1-04b): rewrite_remote
+  setup_gpg
+  write_signingkey
+  rewrite_remote
   printf 'Stage 2 complete. Verify: git commit -S --allow-empty -m verify && git log --show-signature -1\n'
   exit 0
 }
