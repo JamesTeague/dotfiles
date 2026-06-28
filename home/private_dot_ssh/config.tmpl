@@ -1,0 +1,15 @@
+{{- /* Purpose-based SSH Host aliases — see docs/credential-plane.md */ -}}
+Host github-personal
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/personal_ed25519
+  IdentitiesOnly yes
+
+{{- if stat (joinPath .chezmoi.homeDir ".ssh" "work_ed25519") }}
+
+Host gitlab-bluebeam
+  HostName {{ default "gitlab.bluebeam.com" .bluebeamGitlabHost }}
+  User git
+  IdentityFile ~/.ssh/work_ed25519
+  IdentitiesOnly yes
+{{- end }}
