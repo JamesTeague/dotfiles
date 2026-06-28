@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: "Phase 1 CONTEXT captured 2026-06-04 with architecture pivot (`phases/1-credential-plane/1-CONTEXT.md`). Per-machine SSH+GPG keypair model adopted; VaultWarden moves off the apply-time critical path; bootstrap kit deleted from scope; repo stays public. ROADMAP.md Phase 1 entry rewritten to match. SEC-01, SEC-03, SEC-04, SEC-06 + BOOT-01..05 removed from Phase 1 requirements by pivot. STATE.md Locked Decisions updated for the reversals (canonical→per-machine GPG, private→public repo, bootstrap-kit deletion). Next: `/gsd:plan-phase 1`. Discussion-first session also set up a Parallels macOS VM (10.211.55.4, snapshot `vanilla-fresh-boot-pre-chezmoi`) as the Phase 1 verification target."
+stopped_at: "Phase 1 CONTEXT captured 2026-06-04 with architecture pivot (`phases/01-credential-plane/1-CONTEXT.md`). Per-machine SSH+GPG keypair model adopted; VaultWarden moves off the apply-time critical path; bootstrap kit deleted from scope; repo stays public. ROADMAP.md Phase 1 entry rewritten to match. SEC-01, SEC-03, SEC-04, SEC-06 + BOOT-01..05 removed from Phase 1 requirements by pivot. STATE.md Locked Decisions updated for the reversals (canonical→per-machine GPG, private→public repo, bootstrap-kit deletion). Next: `/gsd:plan-phase 1`. Discussion-first session also set up a Parallels macOS VM (10.211.55.4, snapshot `vanilla-fresh-boot-pre-chezmoi`) as the Phase 1 verification target."
 last_updated: "2026-06-28T14:46Z"
 progress:
   total_phases: 6
@@ -20,7 +20,7 @@ progress:
 
 **Core Value:** A new machine — any OS in the fleet — can be set up day-1 via a single `chezmoi init --apply` flow plus one explicit credential-bootstrap script, and arrive at a fully-configured, identity-signed, role-appropriate state without artisanal touch-up. Stage 1 (`chezmoi init --apply`) is auth-free against a public repo; Stage 2 (`setup-credentials.sh`) generates per-machine keys locally and registers them with the relevant services.
 
-**Current Focus:** **Phase 1 CONTEXT captured 2026-06-04** (architecture pivoted). Next: `/gsd:plan-phase 1` against `phases/1-credential-plane/1-CONTEXT.md`.
+**Current Focus:** **Phase 1 CONTEXT captured 2026-06-04** (architecture pivoted). Next: `/gsd:plan-phase 1` against `phases/01-credential-plane/1-CONTEXT.md`.
 
 ## Current Position
 

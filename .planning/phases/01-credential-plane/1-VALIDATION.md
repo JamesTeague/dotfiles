@@ -18,17 +18,17 @@ created: 2026-06-04
 | Property | Value |
 |----------|-------|
 | **Framework** | Bash + chezmoi-internal templating; structural greps; live SSH/git smoke tests on VM |
-| **Config file** | none — Wave 0 of Phase 1 establishes test scripts under `.planning/phases/1-credential-plane/checks/` (pattern from Phase 0.5 Plan 01) |
-| **Quick run command** | `bash .planning/phases/1-credential-plane/checks/quick.sh` |
-| **Full suite command** | `bash .planning/phases/1-credential-plane/checks/full.sh` |
+| **Config file** | none — Wave 0 of Phase 1 establishes test scripts under `.planning/phases/01-credential-plane/checks/` (pattern from Phase 0.5 Plan 01) |
+| **Quick run command** | `bash .planning/phases/01-credential-plane/checks/quick.sh` |
+| **Full suite command** | `bash .planning/phases/01-credential-plane/checks/full.sh` |
 | **Estimated runtime** | quick: < 5s · full: 5–15 min (VM-driven Stage 1+2) |
 
 ---
 
 ## Sampling Rate
 
-- **After every task commit:** Run `bash .planning/phases/1-credential-plane/checks/quick.sh` (structural-only, fast)
-- **After every plan wave:** Run `bash .planning/phases/1-credential-plane/checks/full.sh` (adds VM-driven smoke)
+- **After every task commit:** Run `bash .planning/phases/01-credential-plane/checks/quick.sh` (structural-only, fast)
+- **After every plan wave:** Run `bash .planning/phases/01-credential-plane/checks/full.sh` (adds VM-driven smoke)
 - **Before `/gsd:verify-work`:** Full suite must be green on VM (snapshot restored first) AND structural greps green on local source tree
 - **Max feedback latency:** quick < 5s; full 5–15 min (snapshot-restore + brew install during Stage 1 dominate)
 
@@ -64,11 +64,11 @@ created: 2026-06-04
 
 ## Wave 0 Requirements
 
-- [ ] `.planning/phases/1-credential-plane/checks/lib.sh` — shared helpers (color output, assertion macros). Adapt from `.planning/phases/00.5-audit-documentation/checks/lib.sh`.
-- [ ] `.planning/phases/1-credential-plane/checks/quick.sh` — structural greps for SEC-02, SEC-05, SEC-07, SEC-11, SEC-13 (file existence), SEC-15.
-- [ ] `.planning/phases/1-credential-plane/checks/full.sh` — quick + VM smokes for SEC-08, SEC-09, SEC-10, SEC-12, SEC-13 (key-type check), SEC-14, SEC-16.
-- [ ] `.planning/phases/1-credential-plane/checks/vm-e2e.sh` — composite VM orchestration (Parallels `prlctl snapshot-switch` → Stage 1 → Stage 2 → verifications → idempotency re-run).
-- [ ] `.planning/phases/1-credential-plane/checks/parallels-helpers.sh` — `prlctl`-based snapshot management (availability check, snapshot UUID resolution, restore + wait-for-boot).
+- [ ] `.planning/phases/01-credential-plane/checks/lib.sh` — shared helpers (color output, assertion macros). Adapt from `.planning/phases/00.5-audit-documentation/checks/lib.sh`.
+- [ ] `.planning/phases/01-credential-plane/checks/quick.sh` — structural greps for SEC-02, SEC-05, SEC-07, SEC-11, SEC-13 (file existence), SEC-15.
+- [ ] `.planning/phases/01-credential-plane/checks/full.sh` — quick + VM smokes for SEC-08, SEC-09, SEC-10, SEC-12, SEC-13 (key-type check), SEC-14, SEC-16.
+- [ ] `.planning/phases/01-credential-plane/checks/vm-e2e.sh` — composite VM orchestration (Parallels `prlctl snapshot-switch` → Stage 1 → Stage 2 → verifications → idempotency re-run).
+- [ ] `.planning/phases/01-credential-plane/checks/parallels-helpers.sh` — `prlctl`-based snapshot management (availability check, snapshot UUID resolution, restore + wait-for-boot).
 
 *Framework install commands: none — bash + ssh + (host-side) `prlctl` are macOS-native. VM uses tooling Stage 1 itself installs.*
 

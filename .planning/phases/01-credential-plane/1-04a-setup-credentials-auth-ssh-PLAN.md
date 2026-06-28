@@ -1,5 +1,5 @@
 ---
-phase: 1-credential-plane
+phase: 01-credential-plane
 plan: 04a
 type: execute
 wave: 2
@@ -52,8 +52,8 @@ Output: One executable bash script of approximately 150-180 lines with the heade
 
 <context>
 @.planning/STATE.md
-@.planning/phases/1-credential-plane/1-CONTEXT.md
-@.planning/phases/1-credential-plane/1-RESEARCH.md
+@.planning/phases/01-credential-plane/1-CONTEXT.md
+@.planning/phases/01-credential-plane/1-RESEARCH.md
 
 <interfaces>
 Key research findings driving this half of the script (from 1-RESEARCH.md):
@@ -103,7 +103,7 @@ Create `home/scripts/setup-credentials.sh` as an executable bash script (`#!/usr
 
 **Script structure** (in order):
 
-1. **Header banner comment block** (lines 1-30): purpose, two-stage architecture summary, link to `docs/credential-plane.md`, link to `phases/1-credential-plane/1-CONTEXT.md`. State explicitly: "Operator-invoked. NOT a chezmoi run_once_ script. Re-runnable; idempotent by default; rotation via --rotate-* flags."
+1. **Header banner comment block** (lines 1-30): purpose, two-stage architecture summary, link to `docs/credential-plane.md`, link to `phases/01-credential-plane/1-CONTEXT.md`. State explicitly: "Operator-invoked. NOT a chezmoi run_once_ script. Re-runnable; idempotent by default; rotation via --rotate-* flags."
 
 2. **Constants block** (lines 30-60):
    - `KEY_DIR="${HOME}/.ssh"`
@@ -168,7 +168,7 @@ After Task 1:
 - `bash -n home/scripts/setup-credentials.sh` passes syntax check
 - Script lives in `home/scripts/` and NOT in `home/.chezmoiscripts/`
 - Three `TODO(1-04b):` marker comments present in exact form for Plan 1-04b's append step
-- `bash .planning/phases/1-credential-plane/checks/quick.sh` shows SEC-11 PASS and SEC-13(presence) PASS
+- `bash .planning/phases/01-credential-plane/checks/quick.sh` shows SEC-11 PASS and SEC-13(presence) PASS
 - SEC-15 three-clause grep clean on non-comment lines
 </verification>
 
@@ -182,5 +182,5 @@ After Task 1:
 </success_criteria>
 
 <output>
-After completion, create `.planning/phases/1-credential-plane/1-04a-SUMMARY.md` covering: line count, function count (ensure_gh_auth, ssh_pubkey_registered, setup_ssh, usage, main-skeleton), exit codes used (0/1/2/3), Pitfall coverage for this half (Pitfalls 5/6/7 from 1-RESEARCH.md), shellcheck verdict, and explicit handoff to Plan 1-04b naming the three TODO markers it must replace and the three function bodies it must append.
+After completion, create `.planning/phases/01-credential-plane/1-04a-SUMMARY.md` covering: line count, function count (ensure_gh_auth, ssh_pubkey_registered, setup_ssh, usage, main-skeleton), exit codes used (0/1/2/3), Pitfall coverage for this half (Pitfalls 5/6/7 from 1-RESEARCH.md), shellcheck verdict, and explicit handoff to Plan 1-04b naming the three TODO markers it must replace and the three function bodies it must append.
 </output>

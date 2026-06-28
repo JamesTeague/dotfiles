@@ -1,5 +1,5 @@
 ---
-phase: 1-credential-plane
+phase: 01-credential-plane
 plan: 02
 type: execute
 wave: 2
@@ -50,8 +50,8 @@ Output: One template rewrite (`modify_dot_gitconfig.local`) + one source-tree de
 
 <context>
 @.planning/STATE.md
-@.planning/phases/1-credential-plane/1-CONTEXT.md
-@.planning/phases/1-credential-plane/1-RESEARCH.md
+@.planning/phases/01-credential-plane/1-CONTEXT.md
+@.planning/phases/01-credential-plane/1-RESEARCH.md
 @home/modify_dot_gitconfig.local
 @home/scripts/generate-gpg-key.sh
 
@@ -188,7 +188,7 @@ Additionally, `quick.sh` is invoked as a sanity check (no parsing of its stdout 
 The other gates (SEC-02, SEC-07, SEC-08, SEC-11, SEC-13, SEC-15) remain RED/PENDING after this plan — those are owned by Plans 1-03, 1-04a, and 1-04b.
   </action>
   <verify>
-    <automated>cd /Users/jteague/.local/share/chezmoi && ! test -e home/scripts/generate-gpg-key.sh && grep -q "\.signingkey" home/modify_dot_gitconfig.local && ! grep -q "output" home/modify_dot_gitconfig.local && ! grep -q "data-name\|data-email\|data-helper" home/modify_dot_gitconfig.local && bash .planning/phases/1-credential-plane/checks/quick.sh >/dev/null 2>&1; true</automated>
+    <automated>cd /Users/jteague/.local/share/chezmoi && ! test -e home/scripts/generate-gpg-key.sh && grep -q "\.signingkey" home/modify_dot_gitconfig.local && ! grep -q "output" home/modify_dot_gitconfig.local && ! grep -q "data-name\|data-email\|data-helper" home/modify_dot_gitconfig.local && bash .planning/phases/01-credential-plane/checks/quick.sh >/dev/null 2>&1; true</automated>
   </verify>
   <done>generate-gpg-key.sh removed from source tree via git rm; file-state assertions confirm SEC-05(a) (script absent) and SEC-05(b) (template references .signingkey, no `output` call); quick.sh sanity-invocation completes (exit code not asserted — file-state is the contract); commit message documents per-machine entryState cleanup procedure for operator post-merge handoff.</done>
 </task>
@@ -201,7 +201,7 @@ After both tasks:
 - `grep -q "\.signingkey" home/modify_dot_gitconfig.local` (data-driven)
 - `! grep -q "output" home/modify_dot_gitconfig.local` (no script shell-out)
 - `! grep -q "data-name\|data-email\|data-helper" home/modify_dot_gitconfig.local` (no leftover placeholders)
-- `STRICT=1 bash .planning/phases/1-credential-plane/checks/quick.sh` still exits non-zero (other waves' gates still RED — this plan only owns SEC-05)
+- `STRICT=1 bash .planning/phases/01-credential-plane/checks/quick.sh` still exits non-zero (other waves' gates still RED — this plan only owns SEC-05)
 </verification>
 
 <success_criteria>
@@ -213,5 +213,5 @@ After both tasks:
 </success_criteria>
 
 <output>
-After completion, create `.planning/phases/1-credential-plane/1-02-SUMMARY.md` covering: before/after diff of modify_dot_gitconfig.local, deletion record + git SHA for generate-gpg-key.sh, the entryState cleanup ritual handoff for operator (Mac personal + Mac work paths), and an explicit "until Plan 1-04b lands on a machine, .signingkey is unset and signed-commit is OFF by design" note.
+After completion, create `.planning/phases/01-credential-plane/1-02-SUMMARY.md` covering: before/after diff of modify_dot_gitconfig.local, deletion record + git SHA for generate-gpg-key.sh, the entryState cleanup ritual handoff for operator (Mac personal + Mac work paths), and an explicit "until Plan 1-04b lands on a machine, .signingkey is unset and signed-commit is OFF by design" note.
 </output>

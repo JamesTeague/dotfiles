@@ -1,5 +1,5 @@
 ---
-phase: 1-credential-plane
+phase: 01-credential-plane
 plan: 03
 type: execute
 wave: 2
@@ -66,8 +66,8 @@ Output: One new template, one packages.yaml edit (one line added + one comment),
 
 <context>
 @.planning/STATE.md
-@.planning/phases/1-credential-plane/1-CONTEXT.md
-@.planning/phases/1-credential-plane/1-RESEARCH.md
+@.planning/phases/01-credential-plane/1-CONTEXT.md
+@.planning/phases/01-credential-plane/1-RESEARCH.md
 @home/.chezmoi.toml.tmpl
 @home/.chezmoidata/packages.yaml
 
@@ -180,7 +180,7 @@ After both tasks:
 - `test -f home/private_dot_ssh/config.tmpl` and `chezmoi execute-template < home/private_dot_ssh/config.tmpl` renders Host github-personal block
 - `grep -q "bitwarden-cli" home/.chezmoidata/packages.yaml` and the line includes the PIN comment with VW 1.36.0 reference
 - `test -f docs/credential-plane.md` with 80+ lines and all seven sections
-- `bash .planning/phases/1-credential-plane/checks/quick.sh` shows SEC-02 and SEC-07 gates as PASS
+- `bash .planning/phases/01-credential-plane/checks/quick.sh` shows SEC-02 and SEC-07 gates as PASS
 - SEC-15 three-clause structural grep (`\bbw \b|bitwardenAttachment|\{\{ *bitwarden`) returns zero matches in `*.tmpl` files
 </verification>
 
@@ -195,5 +195,5 @@ After both tasks:
 </success_criteria>
 
 <output>
-After completion, create `.planning/phases/1-credential-plane/1-03-SUMMARY.md` covering: the rendered SSH config shape (both blocks shown), the chosen file-presence gating mechanism + why (Phase 0 lacks employer field) + the divergence-flag operator-review outcome, the bitwarden-cli PIN comment as committed, the seven docs/credential-plane.md sections with line counts, and a confirmation that the SEC-15 three-clause structural grep gate remains GREEN.
+After completion, create `.planning/phases/01-credential-plane/1-03-SUMMARY.md` covering: the rendered SSH config shape (both blocks shown), the chosen file-presence gating mechanism + why (Phase 0 lacks employer field) + the divergence-flag operator-review outcome, the bitwarden-cli PIN comment as committed, the seven docs/credential-plane.md sections with line counts, and a confirmation that the SEC-15 three-clause structural grep gate remains GREEN.
 </output>

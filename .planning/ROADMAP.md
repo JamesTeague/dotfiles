@@ -120,7 +120,7 @@ Plans:
 - Pitfall 14 (GPG key imported without trust) → not applicable (per-machine locally-generated keys are trusted by their own gpg-agent without ownertrust ceremony)
 - Pitfall 15 (per-purpose keys + remote URL mismatch) → `setup-credentials.sh` rewrites chezmoi's remote after key generation, before any subsequent push
 
-**Pivot context**: Roadmap originally specified VaultWarden as the credential plane (canonical GPG + per-purpose SSH retrieved from VW on every apply) plus an age-encrypted bootstrap kit for VW-down recovery. 2026-06-04 discussion-first session reframed: regenerable keypairs (SSH, GPG) don't benefit from a central store, and a script-based per-machine bootstrap eliminates Pitfall 10 structurally rather than mitigating it. See `phases/1-credential-plane/1-CONTEXT.md` for full architecture and tradeoff documentation.
+**Pivot context**: Roadmap originally specified VaultWarden as the credential plane (canonical GPG + per-purpose SSH retrieved from VW on every apply) plus an age-encrypted bootstrap kit for VW-down recovery. 2026-06-04 discussion-first session reframed: regenerable keypairs (SSH, GPG) don't benefit from a central store, and a script-based per-machine bootstrap eliminates Pitfall 10 structurally rather than mitigating it. See `phases/01-credential-plane/1-CONTEXT.md` for full architecture and tradeoff documentation.
 
 **Plans:** 6 plans
 

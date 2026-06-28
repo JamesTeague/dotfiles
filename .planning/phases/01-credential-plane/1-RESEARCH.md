@@ -598,9 +598,9 @@ chezmoi apply ~/.gitconfig.local
 | Property | Value |
 |---|---|
 | Framework | Bash + chezmoi-internal templating; structural greps; live SSH/git smoke tests on VM |
-| Config file | none — Wave 0 of Phase 1 establishes test scripts under `.planning/phases/1-credential-plane/checks/` (pattern established by Phase 0.5 Plan 01) |
-| Quick run command | `bash .planning/phases/1-credential-plane/checks/quick.sh` (structural greps + template-render-only checks; no network) |
-| Full suite command | `bash .planning/phases/1-credential-plane/checks/full.sh` (quick + VM-driven Stage 1+2 + idempotency + rotation) |
+| Config file | none — Wave 0 of Phase 1 establishes test scripts under `.planning/phases/01-credential-plane/checks/` (pattern established by Phase 0.5 Plan 01) |
+| Quick run command | `bash .planning/phases/01-credential-plane/checks/quick.sh` (structural greps + template-render-only checks; no network) |
+| Full suite command | `bash .planning/phases/01-credential-plane/checks/full.sh` (quick + VM-driven Stage 1+2 + idempotency + rotation) |
 
 ### Phase Requirements → Test Map
 
@@ -622,19 +622,19 @@ chezmoi apply ~/.gitconfig.local
 
 ### Sampling Rate
 
-- **Per task commit:** `bash .planning/phases/1-credential-plane/checks/quick.sh` — structural-only, fast (< 5s), runs on every commit in Phase 1.
-- **Per wave merge:** `bash .planning/phases/1-credential-plane/checks/full.sh` — adds VM-driven smoke (Stage 1, Stage 2, verifications). Runs at wave merge points and before `/gsd:verify-work`.
+- **Per task commit:** `bash .planning/phases/01-credential-plane/checks/quick.sh` — structural-only, fast (< 5s), runs on every commit in Phase 1.
+- **Per wave merge:** `bash .planning/phases/01-credential-plane/checks/full.sh` — adds VM-driven smoke (Stage 1, Stage 2, verifications). Runs at wave merge points and before `/gsd:verify-work`.
 - **Phase gate:** Full suite green on the VM (snapshot restored first) AND structural greps green on the local source tree. Then `/gsd:verify-work` runs.
 
 **Note on VM verification cadence:** VM full-suite runs take 5-15 min (snapshot restore + brew install during Stage 1). NOT a per-commit check. Plans should batch their VM verifications at wave merge.
 
 ### Wave 0 Gaps
 
-- [ ] `.planning/phases/1-credential-plane/checks/lib.sh` — shared helpers (color output, assertion macros) — adapt from `.planning/phases/00.5-audit-documentation/checks/lib.sh`.
-- [ ] `.planning/phases/1-credential-plane/checks/quick.sh` — structural greps for SEC-02, SEC-05, SEC-07, SEC-11, SEC-13 (file existence), SEC-15.
-- [ ] `.planning/phases/1-credential-plane/checks/full.sh` — quick + VM smokes (SEC-08, SEC-09, SEC-10, SEC-12, SEC-13 keypair check, SEC-14, SEC-16).
-- [ ] `.planning/phases/1-credential-plane/checks/vm-e2e.sh` — composite VM orchestration script (snapshot restore via Parallels CLI `prlctl snapshot-switch`, Stage 1 invocation, Stage 2 invocation, verifications, idempotency re-run).
-- [ ] `.planning/phases/1-credential-plane/checks/parallels-helpers.sh` — `prlctl`-based snapshot management (verify `prlctl` available, snapshot UUID resolution, restore + wait-for-boot).
+- [ ] `.planning/phases/01-credential-plane/checks/lib.sh` — shared helpers (color output, assertion macros) — adapt from `.planning/phases/00.5-audit-documentation/checks/lib.sh`.
+- [ ] `.planning/phases/01-credential-plane/checks/quick.sh` — structural greps for SEC-02, SEC-05, SEC-07, SEC-11, SEC-13 (file existence), SEC-15.
+- [ ] `.planning/phases/01-credential-plane/checks/full.sh` — quick + VM smokes (SEC-08, SEC-09, SEC-10, SEC-12, SEC-13 keypair check, SEC-14, SEC-16).
+- [ ] `.planning/phases/01-credential-plane/checks/vm-e2e.sh` — composite VM orchestration script (snapshot restore via Parallels CLI `prlctl snapshot-switch`, Stage 1 invocation, Stage 2 invocation, verifications, idempotency re-run).
+- [ ] `.planning/phases/01-credential-plane/checks/parallels-helpers.sh` — `prlctl`-based snapshot management (verify `prlctl` available, snapshot UUID resolution, restore + wait-for-boot).
 
 *Framework install commands: none — bash + ssh + (host-side) `prlctl` are all macOS-available primitives. VM uses standard tooling that Stage 1 itself installs.*
 

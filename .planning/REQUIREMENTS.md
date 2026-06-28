@@ -40,7 +40,7 @@
 
 ### Bootstrap Kit (Disaster Recovery) — SUPERSEDED 2026-06-04
 
-**Entire section superseded** by the 2026-06-04 architecture pivot. Per-machine regenerable keypairs (SSH + GPG) eliminate the disaster-recovery scenario the kit was designed for: if VW is unreachable AND a new machine needs to bootstrap, the script simply generates new keys locally and re-registers them. There is no centrally-stored regenerable material to recover. See ROADMAP.md Phase 1 detail and `phases/1-credential-plane/1-CONTEXT.md` for the architecture and tradeoffs.
+**Entire section superseded** by the 2026-06-04 architecture pivot. Per-machine regenerable keypairs (SSH + GPG) eliminate the disaster-recovery scenario the kit was designed for: if VW is unreachable AND a new machine needs to bootstrap, the script simply generates new keys locally and re-registers them. There is no centrally-stored regenerable material to recover. See ROADMAP.md Phase 1 detail and `phases/01-credential-plane/1-CONTEXT.md` for the architecture and tradeoffs.
 
 - [ ] ~~**BOOT-01**: `bootstrap/encrypted_essentials.age` exists containing recovery essentials (canonical GPG key, primary SSH key, GitHub PAT)~~ **[SUPERSEDED 2026-06-04]**
 - [ ] ~~**BOOT-02**: age identity stored OFF-repo (paper backup + hardware token strategy documented)~~ **[SUPERSEDED 2026-06-04]**

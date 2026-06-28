@@ -1,15 +1,15 @@
 ---
-phase: 1-credential-plane
+phase: 01-credential-plane
 plan: 01
 type: execute
 wave: 1
 depends_on: []
 files_modified:
-  - .planning/phases/1-credential-plane/checks/lib.sh
-  - .planning/phases/1-credential-plane/checks/quick.sh
-  - .planning/phases/1-credential-plane/checks/full.sh
-  - .planning/phases/1-credential-plane/checks/vm-e2e.sh
-  - .planning/phases/1-credential-plane/checks/parallels-helpers.sh
+  - .planning/phases/01-credential-plane/checks/lib.sh
+  - .planning/phases/01-credential-plane/checks/quick.sh
+  - .planning/phases/01-credential-plane/checks/full.sh
+  - .planning/phases/01-credential-plane/checks/vm-e2e.sh
+  - .planning/phases/01-credential-plane/checks/parallels-helpers.sh
   - .planning/REQUIREMENTS.md
 autonomous: true
 requirements:
@@ -27,34 +27,34 @@ must_haves:
     - "checks/full.sh is callable but degrades to quick-only when --no-vm flag passed"
     - "checks/vm-e2e.sh and checks/parallels-helpers.sh exist and lint clean with shellcheck"
   artifacts:
-    - path: ".planning/phases/1-credential-plane/checks/lib.sh"
+    - path: ".planning/phases/01-credential-plane/checks/lib.sh"
       provides: "Shared assertion helpers (pass/fail/pending/assert_file/assert_grep/summary)"
       contains: "LIB_SH_LOADED"
-    - path: ".planning/phases/1-credential-plane/checks/quick.sh"
+    - path: ".planning/phases/01-credential-plane/checks/quick.sh"
       provides: "Fast structural gates for SEC-02/05/07/08/11/13(presence)/15"
       min_lines: 60
-    - path: ".planning/phases/1-credential-plane/checks/full.sh"
+    - path: ".planning/phases/01-credential-plane/checks/full.sh"
       provides: "Quick + VM-driven smokes (SEC-09/10/12/13/14/16) with --no-vm fallback"
       min_lines: 40
-    - path: ".planning/phases/1-credential-plane/checks/vm-e2e.sh"
+    - path: ".planning/phases/01-credential-plane/checks/vm-e2e.sh"
       provides: "Composite VM orchestration: snapshot restore + Stage 1 + Stage 2 + verify + idempotency"
       min_lines: 40
-    - path: ".planning/phases/1-credential-plane/checks/parallels-helpers.sh"
+    - path: ".planning/phases/01-credential-plane/checks/parallels-helpers.sh"
       provides: "prlctl wrappers: availability check, snapshot UUID resolution, restore + wait-for-boot"
     - path: ".planning/REQUIREMENTS.md"
       provides: "SEC-11..16 enumerated with descriptions and traceability rows"
       contains: "SEC-11.*SEC-12.*SEC-13.*SEC-14.*SEC-15.*SEC-16"
   key_links:
-    - from: ".planning/phases/1-credential-plane/checks/quick.sh"
-      to: ".planning/phases/1-credential-plane/checks/lib.sh"
+    - from: ".planning/phases/01-credential-plane/checks/quick.sh"
+      to: ".planning/phases/01-credential-plane/checks/lib.sh"
       via: "source lib.sh"
       pattern: "source.*lib\\.sh"
-    - from: ".planning/phases/1-credential-plane/checks/full.sh"
-      to: ".planning/phases/1-credential-plane/checks/quick.sh"
+    - from: ".planning/phases/01-credential-plane/checks/full.sh"
+      to: ".planning/phases/01-credential-plane/checks/quick.sh"
       via: "invokes quick.sh first then conditional VM tests"
       pattern: "quick\\.sh"
-    - from: ".planning/phases/1-credential-plane/checks/vm-e2e.sh"
-      to: ".planning/phases/1-credential-plane/checks/parallels-helpers.sh"
+    - from: ".planning/phases/01-credential-plane/checks/vm-e2e.sh"
+      to: ".planning/phases/01-credential-plane/checks/parallels-helpers.sh"
       via: "source parallels-helpers.sh for snapshot management"
       pattern: "parallels-helpers"
 ---
@@ -64,7 +64,7 @@ Establish the Phase 1 verification harness AND formalize the six new requirement
 
 Purpose: Wave 1 implementers need (a) a fast structural gate they can run after every commit to confirm their work moves SEC-* requirements from RED to GREEN, and (b) authoritative requirement rows in REQUIREMENTS.md to cite in their commit messages and SUMMARY artifacts. Without this Wave 0, Wave 1 tasks have no automated verification surface and Wave 2 has no composite VM orchestration to drive.
 
-Output: Five harness scripts under `.planning/phases/1-credential-plane/checks/` (pattern adapted from Phase 0.5 Plan 01) plus an amendment to REQUIREMENTS.md adding SEC-11 through SEC-16 with full descriptions, research-support pointers, and Phase 1 traceability table rows.
+Output: Five harness scripts under `.planning/phases/01-credential-plane/checks/` (pattern adapted from Phase 0.5 Plan 01) plus an amendment to REQUIREMENTS.md adding SEC-11 through SEC-16 with full descriptions, research-support pointers, and Phase 1 traceability table rows.
 </objective>
 
 <execution_context>
@@ -76,9 +76,9 @@ Output: Five harness scripts under `.planning/phases/1-credential-plane/checks/`
 @.planning/STATE.md
 @.planning/ROADMAP.md
 @.planning/REQUIREMENTS.md
-@.planning/phases/1-credential-plane/1-CONTEXT.md
-@.planning/phases/1-credential-plane/1-RESEARCH.md
-@.planning/phases/1-credential-plane/1-VALIDATION.md
+@.planning/phases/01-credential-plane/1-CONTEXT.md
+@.planning/phases/01-credential-plane/1-RESEARCH.md
+@.planning/phases/01-credential-plane/1-VALIDATION.md
 @.planning/phases/00.5-audit-documentation/checks/lib.sh
 @.planning/phases/00.5-audit-documentation/checks/quick.sh
 
@@ -182,7 +182,7 @@ Do NOT touch the SUPERSEDED rows or any other section.
 
 <task type="auto">
   <name>Task 2: Author checks/lib.sh + checks/quick.sh (structural gates)</name>
-  <files>.planning/phases/1-credential-plane/checks/lib.sh, .planning/phases/1-credential-plane/checks/quick.sh</files>
+  <files>.planning/phases/01-credential-plane/checks/lib.sh, .planning/phases/01-credential-plane/checks/quick.sh</files>
   <action>
 Copy `.planning/phases/00.5-audit-documentation/checks/lib.sh` as the starting point for Phase 1's `lib.sh`, then ADD one new helper `assert_no_grep PATTERN PATH` (pass when `grep -q PATTERN PATH` finds NOTHING; fail if pattern present; pending if file missing — used by SEC-15 to assert VW-free templates). Keep the LIB_SH_LOADED sentinel guard intact.
 
@@ -233,14 +233,14 @@ STRICT mode contract: `STRICT=1 bash quick.sh` promotes PENDING rows to FAIL and
 The expected runtime on the current source tree (before Wave 1 lands): mostly PENDING rows because none of the artifacts exist yet. Under `STRICT=1`, those PENDINGs become FAILs and exit is non-zero. That's correct — quick.sh is the gate that turns GREEN as Wave 1 implementers land their work.
   </action>
   <verify>
-    <automated>cd /Users/jteague/.local/share/chezmoi && bash -n .planning/phases/1-credential-plane/checks/lib.sh && bash -n .planning/phases/1-credential-plane/checks/quick.sh && test -x .planning/phases/1-credential-plane/checks/quick.sh && STRICT=1 bash .planning/phases/1-credential-plane/checks/quick.sh; rc=$?; test "$rc" -ne 0 || (echo "STRICT=1 quick.sh unexpectedly GREEN before wave 1" && exit 1)</automated>
+    <automated>cd /Users/jteague/.local/share/chezmoi && bash -n .planning/phases/01-credential-plane/checks/lib.sh && bash -n .planning/phases/01-credential-plane/checks/quick.sh && test -x .planning/phases/01-credential-plane/checks/quick.sh && STRICT=1 bash .planning/phases/01-credential-plane/checks/quick.sh; rc=$?; test "$rc" -ne 0 || (echo "STRICT=1 quick.sh unexpectedly GREEN before wave 1" && exit 1)</automated>
   </verify>
   <done>lib.sh and quick.sh syntactically valid bash; quick.sh executable; runs against current tree under STRICT=1 and exits non-zero (Wave 1 has not yet landed; PENDING rows promoted to FAIL); all SEC-02/05/07/08/11/13(presence)/15 gates present with header banners.</done>
 </task>
 
 <task type="auto">
   <name>Task 3: Author checks/full.sh + checks/vm-e2e.sh + checks/parallels-helpers.sh</name>
-  <files>.planning/phases/1-credential-plane/checks/full.sh, .planning/phases/1-credential-plane/checks/vm-e2e.sh, .planning/phases/1-credential-plane/checks/parallels-helpers.sh</files>
+  <files>.planning/phases/01-credential-plane/checks/full.sh, .planning/phases/01-credential-plane/checks/vm-e2e.sh, .planning/phases/01-credential-plane/checks/parallels-helpers.sh</files>
   <action>
 Write three bash scripts. All `#!/usr/bin/env bash` + `set -uo pipefail`. All executable.
 
@@ -283,7 +283,7 @@ End with `summary; exit $?`.
 The script MUST tolerate `prlctl` absence (so quick.sh + full.sh --no-vm flow remains usable on planner workstations) and MUST NOT delete or modify any host-side state outside of the VM.
   </action>
   <verify>
-    <automated>cd /Users/jteague/.local/share/chezmoi && bash -n .planning/phases/1-credential-plane/checks/full.sh && bash -n .planning/phases/1-credential-plane/checks/vm-e2e.sh && bash -n .planning/phases/1-credential-plane/checks/parallels-helpers.sh && test -x .planning/phases/1-credential-plane/checks/full.sh && test -x .planning/phases/1-credential-plane/checks/vm-e2e.sh && STRICT=1 bash .planning/phases/1-credential-plane/checks/full.sh --no-vm --strict; rc=$?; test "$rc" -ne 0 || (echo "STRICT=1 full.sh --no-vm unexpectedly GREEN before wave 1" && exit 1)</automated>
+    <automated>cd /Users/jteague/.local/share/chezmoi && bash -n .planning/phases/01-credential-plane/checks/full.sh && bash -n .planning/phases/01-credential-plane/checks/vm-e2e.sh && bash -n .planning/phases/01-credential-plane/checks/parallels-helpers.sh && test -x .planning/phases/01-credential-plane/checks/full.sh && test -x .planning/phases/01-credential-plane/checks/vm-e2e.sh && STRICT=1 bash .planning/phases/01-credential-plane/checks/full.sh --no-vm --strict; rc=$?; test "$rc" -ne 0 || (echo "STRICT=1 full.sh --no-vm unexpectedly GREEN before wave 1" && exit 1)</automated>
   </verify>
   <done>All three scripts syntactically valid; full.sh + vm-e2e.sh executable; `STRICT=1 full.sh --no-vm --strict` runs quick.sh and reports non-zero (Wave 1 not yet landed); vm-e2e.sh gracefully reports pending on machines without prlctl.</done>
 </task>
@@ -293,14 +293,14 @@ The script MUST tolerate `prlctl` absence (so quick.sh + full.sh --no-vm flow re
 <verification>
 After all three tasks:
 - `grep -c "^- \[ \] \*\*SEC-1[1-6]\*\*:" .planning/REQUIREMENTS.md` returns 6
-- `STRICT=1 bash .planning/phases/1-credential-plane/checks/quick.sh` exits non-zero with structural FAIL rows for SEC-02/05/07/08/11/13(presence)/15 (these go GREEN as Wave 1 lands)
-- `STRICT=1 bash .planning/phases/1-credential-plane/checks/full.sh --no-vm --strict` runs end-to-end, aggregates quick output, exits non-zero
+- `STRICT=1 bash .planning/phases/01-credential-plane/checks/quick.sh` exits non-zero with structural FAIL rows for SEC-02/05/07/08/11/13(presence)/15 (these go GREEN as Wave 1 lands)
+- `STRICT=1 bash .planning/phases/01-credential-plane/checks/full.sh --no-vm --strict` runs end-to-end, aggregates quick output, exits non-zero
 - All five scripts pass `bash -n` syntax check
 </verification>
 
 <success_criteria>
 - REQUIREMENTS.md amended with SEC-11..16 + traceability rows + coverage updated (75 total)
-- Five harness scripts exist under `.planning/phases/1-credential-plane/checks/` (lib.sh, quick.sh, full.sh, vm-e2e.sh, parallels-helpers.sh)
+- Five harness scripts exist under `.planning/phases/01-credential-plane/checks/` (lib.sh, quick.sh, full.sh, vm-e2e.sh, parallels-helpers.sh)
 - quick.sh runs in under 5 seconds; full.sh --no-vm runs in under 10 seconds
 - vm-e2e.sh degrades gracefully (pending, exit 0) when prlctl is not installed
 - All structural gates for SEC-02/05/07/08/11/13(presence)/15 implemented and FAIL-or-PENDING on the current source tree (Wave 1 turns them GREEN)
@@ -308,5 +308,5 @@ After all three tasks:
 </success_criteria>
 
 <output>
-After completion, create `.planning/phases/1-credential-plane/1-01-SUMMARY.md` covering: harness scripts added, lib.sh delta from Phase 0.5 (new `assert_no_grep` helper), SEC-11..16 row content as committed, VM gating model (`--no-vm` fallback + prlctl-absent pending), STRICT mode + canonical SEC-15 regex as contracts for downstream plans, and explicit handoff to Wave 1 plans (1-02, 1-03, 1-04a, 1-04b) listing which `checks/quick.sh` gates each is expected to turn GREEN.
+After completion, create `.planning/phases/01-credential-plane/1-01-SUMMARY.md` covering: harness scripts added, lib.sh delta from Phase 0.5 (new `assert_no_grep` helper), SEC-11..16 row content as committed, VM gating model (`--no-vm` fallback + prlctl-absent pending), STRICT mode + canonical SEC-15 regex as contracts for downstream plans, and explicit handoff to Wave 1 plans (1-02, 1-03, 1-04a, 1-04b) listing which `checks/quick.sh` gates each is expected to turn GREEN.
 </output>

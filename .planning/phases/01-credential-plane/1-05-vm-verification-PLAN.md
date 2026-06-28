@@ -1,5 +1,5 @@
 ---
-phase: 1-credential-plane
+phase: 01-credential-plane
 plan: 05
 type: execute
 wave: 3
@@ -9,7 +9,7 @@ depends_on:
   - "1-04a"
   - "1-04b"
 files_modified:
-  - .planning/phases/1-credential-plane/1-05-vm-results.md
+  - .planning/phases/01-credential-plane/1-05-vm-results.md
 autonomous: false
 requirements:
   - SEC-08
@@ -30,15 +30,15 @@ must_haves:
     - "Structural VW-independence grep on the merged source tree returns zero matches in apply-time paths (SEC-15 phase exit gate)"
     - "Operator manually confirms gh ssh-key list shows the registered key and gh gpg-key list shows the registered GPG key (manual-only verifications per VALIDATION.md)"
   artifacts:
-    - path: ".planning/phases/1-credential-plane/1-05-vm-results.md"
+    - path: ".planning/phases/01-credential-plane/1-05-vm-results.md"
       provides: "VM verification attestation: snapshot UUID + step-by-step pass/fail log + screenshots-or-stdout-captures + operator notes"
       min_lines: 60
   key_links:
-    - from: ".planning/phases/1-credential-plane/checks/vm-e2e.sh"
+    - from: ".planning/phases/01-credential-plane/checks/vm-e2e.sh"
       to: "VM at jteague@10.211.55.4"
       via: "prlctl + ssh"
       pattern: "10\\.211\\.55\\.4"
-    - from: ".planning/phases/1-credential-plane/1-05-vm-results.md"
+    - from: ".planning/phases/01-credential-plane/1-05-vm-results.md"
       to: "SEC-08/09/10/15/16 traceability"
       via: "explicit Requirement-ID -> Result mapping table"
       pattern: "SEC-(08|09|10|15|16)"
@@ -51,7 +51,7 @@ Purpose: Mac personal and Mac work cannot serve as fresh-install verification ta
 
 This plan has a `checkpoint:human-verify` task because (a) Stage 2 requires the operator to enter a device-flow code in a browser, which is interactive by design, and (b) the operator owns approval of the rotation behavior + manual stale-key cleanup outcome. The harness (`checks/vm-e2e.sh`) automates everything that CAN be automated; the checkpoint covers what cannot.
 
-Output: One attestation file `.planning/phases/1-credential-plane/1-05-vm-results.md` capturing snapshot UUID, step-by-step results, stdout captures from each verification, operator notes, and explicit pass/fail status for SEC-08/09/10/15/16.
+Output: One attestation file `.planning/phases/01-credential-plane/1-05-vm-results.md` capturing snapshot UUID, step-by-step results, stdout captures from each verification, operator notes, and explicit pass/fail status for SEC-08/09/10/15/16.
 </objective>
 
 <execution_context>
@@ -61,10 +61,10 @@ Output: One attestation file `.planning/phases/1-credential-plane/1-05-vm-result
 
 <context>
 @.planning/STATE.md
-@.planning/phases/1-credential-plane/1-CONTEXT.md
-@.planning/phases/1-credential-plane/1-VALIDATION.md
-@.planning/phases/1-credential-plane/checks/vm-e2e.sh
-@.planning/phases/1-credential-plane/checks/parallels-helpers.sh
+@.planning/phases/01-credential-plane/1-CONTEXT.md
+@.planning/phases/01-credential-plane/1-VALIDATION.md
+@.planning/phases/01-credential-plane/checks/vm-e2e.sh
+@.planning/phases/01-credential-plane/checks/parallels-helpers.sh
 @docs/credential-plane.md
 
 <interfaces>
@@ -102,11 +102,11 @@ Scenarios to verify, in order (per 1-RESEARCH.md Pitfall 9 snapshot management):
 
 <task type="auto">
   <name>Task 1: Run local structural quick.sh + SEC-15 grep gate before touching VM</name>
-  <files>.planning/phases/1-credential-plane/1-05-vm-results.md</files>
+  <files>.planning/phases/01-credential-plane/1-05-vm-results.md</files>
   <action>
 Pre-flight: confirm the local source tree is in the expected end state before spending VM cycles.
 
-1. From the repo root: `bash .planning/phases/1-credential-plane/checks/quick.sh`. Expected: exit 0, ALL SEC gates GREEN (SEC-02, SEC-05a, SEC-05b, SEC-07, SEC-11, SEC-13-presence, SEC-15). If any FAIL: stop, fix in the appropriate Wave 2 plan, do NOT proceed.
+1. From the repo root: `bash .planning/phases/01-credential-plane/checks/quick.sh`. Expected: exit 0, ALL SEC gates GREEN (SEC-02, SEC-05a, SEC-05b, SEC-07, SEC-11, SEC-13-presence, SEC-15). If any FAIL: stop, fix in the appropriate Wave 2 plan, do NOT proceed.
 
 2. Explicit SEC-15 phase exit gate (slightly broader than quick.sh runs):
    - `grep -rEn "\\bbw \\b|bitwardenAttachment|\\{\\{ *bitwarden" home/ --include='*.tmpl'` → MUST return zero matches
@@ -115,7 +115,7 @@ Pre-flight: confirm the local source tree is in the expected end state before sp
      - `home/.chezmoidata/packages.yaml` lines referencing `bitwarden` (cask) or `bitwarden-cli` (formula) — install names, not template calls
      - Design-comment lines in `home/scripts/setup-credentials.sh` that mention VW (e.g., `# VW is runtime-only; this script does not touch it`)
 
-3. Initialize `.planning/phases/1-credential-plane/1-05-vm-results.md` with:
+3. Initialize `.planning/phases/01-credential-plane/1-05-vm-results.md` with:
    - YAML frontmatter: `phase: 1, plan: 05, status: in-progress, started: <ISO timestamp>, vm_host: jteague@10.211.55.4, snapshot: vanilla-fresh-boot-pre-chezmoi`
    - Section: "Pre-flight (local source tree)" — paste the quick.sh summary line and the SEC-15 grep results (or "no matches")
    - Empty sections (to be filled by Task 2): "Scenario 1: Fresh Stage 1 + Stage 2", "Scenario 2: Idempotency re-run", "Scenario 3: Rotation", "Manual Verifications", "Requirement ID -> Result Map"
@@ -123,16 +123,16 @@ Pre-flight: confirm the local source tree is in the expected end state before sp
 If pre-flight fails, the artifact records the failure and the plan stops — no VM work attempted.
   </action>
   <verify>
-    <automated>cd /Users/jteague/.local/share/chezmoi && bash .planning/phases/1-credential-plane/checks/quick.sh > /tmp/preflight-quick.log 2>&1; rc=$?; test "$rc" -eq 0 && test -f .planning/phases/1-credential-plane/1-05-vm-results.md && grep -q "Pre-flight" .planning/phases/1-credential-plane/1-05-vm-results.md && grep -q "Scenario 1" .planning/phases/1-credential-plane/1-05-vm-results.md && grep -q "Requirement ID" .planning/phases/1-credential-plane/1-05-vm-results.md && ! grep -rEn "\\bbw \\b|bitwardenAttachment|\\{\\{ *bitwarden" home/ --include='*.tmpl'</automated>
+    <automated>cd /Users/jteague/.local/share/chezmoi && bash .planning/phases/01-credential-plane/checks/quick.sh > /tmp/preflight-quick.log 2>&1; rc=$?; test "$rc" -eq 0 && test -f .planning/phases/01-credential-plane/1-05-vm-results.md && grep -q "Pre-flight" .planning/phases/01-credential-plane/1-05-vm-results.md && grep -q "Scenario 1" .planning/phases/01-credential-plane/1-05-vm-results.md && grep -q "Requirement ID" .planning/phases/01-credential-plane/1-05-vm-results.md && ! grep -rEn "\\bbw \\b|bitwardenAttachment|\\{\\{ *bitwarden" home/ --include='*.tmpl'</automated>
   </verify>
   <done>checks/quick.sh exits 0 with all SEC gates GREEN locally; SEC-15 grep clean; 1-05-vm-results.md initialized with pre-flight section populated and empty scenario sections ready for fill-in.</done>
 </task>
 
 <task type="checkpoint:human-verify" gate="blocking">
   <name>Task 2: Operator-driven VM e2e verification (Scenarios 1, 2, 3 + manual checks)</name>
-  <files>.planning/phases/1-credential-plane/1-05-vm-results.md</files>
+  <files>.planning/phases/01-credential-plane/1-05-vm-results.md</files>
   <action>This is a checkpoint:human-verify task. Operator executes the scenarios documented under &lt;how-to-verify&gt; below, captures stdout + notes for each scenario into 1-05-vm-results.md, and resumes the plan with the documented signal once all SEC gates show PASS in the Requirement ID -&gt; Result Map. Claude executor MUST NOT attempt to run the VM scenarios autonomously — Stage 2 requires interactive device-flow code entry and the operator owns rotation + manual stale-cleanup decisions.</action>
-  <verify><automated>cd /Users/jteague/.local/share/chezmoi && grep -q "^status: complete" .planning/phases/1-credential-plane/1-05-vm-results.md && grep -E "SEC-(08|09|10|15|16).*PASS" .planning/phases/1-credential-plane/1-05-vm-results.md | wc -l | tr -d ' ' | grep -qE "^[5-9]$|^[1-9][0-9]+$"</automated></verify>
+  <verify><automated>cd /Users/jteague/.local/share/chezmoi && grep -q "^status: complete" .planning/phases/01-credential-plane/1-05-vm-results.md && grep -E "SEC-(08|09|10|15|16).*PASS" .planning/phases/01-credential-plane/1-05-vm-results.md | wc -l | tr -d ' ' | grep -qE "^[5-9]$|^[1-9][0-9]+$"</automated></verify>
   <done>1-05-vm-results.md frontmatter status=complete; Requirement ID -&gt; Result Map shows PASS for SEC-08, SEC-09, SEC-10, SEC-15, SEC-16; operator approval recorded in resume signal.</done>
   <what-built>
     Plans 1-02, 1-03, 1-04a, 1-04b landed: modify_dot_gitconfig.local rewritten, generate-gpg-key.sh deleted, SSH config template added, bitwarden-cli pin documented, setup-credentials.sh authored. The local structural harness (Task 1 above) reports GREEN. Now we need to prove the end-to-end chain works on a fresh machine — the Parallels VM is the only viable target.
@@ -144,7 +144,7 @@ If pre-flight fails, the artifact records the failure and the plan stops — no 
 
 1. **Restore snapshot** (from planner Mac):
    ```bash
-   bash .planning/phases/1-credential-plane/checks/parallels-helpers.sh  # source helpers
+   bash .planning/phases/01-credential-plane/checks/parallels-helpers.sh  # source helpers
    # If PRL_VM_NAME env var not set, prlctl list -a will show the VM name; export PRL_VM_NAME=...
    prl_restore_snapshot
    prl_wait_for_boot  # blocks until SSH responds; up to 5 minutes
@@ -204,10 +204,10 @@ All three scenarios complete; SEC-08/09/10/15/16 all PASS in the Requirement ID 
 
 <verification>
 After the checkpoint resumes with "approved":
-- `.planning/phases/1-credential-plane/1-05-vm-results.md` has `status: complete` in frontmatter and a populated Requirement ID -> Result Map with PASS for SEC-08/09/10/15/16
+- `.planning/phases/01-credential-plane/1-05-vm-results.md` has `status: complete` in frontmatter and a populated Requirement ID -> Result Map with PASS for SEC-08/09/10/15/16
 - All three scenario sections contain captured stdout + operator notes
 - Manual Verifications section documents device-flow UX outcome + stale-key cleanup decision
-- `bash .planning/phases/1-credential-plane/checks/quick.sh` exits 0 (local structural state unchanged from Task 1)
+- `bash .planning/phases/01-credential-plane/checks/quick.sh` exits 0 (local structural state unchanged from Task 1)
 </verification>
 
 <success_criteria>
@@ -219,5 +219,5 @@ After the checkpoint resumes with "approved":
 </success_criteria>
 
 <output>
-After the checkpoint approves, create `.planning/phases/1-credential-plane/1-05-SUMMARY.md` covering: scenario-by-scenario pass/fail, full Requirement ID -> Result Map for all 12 active SEC requirements, snapshot UUID + duration of each scenario, operator-surfaced friction (if any), manual-cleanup decisions, and final phase status (Phase 1 COMPLETE if all PASS).
+After the checkpoint approves, create `.planning/phases/01-credential-plane/1-05-SUMMARY.md` covering: scenario-by-scenario pass/fail, full Requirement ID -> Result Map for all 12 active SEC requirements, snapshot UUID + duration of each scenario, operator-surfaced friction (if any), manual-cleanup decisions, and final phase status (Phase 1 COMPLETE if all PASS).
 </output>

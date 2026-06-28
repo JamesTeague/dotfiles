@@ -1,5 +1,5 @@
 ---
-phase: 1-credential-plane
+phase: 01-credential-plane
 plan: 04b
 type: execute
 wave: 2
@@ -8,7 +8,7 @@ depends_on:
   - "1-04a"
 files_modified:
   - home/scripts/setup-credentials.sh
-  - .planning/phases/1-credential-plane/1-04b-script-review.md
+  - .planning/phases/01-credential-plane/1-04b-script-review.md
 autonomous: true
 requirements:
   - SEC-08
@@ -27,7 +27,7 @@ must_haves:
     - path: "home/scripts/setup-credentials.sh"
       provides: "Complete operator-invoked Stage-2 credential bootstrap (1-04a auth+SSH + 1-04b GPG+signingkey+remote-rewrite)"
       min_lines: 250
-    - path: ".planning/phases/1-credential-plane/1-04b-script-review.md"
+    - path: ".planning/phases/01-credential-plane/1-04b-script-review.md"
       provides: "Audit-trail attestation for the highest-risk artifact in Phase 1"
       min_lines: 40
   key_links:
@@ -54,7 +54,7 @@ Append the GPG keygen + signingkey write + chezmoi remote rewrite functionality 
 
 Purpose: 1-04a established the script scaffolding, gh auth path, and SSH keygen/registration. 1-04b lands the GPG side (the highest-risk new code per 1-RESEARCH Pitfall analysis — Pitfall 1 pinentry stall, Pitfall 8 agent reload, cli/cli#6528 armored-format requirement), the signingkey write (which unblocks Plan 1-02's gitconfig template), and the chezmoi remote rewrite (which MUST happen last, after smoke-testing SSH). The script-review attestation is the audit trail mapping each Pitfall to a script line range — required because the script is the load-bearing artifact for Phase 1.
 
-Output: Three new function bodies appended to the script (setup_gpg, write_signingkey, rewrite_remote), main() updated to call them in order (TODO markers replaced), and `.planning/phases/1-credential-plane/1-04b-script-review.md` capturing the audit trail.
+Output: Three new function bodies appended to the script (setup_gpg, write_signingkey, rewrite_remote), main() updated to call them in order (TODO markers replaced), and `.planning/phases/01-credential-plane/1-04b-script-review.md` capturing the audit trail.
 </objective>
 
 <execution_context>
@@ -64,8 +64,8 @@ Output: Three new function bodies appended to the script (setup_gpg, write_signi
 
 <context>
 @.planning/STATE.md
-@.planning/phases/1-credential-plane/1-CONTEXT.md
-@.planning/phases/1-credential-plane/1-RESEARCH.md
+@.planning/phases/01-credential-plane/1-CONTEXT.md
+@.planning/phases/01-credential-plane/1-RESEARCH.md
 @home/scripts/setup-credentials.sh
 @home/modify_dot_gitconfig.local
 
@@ -157,11 +157,11 @@ After editing, the script remains executable (no chmod needed — preserved from
 
 <task type="auto">
   <name>Task 2: Write 1-04b-script-review.md attestation + verify SEC-11/13(presence)/SEC-08 gates by name</name>
-  <files>.planning/phases/1-credential-plane/1-04b-script-review.md</files>
+  <files>.planning/phases/01-credential-plane/1-04b-script-review.md</files>
   <action>
 This task is a structural review checkpoint — the script is the highest-risk artifact in Phase 1. Run the structural harness, verify specific gates by NAME (not aggregate count), and capture an in-tree review attestation.
 
-1. Run `bash .planning/phases/1-credential-plane/checks/quick.sh` from the repo root. Capture stdout + stderr to `/tmp/quick-1-04b.log`.
+1. Run `bash .planning/phases/01-credential-plane/checks/quick.sh` from the repo root. Capture stdout + stderr to `/tmp/quick-1-04b.log`.
 
 2. Verify specific gates by NAME (this is the strict version — aggregate-pass counts are not sufficient because sibling-plan gates may be RED). Required PASSes (each by name):
    - **SEC-11 PASS**: `grep -E 'SEC-11.*(PASS|✓)' /tmp/quick-1-04b.log`
@@ -175,7 +175,7 @@ This task is a structural review checkpoint — the script is the highest-risk a
    - `grep -rEn '\bbw \b|bitwarden' home/.chezmoiscripts/` → zero matches
    - Print result.
 
-4. Write `.planning/phases/1-credential-plane/1-04b-script-review.md` containing:
+4. Write `.planning/phases/01-credential-plane/1-04b-script-review.md` containing:
    - Date + git SHA of setup-credentials.sh (after 1-04b's commit)
    - Counts: total lines, function count (8: usage, ensure_gh_auth, ssh_pubkey_registered, setup_ssh, gpg_keyid_registered, setup_gpg, write_signingkey, rewrite_remote + main), exit-code branches (0-6), shellcheck warnings (with justifications if any)
    - Pitfall coverage matrix: for each of Pitfalls 1-9 in 1-RESEARCH.md, cite the script line range that addresses it (or note "N/A — runtime-only, not script-side")
@@ -189,7 +189,7 @@ This artifact lives in the planning tree (not in the source tree) and is committ
 Do NOT execute the script in this task — no VM available, would attempt to register keys. Only structural review.
   </action>
   <verify>
-    <automated>cd /Users/jteague/.local/share/chezmoi && bash .planning/phases/1-credential-plane/checks/quick.sh > /tmp/quick-1-04b.log 2>&1; grep -E 'SEC-11.*(PASS|✓)' /tmp/quick-1-04b.log >/dev/null && grep -E 'SEC-13.*present.*(PASS|✓)' /tmp/quick-1-04b.log >/dev/null && grep -E 'SEC-08.*(PASS|✓)' /tmp/quick-1-04b.log >/dev/null && test -f .planning/phases/1-credential-plane/1-04b-script-review.md && grep -q "Pitfall" .planning/phases/1-credential-plane/1-04b-script-review.md && grep -q "Idempotency" .planning/phases/1-credential-plane/1-04b-script-review.md && grep -q "Rotation" .planning/phases/1-credential-plane/1-04b-script-review.md && grep -q "Named-gate" .planning/phases/1-credential-plane/1-04b-script-review.md && ! grep -rEn '\bbw \b|bitwardenAttachment|\{\{ *bitwarden' home/ --include='*.tmpl'</automated>
+    <automated>cd /Users/jteague/.local/share/chezmoi && bash .planning/phases/01-credential-plane/checks/quick.sh > /tmp/quick-1-04b.log 2>&1; grep -E 'SEC-11.*(PASS|✓)' /tmp/quick-1-04b.log >/dev/null && grep -E 'SEC-13.*present.*(PASS|✓)' /tmp/quick-1-04b.log >/dev/null && grep -E 'SEC-08.*(PASS|✓)' /tmp/quick-1-04b.log >/dev/null && test -f .planning/phases/01-credential-plane/1-04b-script-review.md && grep -q "Pitfall" .planning/phases/01-credential-plane/1-04b-script-review.md && grep -q "Idempotency" .planning/phases/01-credential-plane/1-04b-script-review.md && grep -q "Rotation" .planning/phases/01-credential-plane/1-04b-script-review.md && grep -q "Named-gate" .planning/phases/01-credential-plane/1-04b-script-review.md && ! grep -rEn '\bbw \b|bitwardenAttachment|\{\{ *bitwarden' home/ --include='*.tmpl'</automated>
   </verify>
   <done>quick.sh reports SEC-08, SEC-11, and SEC-13(presence) all PASS by name (not aggregate count); 1-04b-script-review.md exists with all required sections including the named-gate verification table; SEC-15 three-clause grep clean.</done>
 </task>
@@ -202,9 +202,9 @@ After both tasks:
 - `bash -n home/scripts/setup-credentials.sh` passes syntax check
 - All three `TODO(1-04b)` markers gone
 - Script lives in `home/scripts/` and NOT in `home/.chezmoiscripts/`
-- `bash .planning/phases/1-credential-plane/checks/quick.sh` shows SEC-08, SEC-11, SEC-13(presence) PASS by name
+- `bash .planning/phases/01-credential-plane/checks/quick.sh` shows SEC-08, SEC-11, SEC-13(presence) PASS by name
 - SEC-15 three-clause structural VW-independence grep remains GREEN
-- `.planning/phases/1-credential-plane/1-04b-script-review.md` exists with Pitfall/Idempotency/Rotation/Named-gate sections
+- `.planning/phases/01-credential-plane/1-04b-script-review.md` exists with Pitfall/Idempotency/Rotation/Named-gate sections
 </verification>
 
 <success_criteria>
@@ -218,5 +218,5 @@ After both tasks:
 </success_criteria>
 
 <output>
-After completion, create `.planning/phases/1-credential-plane/1-04b-SUMMARY.md` covering: script statistics (LOC, functions, exit codes 0-6), Pitfall coverage matrix, idempotency proof, rotation behavior, link to 1-04b-script-review.md, the named-gate verification table (SEC-08/11/13-presence), and explicit handoff to Plan 1-05 listing the VM verifications that prove SEC-08/09/10/14/16 (SEC-09/10/14/16 cannot be verified in this plan — they need a fresh VM with the operator entering a device-flow code).
+After completion, create `.planning/phases/01-credential-plane/1-04b-SUMMARY.md` covering: script statistics (LOC, functions, exit codes 0-6), Pitfall coverage matrix, idempotency proof, rotation behavior, link to 1-04b-script-review.md, the named-gate verification table (SEC-08/11/13-presence), and explicit handoff to Plan 1-05 listing the VM verifications that prove SEC-08/09/10/14/16 (SEC-09/10/14/16 cannot be verified in this plan — they need a fresh VM with the operator entering a device-flow code).
 </output>
