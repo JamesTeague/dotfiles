@@ -97,7 +97,6 @@ packages:
         - 'microsoft-office'
         - 'utm'
         - 'mullvad-vpn'
-        - 'kindle'
         - 'handbrake-app'
         - 'rode-central'
         mas:
