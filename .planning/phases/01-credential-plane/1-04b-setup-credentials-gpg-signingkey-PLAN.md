@@ -2,7 +2,7 @@
 phase: 01-credential-plane
 plan: 04b
 type: execute
-wave: 2
+wave: 3
 depends_on:
   - "1-01"
   - "1-04a"
