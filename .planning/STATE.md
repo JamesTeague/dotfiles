@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: verifying
-stopped_at: Completed 01-credential-plane/1-03-ssh-config-bw-pin-PLAN.md
-last_updated: "2026-06-28T19:14:36.595Z"
+stopped_at: Completed 01-credential-plane/1-02-gitconfig-rewrite-PLAN.md
+last_updated: "2026-06-28T19:16:34.706Z"
 progress:
   total_phases: 6
   completed_phases: 1
@@ -69,6 +69,9 @@ progress:
 - Non-standard phase numbering retained: 0.5, 0, 1, 2, 3, 4
 - **No bootstrap kit** (pivoted 2026-06-04). Regenerable credentials don't need disaster-recovery encryption; kit complexity deleted from Phase 1 scope.
 - PowerShell 7+ only (5.1 explicitly out of scope)
+- **(Plan 1-02)** Use `get . "key"` (not `{{ .key }}` or `{{- if .key }}`) in chezmoi templates for data fields that may be absent at template-evaluation time. Go template engine errors with "map has no entry for key" before any `if` guard can evaluate — `get` returns empty string for absent keys and enables correct truthiness checks via local variable.
+- **(Plan 1-02)** Deleted chezmoi-managed files require per-machine entryState cleanup post-merge; `chezmoi managed` and `chezmoi diff` are silent on stale entries (Phase 0.5 Plan 04 lesson). Cleanup for `~/scripts/generate-gpg-key.sh` documented in Task 2 commit message: `chezmoi state delete --bucket=entryState --key=/Users/jteague/scripts/generate-gpg-key.sh` + `rm -f ~/scripts/generate-gpg-key.sh`.
+- **(Plan 1-02)** Stage-1 machines (after `chezmoi apply`, before `setup-credentials.sh`) have `.signingkey` absent from chezmoi.toml [data] by design; unsigned commits are the correct graceful default state — not a failure. Signing activates after Plan 1-04b's `write_signingkey()` runs.
 - **(Plan 1-03)** File-presence gating on `~/.ssh/work_ed25519` (not `.employer` data field): Phase 0 did not introduce an employer field — `[data]` in `chezmoi.toml.tmpl` contains only `personal/name/email/role/wsl`. Per 1-RESEARCH Open Question 8, `stat` template helper on `~/.ssh/work_ed25519` is the fallback gate for `gitlab-bluebeam` block. If employer field is preferred, Phase 0 amendment required first.
 - **(Plan 1-03)** `bitwarden-cli` formula pin uses unversioned name + PIN comment: `bitwarden-cli@<ver>` has no upstream Homebrew formula. The `brew extract` ritual is documented in `docs/credential-plane.md` and executed manually per machine; packages.yaml carries the PIN comment as the authoritative marker.
 
@@ -138,7 +141,7 @@ PRIOR action: Completed Plan 00.5-05 (packages-audit, AUD-01 + AUD-02). 3-task p
 
 **Next action:** Operator-driven cutover ritual on Mac personal first, then Mac work. See `.planning/phases/0-structural-refactor/cutover-phase-0.sh`. Run in collaborative mode (not autonomous) per CLAUDE.md §4. After cutover: `chezmoi diff -x externals` EMPTY on both Macs = Phase 0 merge gate PASS → mark Phase 0 complete.
 
-**Stopped at:** Completed 01-credential-plane/1-03-ssh-config-bw-pin-PLAN.md
+**Stopped at:** Completed 01-credential-plane/1-02-gitconfig-rewrite-PLAN.md
 
 **Open questions for next session:** None at Phase 0.5 level. Phase 0 should: (a) decide employer/site axis design (escalation owner), (b) decide `home/exact_bin/` rename vs `~/.local/bin/` standard for employer-local tooling, (c) standardize chezmoi version across both Macs (Mac work 2.69.4 → 2.70.4), (d) read all Phase 0 follow-ups #1-#9 in `00.5-drift-reconciliation.md` before scoping the structural refactor.
 
