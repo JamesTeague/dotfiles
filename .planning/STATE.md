@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: verifying
-stopped_at: Completed 01-credential-plane/1-04a-setup-credentials-auth-ssh-PLAN.md
-last_updated: "2026-06-28T18:22:24.587Z"
+stopped_at: Completed 01-credential-plane/1-03-ssh-config-bw-pin-PLAN.md
+last_updated: "2026-06-28T19:14:36.595Z"
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 9
-  completed_plans: 6
-  percent: 87
+  completed_plans: 7
+  percent: 93
 ---
 
 # Project State: chezmoi Modernization
@@ -28,7 +28,7 @@ progress:
 **Phase:** 0-structural-refactor — COMPLETE (3/3 plans + cutover both Macs)
 **Plan:** Phase 0 closed; Phase 1 not yet planned
 **Status:** Both Macs cutover GREEN. chezmoi diff -x externals empty + dry-run clean on both. NODE_EXTRA_CA_CERTS migrated on Mac work. ~/bin teardown verified on both. Three follow-up commits landed (heredoc fix, cask renames, Step 7 stderr capture) — convention notes added in § 10.4.6 and § 10.4.7.
-**Progress:** [█████████░] 87%
+**Progress:** [█████████░] 93%
 
 ## Performance Metrics
 
@@ -52,6 +52,8 @@ progress:
 | 0-03-docs | 1 | 1 modified (docs/conventions.md +128 lines) | ~15m |
 | Phase 01-credential-plane P01 | 23 | 3 tasks | 6 files |
 | Phase 01-credential-plane P04a | 12 | 1 tasks | 1 files |
+| Phase 01-credential-plane P03 | 22 | 2 tasks | 3 files |
+| Phase 01-credential-plane P02 | 15 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -67,6 +69,8 @@ progress:
 - Non-standard phase numbering retained: 0.5, 0, 1, 2, 3, 4
 - **No bootstrap kit** (pivoted 2026-06-04). Regenerable credentials don't need disaster-recovery encryption; kit complexity deleted from Phase 1 scope.
 - PowerShell 7+ only (5.1 explicitly out of scope)
+- **(Plan 1-03)** File-presence gating on `~/.ssh/work_ed25519` (not `.employer` data field): Phase 0 did not introduce an employer field — `[data]` in `chezmoi.toml.tmpl` contains only `personal/name/email/role/wsl`. Per 1-RESEARCH Open Question 8, `stat` template helper on `~/.ssh/work_ed25519` is the fallback gate for `gitlab-bluebeam` block. If employer field is preferred, Phase 0 amendment required first.
+- **(Plan 1-03)** `bitwarden-cli` formula pin uses unversioned name + PIN comment: `bitwarden-cli@<ver>` has no upstream Homebrew formula. The `brew extract` ritual is documented in `docs/credential-plane.md` and executed manually per machine; packages.yaml carries the PIN comment as the authoritative marker.
 
 ### Critical Pitfalls Baked Into Phases
 - Phase 0: `promptStringOnce` everywhere + per-machine cutover ritual + `generate-gpg-key.sh` DELETED (not renamed) — DEFERRED to Phase 1 per Phase 0 CONTEXT amendments
@@ -134,7 +138,7 @@ PRIOR action: Completed Plan 00.5-05 (packages-audit, AUD-01 + AUD-02). 3-task p
 
 **Next action:** Operator-driven cutover ritual on Mac personal first, then Mac work. See `.planning/phases/0-structural-refactor/cutover-phase-0.sh`. Run in collaborative mode (not autonomous) per CLAUDE.md §4. After cutover: `chezmoi diff -x externals` EMPTY on both Macs = Phase 0 merge gate PASS → mark Phase 0 complete.
 
-**Stopped at:** Completed 01-credential-plane/1-04a-setup-credentials-auth-ssh-PLAN.md
+**Stopped at:** Completed 01-credential-plane/1-03-ssh-config-bw-pin-PLAN.md
 
 **Open questions for next session:** None at Phase 0.5 level. Phase 0 should: (a) decide employer/site axis design (escalation owner), (b) decide `home/exact_bin/` rename vs `~/.local/bin/` standard for employer-local tooling, (c) standardize chezmoi version across both Macs (Mac work 2.69.4 → 2.70.4), (d) read all Phase 0 follow-ups #1-#9 in `00.5-drift-reconciliation.md` before scoping the structural refactor.
 

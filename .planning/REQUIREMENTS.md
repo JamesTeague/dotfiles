@@ -28,12 +28,12 @@
 ### Secrets & Identity
 
 - [ ] ~~**SEC-01**: chezmoi config sets `bitwarden.unlock = "auto"` (eliminates manual `BW_SESSION` ritual)~~ **[SUPERSEDED 2026-06-04 — see ROADMAP Phase 1 pivot]** No inline VW unlock in apply path; VW is off the credential-plane critical path.
-- [ ] **SEC-02**: `bw` CLI version pinned in `packages.yaml` against VaultWarden 1.36.0 (prevents CLI/server drift breakage)
+- [x] **SEC-02**: `bw` CLI version pinned in `packages.yaml` against VaultWarden 1.36.0 (prevents CLI/server drift breakage)
 - [ ] ~~**SEC-03**: Canonical GPG signing key retrieved from VaultWarden via `bitwardenAttachment` template function~~ **[SUPERSEDED 2026-06-04 — see ROADMAP Phase 1 pivot]** Per-machine GPG generated locally by `setup-credentials.sh`; no canonical key, no VW retrieval.
 - [ ] ~~**SEC-04**: GPG ownertrust imported via `run_once_after_*.sh.tmpl` so signing works post-import~~ **[SUPERSEDED 2026-06-04 — see ROADMAP Phase 1 pivot]** Locally-generated GPG keys are trusted by their own gpg-agent without ownertrust ceremony.
 - [ ] **SEC-05**: `home/scripts/generate-gpg-key.sh` DELETED (not renamed — avoids re-fire of `run_once_` on existing machines generating new canonical key) — *carryover from Phase 0 to Phase 1; deletion lands together with `modify_dot_gitconfig.local` rewrite*
 - [ ] ~~**SEC-06**: Per-purpose SSH keys retrieved from VaultWarden (`personal-github` + `work-github` minimum)~~ **[SUPERSEDED 2026-06-04 — see ROADMAP Phase 1 pivot]** Per-machine SSH keys generated locally by `setup-credentials.sh`; registered via `gh ssh-key add`.
-- [ ] **SEC-07**: SSH `~/.ssh/config` uses Host aliases (`github-personal` on every dev-role machine; `gitlab-bluebeam` on work Mac) to disambiguate per-purpose keys — *example aliases amended 2026-06-04 (was `github-work`); Bluebeam uses GitLab not GitHub for work git, and work key generation itself is out of script scope*
+- [x] **SEC-07**: SSH `~/.ssh/config` uses Host aliases (`github-personal` on every dev-role machine; `gitlab-bluebeam` on work Mac) to disambiguate per-purpose keys — *example aliases amended 2026-06-04 (was `github-work`); Bluebeam uses GitLab not GitHub for work git, and work key generation itself is out of script scope*
 - [ ] **SEC-08**: chezmoi repo's git remote rewritten to use `git@github-personal:JamesTeague/dotfiles.git`
 - [ ] **SEC-09**: User can `git commit -S` and the commit is signed on first machine setup — *2026-06-04 amendment: "canonical GPG identity" dropped; signed commit is now under a per-machine GPG identity registered to the user's GitHub account*
 - [ ] **SEC-10**: User can `ssh -T git@github-personal` and authenticate as the personal identity on first setup
@@ -170,7 +170,7 @@
 | TAX-07 | Phase 0 | Pending |
 | TAX-08 | Phase 0 | Pending |
 | SEC-01 | Phase 1 | Superseded 2026-06-04 |
-| SEC-02 | Phase 1 | Pending |
+| SEC-02 | Phase 1 | Complete |
 | SEC-03 | Phase 1 | Superseded 2026-06-04 |
 | SEC-04 | Phase 1 | Superseded 2026-06-04 |
 | SEC-05 | Phase 1 (carryover from Phase 0) | Pending |
