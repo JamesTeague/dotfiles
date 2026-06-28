@@ -7,6 +7,7 @@ packages:
         brews:
         - 'bash'
         - 'bash-completion@2'
+        - 'bitwarden-cli' # PIN: pair with VaultWarden 1.36.0 — see docs/credential-plane.md (SEC-02 / Pitfall 3)
         - 'wget'
         - 'chezmoi'
         - 'jq'
