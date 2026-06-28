@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: verifying
-stopped_at: Completed 01-credential-plane/1-02-gitconfig-rewrite-PLAN.md
-last_updated: "2026-06-28T19:16:34.706Z"
+stopped_at: Completed 01-credential-plane/1-04b-setup-credentials-gpg-signingkey-PLAN.md
+last_updated: "2026-06-28T20:04:43.904Z"
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 9
-  completed_plans: 7
-  percent: 93
+  completed_plans: 8
+  percent: 100
 ---
 
 # Project State: chezmoi Modernization
@@ -28,7 +28,7 @@ progress:
 **Phase:** 0-structural-refactor — COMPLETE (3/3 plans + cutover both Macs)
 **Plan:** Phase 0 closed; Phase 1 not yet planned
 **Status:** Both Macs cutover GREEN. chezmoi diff -x externals empty + dry-run clean on both. NODE_EXTRA_CA_CERTS migrated on Mac work. ~/bin teardown verified on both. Three follow-up commits landed (heredoc fix, cask renames, Step 7 stderr capture) — convention notes added in § 10.4.6 and § 10.4.7.
-**Progress:** [█████████░] 93%
+**Progress:** [██████████] 100%
 
 ## Performance Metrics
 
@@ -54,6 +54,7 @@ progress:
 | Phase 01-credential-plane P04a | 12 | 1 tasks | 1 files |
 | Phase 01-credential-plane P03 | 22 | 2 tasks | 3 files |
 | Phase 01-credential-plane P02 | 15 | 2 tasks | 2 files |
+| Phase 01-credential-plane P04b | 18 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -141,7 +142,7 @@ PRIOR action: Completed Plan 00.5-05 (packages-audit, AUD-01 + AUD-02). 3-task p
 
 **Next action:** Operator-driven cutover ritual on Mac personal first, then Mac work. See `.planning/phases/0-structural-refactor/cutover-phase-0.sh`. Run in collaborative mode (not autonomous) per CLAUDE.md §4. After cutover: `chezmoi diff -x externals` EMPTY on both Macs = Phase 0 merge gate PASS → mark Phase 0 complete.
 
-**Stopped at:** Completed 01-credential-plane/1-02-gitconfig-rewrite-PLAN.md
+**Stopped at:** Completed 01-credential-plane/1-04b-setup-credentials-gpg-signingkey-PLAN.md
 
 **Open questions for next session:** None at Phase 0.5 level. Phase 0 should: (a) decide employer/site axis design (escalation owner), (b) decide `home/exact_bin/` rename vs `~/.local/bin/` standard for employer-local tooling, (c) standardize chezmoi version across both Macs (Mac work 2.69.4 → 2.70.4), (d) read all Phase 0 follow-ups #1-#9 in `00.5-drift-reconciliation.md` before scoping the structural refactor.
 

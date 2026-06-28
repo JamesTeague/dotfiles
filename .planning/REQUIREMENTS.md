@@ -34,13 +34,13 @@
 - [x] **SEC-05**: `home/scripts/generate-gpg-key.sh` DELETED (not renamed — avoids re-fire of `run_once_` on existing machines generating new canonical key) — *carryover from Phase 0 to Phase 1; deletion lands together with `modify_dot_gitconfig.local` rewrite*
 - [ ] ~~**SEC-06**: Per-purpose SSH keys retrieved from VaultWarden (`personal-github` + `work-github` minimum)~~ **[SUPERSEDED 2026-06-04 — see ROADMAP Phase 1 pivot]** Per-machine SSH keys generated locally by `setup-credentials.sh`; registered via `gh ssh-key add`.
 - [x] **SEC-07**: SSH `~/.ssh/config` uses Host aliases (`github-personal` on every dev-role machine; `gitlab-bluebeam` on work Mac) to disambiguate per-purpose keys — *example aliases amended 2026-06-04 (was `github-work`); Bluebeam uses GitLab not GitHub for work git, and work key generation itself is out of script scope*
-- [ ] **SEC-08**: chezmoi repo's git remote rewritten to use `git@github-personal:JamesTeague/dotfiles.git`
+- [x] **SEC-08**: chezmoi repo's git remote rewritten to use `git@github-personal:JamesTeague/dotfiles.git`
 - [ ] **SEC-09**: User can `git commit -S` and the commit is signed on first machine setup — *2026-06-04 amendment: "canonical GPG identity" dropped; signed commit is now under a per-machine GPG identity registered to the user's GitHub account*
 - [ ] **SEC-10**: User can `ssh -T git@github-personal` and authenticate as the personal identity on first setup
 - [x] **SEC-11**: `home/scripts/setup-credentials.sh` exists, is executable, and is operator-invoked (NOT a `run_once_` chezmoi script). Distributes via `chezmoi apply` to `~/scripts/setup-credentials.sh`.
 - [x] **SEC-12**: `setup-credentials.sh` exposes `--rotate-ssh`, `--rotate-gpg`, and `--rotate-all` flags that regenerate the targeted local keypair, re-register it with GitHub, and log the prior fingerprint/key-ID for manual stale-cleanup. Default invocation does NOT rotate.
 - [x] **SEC-13**: Per-machine SSH key generated with `ssh-keygen -t ed25519 -N "" -C "<hostname>-personal-<YYYYMMDD>"` at `~/.ssh/personal_ed25519`, registered via `gh ssh-key add` with idempotent fingerprint-compare-before-add (cli/cli#5085 mitigation).
-- [ ] **SEC-14**: Per-machine GPG key generated via `gpg --batch --gen-key` with parameter file using `Key-Type: EDDSA` + `Key-Curve: Ed25519` + `%no-protection`; registered via `gh gpg-key add` with idempotent key-ID-compare-before-add. Long key ID written to `~/.config/chezmoi/chezmoi.toml` `[data]` section as `signingkey`.
+- [x] **SEC-14**: Per-machine GPG key generated via `gpg --batch --gen-key` with parameter file using `Key-Type: EDDSA` + `Key-Curve: Ed25519` + `%no-protection`; registered via `gh gpg-key add` with idempotent key-ID-compare-before-add. Long key ID written to `~/.config/chezmoi/chezmoi.toml` `[data]` section as `signingkey`.
 - [ ] **SEC-15**: Structural VaultWarden-independence verified: `grep -rEn '\bbw \b|bitwardenAttachment|\{\{ *bitwarden' home/ --include='*.tmpl'` returns zero matches; `grep -rEn '\bbw \b|bitwarden' home/.chezmoiscripts/` returns zero matches. Permitted exceptions: `packages.yaml` install names (`bitwarden` cask, `bitwarden-cli` formula) and design-comment lines in `setup-credentials.sh`.
 - [ ] **SEC-16**: End-to-end verification on Parallels VM (snapshot `vanilla-fresh-boot-pre-chezmoi` at jteague@10.211.55.4): Stage 1 (`chezmoi init --apply`) + Stage 2 (`setup-credentials.sh`) produces a verified-signed commit (`git log --show-signature` shows "Good signature") AND `ssh -T git@github-personal` returns the GitHub welcome message AND `chezmoi git -- remote get-url origin` reports `git@github-personal:...` AND re-running `setup-credentials.sh` is a no-op.
 
@@ -176,13 +176,13 @@
 | SEC-05 | Phase 1 (carryover from Phase 0) | Complete |
 | SEC-06 | Phase 1 | Superseded 2026-06-04 |
 | SEC-07 | Phase 1 | Pending (amended 2026-06-04) |
-| SEC-08 | Phase 1 | Pending |
+| SEC-08 | Phase 1 | Complete |
 | SEC-09 | Phase 1 | Pending (amended 2026-06-04) |
 | SEC-10 | Phase 1 | Pending |
 | SEC-11 | Phase 1 | Complete |
 | SEC-12 | Phase 1 | Complete |
 | SEC-13 | Phase 1 | Complete |
-| SEC-14 | Phase 1 | Pending |
+| SEC-14 | Phase 1 | Complete |
 | SEC-15 | Phase 1 | Pending |
 | SEC-16 | Phase 1 | Pending |
 | BOOT-01 | Phase 1 | Superseded 2026-06-04 |
