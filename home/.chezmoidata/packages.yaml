@@ -11,6 +11,7 @@ packages:
         - 'wget'
         - 'chezmoi'
         - 'jq'
+        - 'gh' # GitHub CLI — Stage 2 setup-credentials.sh uses for device-flow auth + ssh/gpg-key add (SEC-08/09/10)
         - 'git'
         - 'grep'
         - 'lua'
