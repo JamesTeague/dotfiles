@@ -22,5 +22,13 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 {{ end }}
 
+{{ if eq .chezmoi.os "darwin" -}}
+brew trust --tap jesseduffield/lazygit || true
+brew trust --tap jesseduffield/lazydocker || true
+{{ if .personal -}}
+brew trust --tap nikitabobko/tap || true
+{{ end -}}
+{{ end -}}
+
 {{ template "brew" . }}
 
