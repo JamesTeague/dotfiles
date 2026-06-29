@@ -219,9 +219,10 @@ ssh_pubkey_registered() {
 
   # Fetch registered keys, compute fingerprints, compare
   # Each registered key is a one-liner OpenSSH pubkey string
+  # NB: `gh ssh-key list` is TSV only (no --json flag) — use `gh api user/keys` instead.
   local registered_fp
   # shellcheck disable=SC2016  # $pk is intentionally inside single-quotes for while-read
-  registered_fp="$(gh ssh-key list --json key --jq '.[].key' 2>/dev/null \
+  registered_fp="$(gh api user/keys --jq '.[].key' 2>/dev/null \
     | while IFS= read -r pk; do
         printf '%s\n' "${pk}" | ssh-keygen -lf - 2>/dev/null | awk '{print $2}'
       done)"
@@ -292,8 +293,9 @@ gpg_keyid_registered() {
   local key_id="$1"
 
   # Fetch all registered key IDs and look for exact match
+  # NB: `gh gpg-key list` is TSV only (no --json flag) — use `gh api user/gpg_keys` instead.
   local registered_ids
-  registered_ids="$(gh gpg-key list --json keyId --jq '.[].keyId' 2>/dev/null || true)"
+  registered_ids="$(gh api user/gpg_keys --jq '.[].key_id' 2>/dev/null || true)"
 
   if printf '%s\n' "${registered_ids}" | grep -qFx "${key_id}"; then
     return 0
