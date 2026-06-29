@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: verifying
-stopped_at: Completed 01-credential-plane/1-04b-setup-credentials-gpg-signingkey-PLAN.md
-last_updated: "2026-06-28T20:04:43.904Z"
+stopped_at: Completed 01-credential-plane/1-05-vm-verification-PLAN.md (Scenarios 1+2 GREEN, Scenario 3 partial GREEN — full fresh-snapshot rerun deferred)
+last_updated: "2026-06-29T04:35:00Z"
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 9
-  completed_plans: 8
+  completed_plans: 9
   percent: 100
 ---
 
