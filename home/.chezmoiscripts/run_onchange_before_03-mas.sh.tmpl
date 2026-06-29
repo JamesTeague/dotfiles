@@ -1,5 +1,12 @@
 #!/bin/bash
 {{ if .personal -}}
+# Skip all mas installs when not signed into the App Store (mas install hangs
+# indefinitely on auth prompts otherwise — surfaced by Plan 1-05 VM verification).
+# Sign in via System Settings > Apple ID, then re-run `chezmoi apply`.
+if ! defaults read MobileMeAccounts Accounts 2>/dev/null | grep -q "AccountID"; then
+  echo "Skipping mas installs: not signed into App Store. Sign in via System Settings > Apple ID, then re-run 'chezmoi apply'."
+  exit 0
+fi
   {{ range $k, $v := .packages.overlays.personal.darwin.mas }}
     app_name={{ dig "name" "" $v | quote }}
     if [ ! -d "/Applications/${app_name}.app" ]; then
