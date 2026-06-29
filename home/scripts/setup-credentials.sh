@@ -322,17 +322,21 @@ setup_gpg() {
     exit 4
   fi
 
-  # Rotation: log existing key IDs, delete local copies
+  # Rotation: log existing key IDs (for manual GitHub cleanup), delete local copies.
+  # Use long fingerprints + two-pass delete (secret-keys THEN keys); modern GPG
+  # refuses secret-key deletion via short-id even with --batch --yes.
   if [[ "${ROTATE_GPG}" == "1" ]]; then
     printf '[gpg] --rotate-gpg: logging existing key IDs for manual GitHub cleanup:\n'
-    local old_ids
-    old_ids="$(gpg --list-secret-keys --keyid-format LONG --with-colons "${EMAIL}" 2>/dev/null \
-      | awk -F: '/^sec:/ {print $5}')"
-    if [[ -n "${old_ids}" ]]; then
-      printf '%s\n' "${old_ids}" | while IFS= read -r oid; do
-        printf '  old key ID: %s\n' "${oid}"
-        # Best-effort local deletion; continue on error (agent state can lag)
-        gpg --batch --yes --delete-secret-and-public-key "${oid}" 2>/dev/null || true
+    # Collect (key_id, fingerprint) pairs from the colon-format output
+    local old_pairs
+    old_pairs="$(gpg --list-secret-keys --keyid-format LONG --with-colons "${EMAIL}" 2>/dev/null \
+      | awk -F: '/^sec:/ {kid=$5} /^fpr:/ && kid {print kid"|"$10; kid=""}')"
+    if [[ -n "${old_pairs}" ]]; then
+      printf '%s\n' "${old_pairs}" | while IFS='|' read -r oid ofpr; do
+        printf '  old key ID: %s (fpr: %s)\n' "${oid}" "${ofpr}"
+        # Best-effort local deletion via fingerprint (short-id rejected for secret keys)
+        gpg --batch --yes --delete-secret-keys "${ofpr}" 2>/dev/null || true
+        gpg --batch --yes --delete-keys "${ofpr}" 2>/dev/null || true
       done
     else
       printf '[gpg] No existing secret keys found for %s — nothing to rotate.\n' "${EMAIL}"
